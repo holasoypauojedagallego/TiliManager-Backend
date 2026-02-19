@@ -1,0 +1,7 @@
+### GET request to example server
+GET http://localhost:8080/jugadores/
+Accept: application/json
+
+POST http://localhost:8080/jugadores
+
+###
