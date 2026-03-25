@@ -1,39 +1,45 @@
 package com.JPAVideoGames.TiliManager.controller;
 
 import com.JPAVideoGames.TiliManager.model.Player;
+import com.JPAVideoGames.TiliManager.model.Team;
+import com.JPAVideoGames.TiliManager.service.PlayerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/jugadores")
 public class PlayerController {
-    private static List<Player> jugadores = new ArrayList<>(List.of(
-            new Player(1, "Pau ", "Barça"),
-            new Player(2, "Adrian ", "Atleti"),
-            new Player(3, "Justin ", "Madrid"),
-            new Player(4, "Tadi", "Real Sociedadw")));
 
+    @Autowired
+    @Lazy
+    private PlayerService playerService;
 
     @GetMapping
-    public List<Player> listaJugadores() {
-        return jugadores;
+    public ResponseEntity<List<Player>> getJugadores() {
+        playerService.codigo();
+        return ResponseEntity.ok(playerService.getJugadores());
     }
 
     @GetMapping("/{id}")
-    public Player getJugador(@PathVariable long id) {
-        for (Player p : jugadores) {
-            if (p.getId() == id){
-                return p;
-            }
-        }
-        return null;
+    public ResponseEntity<Player> getJugador(@PathVariable long id) {
+        Team attackerTeam = playerService.getEquipo().get(0);
+        Team defenderTeam = playerService.getEquipo().get(1);
+        playerService.gol(
+                attackerTeam.getPlayers().stream().mapToInt(Player::getAttack).sum(),
+                defenderTeam.getPlayers().stream().mapToInt(Player::getDefense).sum()
+        );
+
+        return playerService.getJugador(id) == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(playerService.getJugador(id));
     }
 
     @PostMapping
-    public Player postJugador(@RequestBody Player player) {
-        jugadores.add(player);
-        return player;
+    public ResponseEntity<Player> postJugador(@RequestBody Player player) {
+        return ResponseEntity.ok(playerService.postJugador(player)); // Hay que cambiarlo a 'created' no 'ok'
     }
+
 }
