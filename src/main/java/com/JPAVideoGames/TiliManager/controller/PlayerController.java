@@ -34,7 +34,7 @@ public class PlayerController {
                 defenderTeam.getPlayers().stream().mapToInt(Player::getDefense).sum()
         );
 
-        return playerService.getJugador(id) == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(playerService.getJugador(id));
+        return playerService.getJugador(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping

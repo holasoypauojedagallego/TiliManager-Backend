@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -47,8 +48,8 @@ public class PlayerService {
         return teams;
     }
 
-    public Player getJugador(long id) {
-        return jugadores.stream().filter(player-> player.getId() == id).findFirst().orElse(null);
+    public Optional<Player> getJugador(long id) {
+        return jugadores.stream().filter(player-> player.getId() == id).findFirst();
     }
 
     public Player postJugador(Player player) {
