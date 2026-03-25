@@ -15,9 +15,9 @@ import java.util.Optional;
 public class PlayerService {
 
     private static final List<Player> jugadores = new ArrayList<>(List.of(
-            new Player(1, "Pau ", 87, 83, 92),
-            new Player(2, "Adrian ", 87, 87, 87),
-            new Player(3, "Justin ", 87, 83, 92),
+            new Player(1, "Pau", 87, 83, 92),
+            new Player(2, "Adrian", 87, 87, 87),
+            new Player(3, "Justin", 87, 83, 92),
             new Player(4, "Tadi", 87, 83, 92),
             new Player(5, "Tadi", 87, 86, 89),
             new Player(6, "Tadi", 87, 84, 91),
@@ -25,9 +25,9 @@ public class PlayerService {
     ));
 
     private static final List<Player> jugadorTeams = new ArrayList<>(List.of(
-            new Player(11, "cvA ", 87, 81, 75),
-            new Player(21, "Adrian ", 87, 83, 92),
-            new Player(31, "Justin ", 87, 95, 78),
+            new Player(11, "cvA", 87, 81, 75),
+            new Player(21, "Adrian", 87, 83, 92),
+            new Player(31, "Justin", 87, 95, 78),
             new Player(41, "Tadi", 87, 83, 92),
             new Player(51, "ras", 87, 83, 92),
             new Player(61, "AS", 87, 80, 94),
@@ -57,48 +57,60 @@ public class PlayerService {
         return player;
     }
 
-    public void logica() {
-        int localTeam = 0;
-        int localRatingTeam = 172;
-        int visitorTeam= 0;
-        int visitorRatingTeam= 188;
-        boolean momentoPartido;
-        int ganaLocal = 0;
-        for (int i = 0; i < 91; i++) {
-            System.out.println("Minuto: " + i);
-            double rating = (double) ((localRatingTeam + ganaLocal) - visitorRatingTeam) / 33;
-            System.out.println(rating);
-            boolean momentoPartido1 = Math.random() > (0.5 - rating);
-            if (momentoPartido1) {
-                localTeam++;
-                ganaLocal--;
-            } else {
-                visitorTeam++;
-            }
-            System.out.println("Gana local: " + momentoPartido1);
-        }
-        System.out.println("\nLocal: " + localTeam);
-        System.out.println("Visitor: " + visitorTeam);
-    }
-
     public void codigo() {
-        int localTeamRating = 185;
+        int localTeamRating = 184;
         int localGoals = 0;
         int visitorTeamRating = 194;
         int visitorGoals = 0;
 
-        int maximaValoracionGrupal = localTeamRating + visitorTeamRating;
-        double porcentajeGanaLocal = (double) localTeamRating / maximaValoracionGrupal * 100;
-        double porcentajeGanaVisitante = (double) visitorTeamRating / maximaValoracionGrupal * 100;
+        int pasaalgo = 0;
+        int noPasaalgo = 0;
 
-        System.out.println(porcentajeGanaLocal + " " + localGoals);
-        System.out.println(porcentajeGanaVisitante + " " + visitorGoals);
+        int porcentajeGanaLocal = 45 + (localTeamRating - visitorTeamRating);
+        int porcentajeGanaVisitante = 45 + (visitorTeamRating - localTeamRating);
+
+        while (porcentajeGanaLocal > 0 &&  porcentajeGanaVisitante > 0) {
+
+            if (porcentajeGanaLocal > porcentajeGanaVisitante) {
+                porcentajeGanaLocal--;
+            } else  {
+                porcentajeGanaVisitante--;
+            }
+
+        }
+
+        for (int i = 0; i < 91; i++) {
+            System.out.println("Minuto: " + i);
+
+            boolean sucedealgo = Math.random() < 0.3;
+            if (sucedealgo ) { System.out.println("No pasa nada"); noPasaalgo++; continue; }
+
+            System.out.println("Pasa algo");
+            pasaalgo++;
+
+            float queSucede = (float) Math.random();
+            if (queSucede < 0.3) {
+                localGoals = localGoals + gol(
+                        jugadores.stream().mapToInt(Player::getAttack).sum(),
+                        jugadorTeams.stream().mapToInt(Player::getDefense).sum());
+            }
+            System.out.println("Local: " + localGoals);
+        }
+
+        System.out.println("Pasa Algo " + pasaalgo);
+        System.out.println("NO Pasa Algo " + noPasaalgo);
+
+        System.out.println(porcentajeGanaLocal + "; Goles Local: " + localGoals);
+        System.out.println(porcentajeGanaVisitante + "; Goles Visitante: " + visitorGoals);
     }
 
-    public boolean gol(int attackTeamRating, int defenseTeamRating) {
-        System.out.println(attackTeamRating);
-        System.out.println(defenseTeamRating);
-        return true;
+    public int gol(int attackTeamRating, int defenseTeamRating) {
+
+        float probabilidad = (float) Math.random();
+        float diferencia = 0.01f * (attackTeamRating - defenseTeamRating);
+        float probabilidadFinal = 0.55f - diferencia;
+
+        return (probabilidad > probabilidadFinal) ? 1 : 0;
     }
 
 }
