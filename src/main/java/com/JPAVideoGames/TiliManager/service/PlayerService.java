@@ -24,7 +24,7 @@ public class PlayerService {
             new Player(7, "fa", 87, 85, 90)
     ));
 
-    private static final List<Player> jugadorTeams = new ArrayList<>(List.of(
+    private static final List<Player> jugadores2 = new ArrayList<>(List.of(
             new Player(11, "cvA", 87, 81, 75),
             new Player(21, "Adrian", 87, 83, 92),
             new Player(31, "Justin", 87, 95, 78),
@@ -36,7 +36,7 @@ public class PlayerService {
 
     private static final List<Team> teams = new ArrayList<>(List.of(
             new Team(1, "Pau", "Equipo", jugadores),
-            new Team(2, "Adri", "Socialista", jugadorTeams)
+            new Team(2, "Adri", "Socialista", jugadores2)
     ));
 
 
@@ -59,8 +59,12 @@ public class PlayerService {
 
     public void codigo() {
         int localTeamRating = 184;
+        int localAttackRating = jugadores.stream().mapToInt(Player::getAttack).sum();
+        int localDefenseRating = jugadores.stream().mapToInt(Player::getDefense).sum();
         int localGoals = 0;
-        int visitorTeamRating = 194;
+        int visitorTeamRating = 182;
+        int visitorAttackRating = jugadores2.stream().mapToInt(Player::getAttack).sum();
+        int visitorDefenseRating = jugadores2.stream().mapToInt(Player::getDefense).sum();
         int visitorGoals = 0;
 
         int pasaalgo = 0;
@@ -68,33 +72,47 @@ public class PlayerService {
 
         int porcentajeGanaLocal = 45 + (localTeamRating - visitorTeamRating);
         int porcentajeGanaVisitante = 45 + (visitorTeamRating - localTeamRating);
+        if (porcentajeGanaLocal <= 0){ porcentajeGanaLocal = 1; porcentajeGanaVisitante = 89; }
+        if (porcentajeGanaVisitante <= 0){ porcentajeGanaVisitante = 1; porcentajeGanaLocal = 89; }
 
-        while (porcentajeGanaLocal > 0 &&  porcentajeGanaVisitante > 0) {
+        int contador = 0;
 
-            if (porcentajeGanaLocal > porcentajeGanaVisitante) {
-                porcentajeGanaLocal--;
-            } else  {
-                porcentajeGanaVisitante--;
+        while (porcentajeGanaLocal > 0  || porcentajeGanaVisitante > 0) {
+            contador++;
+
+            System.out.println("Minuto: " + contador);
+
+            boolean sucedealgo = Math.random() < 0.33;
+            if (!sucedealgo) {
+                System.out.println("No pasa nada");
+                noPasaalgo++;
+                if (porcentajeGanaLocal >= porcentajeGanaVisitante) porcentajeGanaLocal--;
+                else porcentajeGanaVisitante--;
+                continue;
             }
-
-        }
-
-        for (int i = 0; i < 91; i++) {
-            System.out.println("Minuto: " + i);
-
-            boolean sucedealgo = Math.random() < 0.3;
-            if (sucedealgo ) { System.out.println("No pasa nada"); noPasaalgo++; continue; }
 
             System.out.println("Pasa algo");
             pasaalgo++;
-
             float queSucede = (float) Math.random();
-            if (queSucede < 0.3) {
-                localGoals = localGoals + gol(
-                        jugadores.stream().mapToInt(Player::getAttack).sum(),
-                        jugadorTeams.stream().mapToInt(Player::getDefense).sum());
+
+            if (porcentajeGanaLocal >= porcentajeGanaVisitante) {
+                porcentajeGanaLocal--;
+
+                if (queSucede < 0.3) {
+                    localGoals = localGoals + gol( localAttackRating, visitorDefenseRating);
+                }
+
+                System.out.println("Local: " + localGoals);
+            } else  {
+                porcentajeGanaVisitante--;
+
+                if (queSucede < 0.3) {
+                    visitorGoals += gol(visitorAttackRating, localDefenseRating);
+                }
+
+                System.out.println("Visitante: " + visitorGoals);
             }
-            System.out.println("Local: " + localGoals);
+
         }
 
         System.out.println("Pasa Algo " + pasaalgo);
@@ -108,7 +126,7 @@ public class PlayerService {
 
         float probabilidad = (float) Math.random();
         float diferencia = 0.01f * (attackTeamRating - defenseTeamRating);
-        float probabilidadFinal = 0.55f - diferencia;
+        float probabilidadFinal = 0.52f - diferencia;
 
         return (probabilidad > probabilidadFinal) ? 1 : 0;
     }
