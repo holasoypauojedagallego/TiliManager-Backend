@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.JPAVideoGames</groupId>
-	<artifactId>TiliManager</artifactId>
+	<artifactId>TiliManager-Backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>TiliManager</name>
 	<description>Este es mi proyecto de Síntesis, de Pau Ojeda Gallego</description>
