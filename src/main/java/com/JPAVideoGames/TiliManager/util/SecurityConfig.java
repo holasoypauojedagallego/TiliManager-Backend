@@ -1,4 +1,4 @@
-package com.JPAVideoGames.TiliManager.model;
+package com.JPAVideoGames.TiliManager.util;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

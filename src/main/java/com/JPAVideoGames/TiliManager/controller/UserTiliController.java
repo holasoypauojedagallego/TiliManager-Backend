@@ -34,7 +34,7 @@ public class UserTiliController {
 
     @PostMapping("/register")
     public ResponseEntity<UserTiliDTO> postUserTili(@RequestBody UserTiliCreateDTO userTili) {
-        return ResponseEntity.ok(userTiliService.registerUserTili(userTili));
+        return ResponseEntity.ok(userTiliService.registerUserTili(userTili)); // Cambiar a created
     }
 
     @PostMapping("/login")

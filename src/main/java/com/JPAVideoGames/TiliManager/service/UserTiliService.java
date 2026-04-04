@@ -2,7 +2,7 @@ package com.JPAVideoGames.TiliManager.service;
 
 import com.JPAVideoGames.TiliManager.dto.UserTiliCreateDTO;
 import com.JPAVideoGames.TiliManager.dto.UserTiliDTO;
-import com.JPAVideoGames.TiliManager.mapper.UserTiliMapper;
+import com.JPAVideoGames.TiliManager.util.UserTiliMapper;
 import com.JPAVideoGames.TiliManager.model.UserTili;
 import com.JPAVideoGames.TiliManager.repository.UserTiliRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;

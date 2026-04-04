@@ -1,4 +1,4 @@
-package com.JPAVideoGames.TiliManager.mapper;
+package com.JPAVideoGames.TiliManager.util;
 
 import com.JPAVideoGames.TiliManager.dto.UserTiliCreateDTO;
 import com.JPAVideoGames.TiliManager.dto.UserTiliDTO;
