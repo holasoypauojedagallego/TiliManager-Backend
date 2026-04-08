@@ -37,6 +37,9 @@ public class UserTiliService {
     }
 
     public UserTiliDTO registerUserTili(UserTiliCreateDTO userTiliCreateDTO) {
+        if (userTiliCreateDTO.getEmail().isEmpty() || userTiliCreateDTO.getPassword().isEmpty() || userTiliCreateDTO.getName().isEmpty()){
+            return null;
+        }
         UserTili userTili = userTiliMapper.toCreateEntity(userTiliCreateDTO);
         userTili.setPassword(passwordEncoder.encode(userTili.getPassword()));
 
