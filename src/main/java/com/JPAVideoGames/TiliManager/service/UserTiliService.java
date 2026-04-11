@@ -2,6 +2,7 @@ package com.JPAVideoGames.TiliManager.service;
 
 import com.JPAVideoGames.TiliManager.dto.UserTiliCreateDTO;
 import com.JPAVideoGames.TiliManager.dto.UserTiliDTO;
+import com.JPAVideoGames.TiliManager.dto.UserTiliLoginDTO;
 import com.JPAVideoGames.TiliManager.util.UserTiliMapper;
 import com.JPAVideoGames.TiliManager.model.UserTili;
 import com.JPAVideoGames.TiliManager.repository.UserTiliRepository;
@@ -32,6 +33,10 @@ public class UserTiliService {
         return userTiliRepository.findById(id).map(userTiliMapper::toDto);
     }
 
+    public Optional<UserTiliDTO> getByName(String name){
+        return userTiliRepository.findByName(name).map(userTiliMapper::toDto);
+    }
+
     public Optional<UserTiliDTO> getByEmail(String email){
         return userTiliRepository.findByEmail(email).map(userTiliMapper::toDto);
     }
@@ -46,7 +51,7 @@ public class UserTiliService {
         return userTiliMapper.toDto(userTiliRepository.save(userTili));
     }
 
-    public Optional<UserTiliDTO> loginUserTili(UserTiliCreateDTO userTili) {
+    public Optional<UserTiliDTO> loginUserTili(UserTiliLoginDTO userTili) {
         return userTiliRepository.findByEmail(userTili.getEmail()).filter
                 (u -> passwordEncoder.matches((userTili.getPassword()), u.getPassword())).
                 map(userTiliMapper::toDto);
