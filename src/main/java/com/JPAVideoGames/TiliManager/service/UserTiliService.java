@@ -68,11 +68,11 @@ public class UserTiliService {
                 new UsernamePasswordAuthenticationToken(
                         userTili.getEmail(),
                         userTili.getPassword()
-                )
-        );
+                ));
 
         String token = jwtService.generateToken(authentication);
+        String getUsername = getByEmail(userTili.getEmail()).get().getName();
 
-        return new AuthResponse(token, "Bearer", userTili.getEmail(),"userTili");
+        return new AuthResponse(token, "Bearer", userTili.getEmail(), getUsername);
     }
 }
