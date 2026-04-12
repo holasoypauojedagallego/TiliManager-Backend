@@ -3,9 +3,14 @@ package com.JPAVideoGames.TiliManager.service;
 import com.JPAVideoGames.TiliManager.dto.UserTiliCreateDTO;
 import com.JPAVideoGames.TiliManager.dto.UserTiliDTO;
 import com.JPAVideoGames.TiliManager.dto.UserTiliLoginDTO;
+import com.JPAVideoGames.TiliManager.model.AuthResponse;
 import com.JPAVideoGames.TiliManager.util.UserTiliMapper;
 import com.JPAVideoGames.TiliManager.model.UserTili;
 import com.JPAVideoGames.TiliManager.repository.UserTiliRepository;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +23,17 @@ public class UserTiliService {
     private final UserTiliRepository userTiliRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserTiliMapper userTiliMapper;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
-    public UserTiliService(UserTiliRepository userTiliRepository, PasswordEncoder passwordEncoder, UserTiliMapper userTiliMapper) {
+    public UserTiliService(UserTiliRepository userTiliRepository, PasswordEncoder passwordEncoder,
+                           UserTiliMapper userTiliMapper,@Lazy AuthenticationManager authenticationManager,
+                           JwtService jwtService) {
         this.userTiliRepository = userTiliRepository;
         this.passwordEncoder = passwordEncoder;
         this.userTiliMapper = userTiliMapper;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
     public List<UserTiliDTO> getAll(){
@@ -51,9 +62,17 @@ public class UserTiliService {
         return userTiliMapper.toDto(userTiliRepository.save(userTili));
     }
 
-    public Optional<UserTiliDTO> loginUserTili(UserTiliLoginDTO userTili) {
-        return userTiliRepository.findByEmail(userTili.getEmail()).filter
-                (u -> passwordEncoder.matches((userTili.getPassword()), u.getPassword())).
-                map(userTiliMapper::toDto);
+    public AuthResponse loginUserTili(UserTiliLoginDTO userTili) {
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        userTili.getEmail(),
+                        userTili.getPassword()
+                )
+        );
+
+        String token = jwtService.generateToken(authentication);
+
+        return new AuthResponse(token, "Bearer", userTili.getEmail(),"userTili");
     }
 }

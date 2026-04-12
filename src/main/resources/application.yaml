@@ -10,3 +10,5 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  jwt:
+    secreto: FernandoPorrinoGuapo2704PorfavorUn10Gracias

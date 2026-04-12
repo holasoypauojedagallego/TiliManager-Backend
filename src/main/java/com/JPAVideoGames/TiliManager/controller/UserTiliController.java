@@ -3,6 +3,7 @@ package com.JPAVideoGames.TiliManager.controller;
 import com.JPAVideoGames.TiliManager.dto.UserTiliCreateDTO;
 import com.JPAVideoGames.TiliManager.dto.UserTiliDTO;
 import com.JPAVideoGames.TiliManager.dto.UserTiliLoginDTO;
+import com.JPAVideoGames.TiliManager.model.AuthResponse;
 import com.JPAVideoGames.TiliManager.service.UserTiliService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -56,10 +56,9 @@ public class UserTiliController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserTiliDTO> loginUserTili(@RequestBody @Valid UserTiliLoginDTO userTili){
-        return userTiliService.loginUserTili(userTili).
-                map(ResponseEntity.status(HttpStatus.OK)::body).
-                orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    public ResponseEntity<AuthResponse> loginUserTili(@RequestBody @Valid UserTiliLoginDTO userTili){
+        return ResponseEntity.ok(userTiliService.loginUserTili(userTili));
+
     }
 
 }
