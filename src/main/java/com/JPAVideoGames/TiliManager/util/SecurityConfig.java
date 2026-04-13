@@ -24,7 +24,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable) // desactivar CSRF para pruebas
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // permitir todo
+                        .anyRequest().permitAll() // permitir
                 );
 
         return http.build();
@@ -37,7 +37,7 @@ public class SecurityConfig {
 //                .csrf(AbstractHttpConfigurer::disable) // desactivar CSRF para pruebas
 //                .authorizeHttpRequests(auth -> auth
 //                        .requestMatchers("/users/login", "/users/register").permitAll()
-//                        .anyRequest().authenticated() // permitir todo
+//                        .anyRequest().authenticated()
 //                );
 //
 //        return http.build();

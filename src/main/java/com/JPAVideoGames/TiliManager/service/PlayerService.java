@@ -1,5 +1,6 @@
 package com.JPAVideoGames.TiliManager.service;
 
+import com.JPAVideoGames.TiliManager.model.Partido;
 import com.JPAVideoGames.TiliManager.model.Player;
 import com.JPAVideoGames.TiliManager.model.Team;
 import org.springframework.context.annotation.Lazy;
@@ -57,7 +58,7 @@ public class PlayerService {
         return player;
     }
 
-    public void codigo() {
+    public List<Partido> codigo() {
         int localTeamRating = 184;
         int localAttackRating = jugadores.stream().mapToInt(Player::getAttack).sum();
         int localDefenseRating = jugadores.stream().mapToInt(Player::getDefense).sum();
@@ -76,9 +77,11 @@ public class PlayerService {
         if (porcentajeGanaVisitante <= 0){ porcentajeGanaVisitante = 1; porcentajeGanaLocal = 89; }
 
         int contador = 0;
+        List<Partido> partidos = new ArrayList<>();
 
         while (porcentajeGanaLocal > 0  || porcentajeGanaVisitante > 0) {
             contador++;
+            Partido partidoalgo = new Partido(contador);
 
             System.out.println("Minuto: " + contador);
 
@@ -102,6 +105,7 @@ public class PlayerService {
                     localGoals = localGoals + gol( localAttackRating, visitorDefenseRating);
                 }
 
+                partidoalgo.setSucede("Local: " + localGoals);
                 System.out.println("Local: " + localGoals);
             } else  {
                 porcentajeGanaVisitante--;
@@ -110,9 +114,12 @@ public class PlayerService {
                     visitorGoals += gol(visitorAttackRating, localDefenseRating);
                 }
 
+                partidoalgo.setSucede("Visitante: " + localGoals);
                 System.out.println("Visitante: " + visitorGoals);
             }
-
+            if (!partidoalgo.getSucede().isEmpty()){
+                partidos.add(partidoalgo);
+            }
         }
 
         System.out.println("Pasa Algo " + pasaalgo);
@@ -120,6 +127,7 @@ public class PlayerService {
 
         System.out.println(porcentajeGanaLocal + "; Goles Local: " + localGoals);
         System.out.println(porcentajeGanaVisitante + "; Goles Visitante: " + visitorGoals);
+        return partidos;
     }
 
     public int gol(int attackTeamRating, int defenseTeamRating) {

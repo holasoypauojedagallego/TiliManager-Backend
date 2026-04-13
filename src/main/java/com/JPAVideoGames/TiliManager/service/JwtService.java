@@ -25,6 +25,7 @@ public class JwtService {
         String username = authentication.getName();
         return Jwts.builder()
                 .subject(username)
+                .claim("email", username)
                 .issuedAt(now)
                 .expiration(expiryDate)
                 .signWith(secreto)

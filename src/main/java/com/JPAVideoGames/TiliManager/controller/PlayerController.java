@@ -1,5 +1,6 @@
 package com.JPAVideoGames.TiliManager.controller;
 
+import com.JPAVideoGames.TiliManager.model.Partido;
 import com.JPAVideoGames.TiliManager.model.Player;
 import com.JPAVideoGames.TiliManager.model.Team;
 import com.JPAVideoGames.TiliManager.service.PlayerService;
@@ -21,8 +22,12 @@ public class PlayerController {
 
     @GetMapping
     public ResponseEntity<List<Player>> getJugadores() {
-        playerService.codigo();
         return ResponseEntity.ok(playerService.getJugadores());
+    }
+
+    @GetMapping("/codigo")
+    public ResponseEntity<List<Partido>> codigoJugar() {
+        return ResponseEntity.ok(playerService.codigo());
     }
 
     @GetMapping("/{id}")
