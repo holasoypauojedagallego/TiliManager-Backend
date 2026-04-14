@@ -1,6 +1,6 @@
 package com.JPAVideoGames.TiliManager.controller;
 
-import com.JPAVideoGames.TiliManager.model.Partido;
+import com.JPAVideoGames.TiliManager.model.PartidoEncapsulado;
 import com.JPAVideoGames.TiliManager.model.Player;
 import com.JPAVideoGames.TiliManager.model.Team;
 import com.JPAVideoGames.TiliManager.service.PlayerService;
@@ -26,7 +26,7 @@ public class PlayerController {
     }
 
     @GetMapping("/codigo")
-    public ResponseEntity<List<Partido>> codigoJugar() {
+    public ResponseEntity<List<PartidoEncapsulado>> codigoJugar() {
         return ResponseEntity.ok(playerService.codigo());
     }
 
