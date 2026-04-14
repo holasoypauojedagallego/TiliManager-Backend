@@ -1,5 +1,6 @@
 package com.JPAVideoGames.TiliManager.service;
 
+import com.JPAVideoGames.TiliManager.model.PartidoEncapsulado;
 import com.JPAVideoGames.TiliManager.model.Player;
 import com.JPAVideoGames.TiliManager.model.Team;
 import org.springframework.context.annotation.Lazy;
@@ -57,18 +58,13 @@ public class PlayerService {
         return player;
     }
 
-    public void codigo() {
-        int localTeamRating = 184;
+    public List<PartidoEncapsulado> codigo(int localTeamRating, int visitorTeamRating) {
         int localAttackRating = jugadores.stream().mapToInt(Player::getAttack).sum();
         int localDefenseRating = jugadores.stream().mapToInt(Player::getDefense).sum();
         int localGoals = 0;
-        int visitorTeamRating = 182;
         int visitorAttackRating = jugadores2.stream().mapToInt(Player::getAttack).sum();
         int visitorDefenseRating = jugadores2.stream().mapToInt(Player::getDefense).sum();
         int visitorGoals = 0;
-
-        int pasaalgo = 0;
-        int noPasaalgo = 0;
 
         int porcentajeGanaLocal = 45 + (localTeamRating - visitorTeamRating);
         int porcentajeGanaVisitante = 45 + (visitorTeamRating - localTeamRating);
@@ -76,50 +72,54 @@ public class PlayerService {
         if (porcentajeGanaVisitante <= 0){ porcentajeGanaVisitante = 1; porcentajeGanaLocal = 89; }
 
         int contador = 0;
+        List<PartidoEncapsulado> partidoEncapsulados = new ArrayList<>();
 
         while (porcentajeGanaLocal > 0  || porcentajeGanaVisitante > 0) {
             contador++;
+            PartidoEncapsulado partidoalgo = new PartidoEncapsulado(contador);
 
             System.out.println("Minuto: " + contador);
 
             boolean sucedealgo = Math.random() < 0.33;
             if (!sucedealgo) {
                 System.out.println("No pasa nada");
-                noPasaalgo++;
                 if (porcentajeGanaLocal >= porcentajeGanaVisitante) porcentajeGanaLocal--;
                 else porcentajeGanaVisitante--;
                 continue;
             }
 
             System.out.println("Pasa algo");
-            pasaalgo++;
             float queSucede = (float) Math.random();
 
             if (porcentajeGanaLocal >= porcentajeGanaVisitante) {
                 porcentajeGanaLocal--;
+                partidoalgo.setEquipo("Local");
 
                 if (queSucede < 0.3) {
                     localGoals = localGoals + gol( localAttackRating, visitorDefenseRating);
                 }
 
+                partidoalgo.setSucede(localGoals);
                 System.out.println("Local: " + localGoals);
             } else  {
                 porcentajeGanaVisitante--;
+                partidoalgo.setEquipo("Visitante");
 
                 if (queSucede < 0.3) {
                     visitorGoals += gol(visitorAttackRating, localDefenseRating);
                 }
 
+                partidoalgo.setSucede(visitorGoals);
                 System.out.println("Visitante: " + visitorGoals);
             }
-
+            if (!partidoalgo.getEquipo().isEmpty()){
+                partidoEncapsulados.add(partidoalgo);
+            }
         }
-
-        System.out.println("Pasa Algo " + pasaalgo);
-        System.out.println("NO Pasa Algo " + noPasaalgo);
 
         System.out.println(porcentajeGanaLocal + "; Goles Local: " + localGoals);
         System.out.println(porcentajeGanaVisitante + "; Goles Visitante: " + visitorGoals);
+        return partidoEncapsulados;
     }
 
     public int gol(int attackTeamRating, int defenseTeamRating) {
