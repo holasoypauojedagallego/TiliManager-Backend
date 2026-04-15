@@ -1,5 +1,7 @@
 package com.JPAVideoGames.TiliManager.model;
 
+import jakarta.validation.constraints.Size;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +10,7 @@ public class Team {
     private String owner;
     private String name;
 
+    @Size(min = 5, max = 7)
     private List<Player> players;
 
     public Team(long id, String owner, String name, List<Player> players) {

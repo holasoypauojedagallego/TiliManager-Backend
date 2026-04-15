@@ -1,6 +1,6 @@
 package com.JPAVideoGames.TiliManager.controller;
 
-import com.JPAVideoGames.TiliManager.model.PartidoEncapsulado;
+import com.JPAVideoGames.TiliManager.dto.PartidoEncapsuladoDTO;
 import com.JPAVideoGames.TiliManager.model.Player;
 import com.JPAVideoGames.TiliManager.model.Team;
 import com.JPAVideoGames.TiliManager.service.PlayerService;
@@ -25,11 +25,21 @@ public class PlayerController {
         return ResponseEntity.ok(playerService.getJugadores());
     }
 
+    @GetMapping("/equipos")
+    public ResponseEntity<List<Team>> getEquipos() {
+        return ResponseEntity.ok(playerService.getEquipo());
+    }
+
     @GetMapping("/codigo")
-    public ResponseEntity<List<PartidoEncapsulado>> codigoJugar() {
-        int localTeamRating = 184;
-        int visitorTeamRating = 182;
+    public ResponseEntity<List<PartidoEncapsuladoDTO>> codigoJugarSimulado() {
+        Team localTeamRating = playerService.getEquipo().get(0);
+        Team visitorTeamRating = playerService.getEquipo().get(1);
         return ResponseEntity.ok(playerService.codigo(localTeamRating, visitorTeamRating));
+    }
+
+    @PostMapping("/codigo")
+    public ResponseEntity<List<PartidoEncapsuladoDTO>> codigoJugar(@RequestBody Team localTeam, Team visitorTeam) {
+        return ResponseEntity.ok(playerService.codigo(localTeam, visitorTeam));
     }
 
     @GetMapping("/{id}")
