@@ -1,8 +1,12 @@
 package com.JPAVideoGames.TiliManager.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "user_tili")
 public class UserTili {
 
     @Id
@@ -17,6 +21,10 @@ public class UserTili {
 
     @Column(nullable = false)
     private String password;
+
+    @OneToOne(mappedBy = "team")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+    private Team team;
 
     public long getId() {
         return id;
@@ -48,5 +56,13 @@ public class UserTili {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }

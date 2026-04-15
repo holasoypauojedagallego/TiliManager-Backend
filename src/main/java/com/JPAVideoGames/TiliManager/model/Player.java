@@ -1,12 +1,30 @@
 package com.JPAVideoGames.TiliManager.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "player")
 public class Player {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(unique = true)
     private String name;
+
+    @Column
     private int rating;
+
+    @Column
     private int attack;
+
+    @Column
     private int defense;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id", nullable = true)
+    private Team team;
 
     public Player(long id, String name, int rating, int attack, int defense) {
         this.id = id;
@@ -54,5 +72,13 @@ public class Player {
 
     public void setDefense(int defense) {
         this.defense = defense;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }

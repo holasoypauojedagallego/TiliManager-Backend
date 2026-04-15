@@ -3,9 +3,12 @@ package com.JPAVideoGames.TiliManager.service;
 import com.JPAVideoGames.TiliManager.dto.UserTiliCreateDTO;
 import com.JPAVideoGames.TiliManager.dto.UserTiliDTO;
 import com.JPAVideoGames.TiliManager.dto.UserTiliLoginDTO;
+import com.JPAVideoGames.TiliManager.model.Team;
+import com.JPAVideoGames.TiliManager.repository.TeamRepository;
 import com.JPAVideoGames.TiliManager.util.UserTiliMapper;
 import com.JPAVideoGames.TiliManager.model.UserTili;
 import com.JPAVideoGames.TiliManager.repository.UserTiliRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,16 +16,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserTiliService {
 
     private final UserTiliRepository userTiliRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserTiliMapper userTiliMapper;
+    private final TeamRepository teamRepository;
 
-    public UserTiliService(UserTiliRepository userTiliRepository, PasswordEncoder passwordEncoder, UserTiliMapper userTiliMapper) {
+    public UserTiliService(UserTiliRepository userTiliRepository, PasswordEncoder passwordEncoder,
+                           UserTiliMapper userTiliMapper,  TeamRepository teamRepository) {
         this.userTiliRepository = userTiliRepository;
         this.passwordEncoder = passwordEncoder;
         this.userTiliMapper = userTiliMapper;
+        this.teamRepository = teamRepository;
     }
 
     public List<UserTiliDTO> getAll(){
@@ -41,6 +48,7 @@ public class UserTiliService {
         return userTiliRepository.findByEmail(email).map(userTiliMapper::toDto);
     }
 
+    @Transactional
     public UserTiliDTO registerUserTili(UserTiliCreateDTO userTiliCreateDTO) {
         if (userTiliCreateDTO.getEmail().isEmpty() || userTiliCreateDTO.getPassword().isEmpty() || userTiliCreateDTO.getName().isEmpty()){
             return null;
@@ -48,7 +56,15 @@ public class UserTiliService {
         UserTili userTili = userTiliMapper.toCreateEntity(userTiliCreateDTO);
         userTili.setPassword(passwordEncoder.encode(userTili.getPassword()));
 
-        return userTiliMapper.toDto(userTiliRepository.save(userTili));
+        Team teamFromUserTili = new Team();
+        int numeroaleatorio = (int) (Math.random() * 1000000);
+        teamFromUserTili.setName("T_" + numeroaleatorio);
+
+        userTili.setTeam(teamFromUserTili);
+
+        UserTili savedUserTili = userTiliRepository.save(userTili);
+
+        return userTiliMapper.toDto(savedUserTili);
     }
 
     public Optional<UserTiliDTO> loginUserTili(UserTiliLoginDTO userTili) {

@@ -8,5 +8,5 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate # Poner 'create' la primera vez que lo instancies a tu base de datos, o error, ya después dejar 'validate'
+      ddl-auto: create # Poner 'create' la primera vez que lo instancies a tu base de datos, o error, ya después dejar 'validate'
     defer-datasource-initialization: true

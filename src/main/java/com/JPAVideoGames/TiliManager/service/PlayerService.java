@@ -3,6 +3,9 @@ package com.JPAVideoGames.TiliManager.service;
 import com.JPAVideoGames.TiliManager.dto.PartidoEncapsuladoDTO;
 import com.JPAVideoGames.TiliManager.model.Player;
 import com.JPAVideoGames.TiliManager.model.Team;
+import com.JPAVideoGames.TiliManager.model.UserTili;
+import com.JPAVideoGames.TiliManager.repository.PlayerRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +16,14 @@ import java.util.Optional;
 
 @Service
 @Lazy
+@Transactional
 public class PlayerService {
+
+    private final PlayerRepository playerRepository;
+
+    public PlayerService(PlayerRepository playerRepository) {
+        this.playerRepository = playerRepository;
+    }
 
     private static final List<Player> jugadores = new ArrayList<>(List.of(
             new Player(1, "Pau", 87, 83, 92),
@@ -31,18 +41,18 @@ public class PlayerService {
             new Player(31, "Justin", 87, 95, 78),
             new Player(41, "TadiPro", 97, 83, 92),
             new Player(51, "John Marston", 82, 83, 92),
-            new Player(61, "CuloGordo40", 85, 80, 94),
+            new Player(61, "CuloGordo", 85, 80, 94),
             new Player(71, "MrPopo", 83, 97, 79)));
 
 
     private static final List<Team> teams = new ArrayList<>(List.of(
-            new Team(1, "Pau", "EquipoFinal", jugadores),
-            new Team(2, "Adri", "Socialista", jugadores2)
+            new Team(1, new UserTili(), "EquipoFinal", jugadores),
+            new Team(2, new UserTili(), "Socialista", jugadores2)
     ));
 
 
     public List<Player> getJugadores() {
-        return jugadores;
+        return playerRepository.findAll();
     }
 
     public List<Team> getEquipo() {

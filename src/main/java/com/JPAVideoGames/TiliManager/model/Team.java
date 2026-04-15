@@ -1,19 +1,37 @@
 package com.JPAVideoGames.TiliManager.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "team")
 public class Team {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String owner;
+
+    @Column(unique = true, nullable = false)
+    @Size(min = 3, max = 16)
+    @Pattern(regexp = "^[a-zA-Z0-9._+-]+$", message = "Ha de tener caracteres válidos (a-zA-Z0-9._+-)")
     private String name;
 
+    @Column
     @Size(min = 5, max = 7)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private List<Player> players;
 
-    public Team(long id, String owner, String name, List<Player> players) {
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "team", unique = true)
+    private UserTili owner;
+
+    public Team(long id, UserTili owner, String name, List<Player> players) {
         this.id = id;
         this.owner = owner;
         this.name = name;
@@ -32,11 +50,11 @@ public class Team {
         this.id = id;
     }
 
-    public String getOwner() {
+    public UserTili getOwner() {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(UserTili owner) {
         this.owner = owner;
     }
 
