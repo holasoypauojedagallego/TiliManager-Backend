@@ -48,7 +48,6 @@ public class UserTiliService {
         return userTiliRepository.findByEmail(email).map(userTiliMapper::toDto);
     }
 
-    @Transactional
     public UserTiliDTO registerUserTili(UserTiliCreateDTO userTiliCreateDTO) {
         if (userTiliCreateDTO.getEmail().isEmpty() || userTiliCreateDTO.getPassword().isEmpty() || userTiliCreateDTO.getName().isEmpty()){
             return null;
@@ -57,12 +56,13 @@ public class UserTiliService {
         userTili.setPassword(passwordEncoder.encode(userTili.getPassword()));
 
         Team teamFromUserTili = new Team();
-        int numeroaleatorio = (int) (Math.random() * 1000000);
+        int numeroaleatorio = (int) (Math.random() * 100000000);
         teamFromUserTili.setName("T_" + numeroaleatorio);
 
-        userTili.setTeam(teamFromUserTili);
-
         UserTili savedUserTili = userTiliRepository.save(userTili);
+
+        teamFromUserTili.setOwner(savedUserTili);
+        teamRepository.save(teamFromUserTili);
 
         return userTiliMapper.toDto(savedUserTili);
     }

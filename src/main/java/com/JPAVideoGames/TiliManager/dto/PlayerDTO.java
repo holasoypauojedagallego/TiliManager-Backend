@@ -1,39 +1,18 @@
-package com.JPAVideoGames.TiliManager.model;
+package com.JPAVideoGames.TiliManager.dto;
 
-import jakarta.persistence.*;
+import com.JPAVideoGames.TiliManager.model.Team;
 
-@Entity
-@Table(name = "player")
-public class Player {
+public class PlayerDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    @Column(unique = true)
     private String name;
-
-    @Column
     private int rating;
-
-    @Column
     private int attack;
-
-    @Column
     private int defense;
 
-    @Column(name = "team_id")
-    private Long teamId;
+    private Team team;
 
-    public Player(long id, String name, int rating, int attack, int defense) {
-        this.id = id;
-        this.name = name;
-        this.rating = rating;
-        this.attack = attack;
-        this.defense = defense;
-    }
-
-    public Player() {}
+    public PlayerDTO() {}
 
     public long getId() {
         return id;
@@ -75,11 +54,4 @@ public class Player {
         this.defense = defense;
     }
 
-    public Long getTeamId() {
-        return teamId;
-    }
-
-    public void setTeamId(Long teamId) {
-        this.teamId = teamId;
-    }
 }

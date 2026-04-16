@@ -22,13 +22,12 @@ public class Team {
     @Pattern(regexp = "^[a-zA-Z0-9._+-]+$", message = "Ha de tener caracteres válidos (a-zA-Z0-9._+-)")
     private String name;
 
-    @Column
-    @Size(min = 5, max = 7)
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "team_id", referencedColumnName = "id")
     private List<Player> players;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "team", unique = true)
+    @JoinColumn(name = "owner", referencedColumnName = "id", unique = true)
     private UserTili owner;
 
     public Team(long id, UserTili owner, String name, List<Player> players) {

@@ -22,9 +22,6 @@ public class UserTili {
     @Column(nullable = false)
     private String password;
 
-    @OneToOne(mappedBy = "team")
-    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-    private Team team;
 
     public long getId() {
         return id;
@@ -58,11 +55,4 @@ public class UserTili {
         this.password = password;
     }
 
-    public Team getTeam() {
-        return team;
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
-    }
 }

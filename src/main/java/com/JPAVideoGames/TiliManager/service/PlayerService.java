@@ -44,10 +44,14 @@ public class PlayerService {
             new Player(61, "CuloGordo", 85, 80, 94),
             new Player(71, "MrPopo", 83, 97, 79)));
 
+    private static final List<UserTili> users = new ArrayList<>(List.of(
+            new UserTili(),
+            new UserTili()
+    ));
 
     private static final List<Team> teams = new ArrayList<>(List.of(
-            new Team(1, new UserTili(), "EquipoFinal", jugadores),
-            new Team(2, new UserTili(), "Socialista", jugadores2)
+            new Team(1, users.get(0), "EquipoFinal", jugadores),
+            new Team(2, users.get(1), "Socialista", jugadores2)
     ));
 
 
@@ -56,6 +60,12 @@ public class PlayerService {
     }
 
     public List<Team> getEquipo() {
+        UserTili userTili = new UserTili();
+        userTili.setName("Pau");
+        UserTili userTili2 = new UserTili();
+        userTili2.setName("Adrian");
+        teams.get(0).setOwner(userTili);
+        teams.get(1).setOwner(userTili2);
         return teams;
     }
 
