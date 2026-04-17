@@ -3,6 +3,7 @@ package com.JPAVideoGames.TiliManager.controller;
 import com.JPAVideoGames.TiliManager.dto.UserTiliCreateDTO;
 import com.JPAVideoGames.TiliManager.dto.UserTiliDTO;
 import com.JPAVideoGames.TiliManager.dto.UserTiliLoginDTO;
+import com.JPAVideoGames.TiliManager.dto.UserTiliPassDTO;
 import com.JPAVideoGames.TiliManager.service.UserTiliService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
@@ -26,7 +28,7 @@ public class UserTiliController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserTiliDTO> getUserTiliById(@PathVariable long id){
+    public ResponseEntity<UserTiliDTO> getUserTiliById(@PathVariable UUID id){
         return userTiliService.getById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
@@ -56,7 +58,7 @@ public class UserTiliController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserTiliDTO> loginUserTili(@RequestBody @Valid UserTiliLoginDTO userTili){
+    public ResponseEntity<UserTiliPassDTO> loginUserTili(@RequestBody @Valid UserTiliLoginDTO userTili){
         return userTiliService.loginUserTili(userTili).
                 map(ResponseEntity.status(HttpStatus.OK)::body).
                 orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());

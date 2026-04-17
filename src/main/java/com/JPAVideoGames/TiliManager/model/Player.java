@@ -25,6 +25,9 @@ public class Player {
     @Column(name = "team_id")
     private Long teamId;
 
+    @Column
+    private Long price;
+
     public Player(long id, String name, int rating, int attack, int defense) {
         this.id = id;
         this.name = name;
@@ -81,5 +84,13 @@ public class Player {
 
     public void setTeamId(Long teamId) {
         this.teamId = teamId;
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
     }
 }

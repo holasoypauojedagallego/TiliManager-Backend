@@ -1,17 +1,17 @@
 package com.JPAVideoGames.TiliManager.dto;
 
 import com.JPAVideoGames.TiliManager.model.Player;
+
 import java.util.List;
 
-public class TeamDTO {
+public class TeamUpdateDTO {
 
     private long id;
     private String name;
     private List<Player> players;
-    private UserTiliDTO owner;
     private long price;
 
-    public TeamDTO() {}
+    public TeamUpdateDTO() {}
 
     public long getId() {
         return id;
@@ -35,14 +35,6 @@ public class TeamDTO {
 
     public void setPlayers(List<Player> players) {
         this.players = players;
-    }
-
-    public UserTiliDTO getOwner() {
-        return owner;
-    }
-
-    public void setOwner(UserTiliDTO owner) {
-        this.owner = owner;
     }
 
     public long getPrice() {

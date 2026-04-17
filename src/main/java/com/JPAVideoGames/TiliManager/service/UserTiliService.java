@@ -3,6 +3,7 @@ package com.JPAVideoGames.TiliManager.service;
 import com.JPAVideoGames.TiliManager.dto.UserTiliCreateDTO;
 import com.JPAVideoGames.TiliManager.dto.UserTiliDTO;
 import com.JPAVideoGames.TiliManager.dto.UserTiliLoginDTO;
+import com.JPAVideoGames.TiliManager.dto.UserTiliPassDTO;
 import com.JPAVideoGames.TiliManager.model.Team;
 import com.JPAVideoGames.TiliManager.repository.TeamRepository;
 import com.JPAVideoGames.TiliManager.util.UserTiliMapper;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -36,7 +38,7 @@ public class UserTiliService {
         return userTiliMapper.toDto(userTiliRepository.findAll());
     }
 
-    public Optional<UserTiliDTO> getById(long id){
+    public Optional<UserTiliDTO> getById(UUID id){
         return userTiliRepository.findById(id).map(userTiliMapper::toDto);
     }
 
@@ -67,9 +69,9 @@ public class UserTiliService {
         return userTiliMapper.toDto(savedUserTili);
     }
 
-    public Optional<UserTiliDTO> loginUserTili(UserTiliLoginDTO userTili) {
+    public Optional<UserTiliPassDTO> loginUserTili(UserTiliLoginDTO userTili) {
         return userTiliRepository.findByEmail(userTili.getEmail()).filter
                 (u -> passwordEncoder.matches((userTili.getPassword()), u.getPassword())).
-                map(userTiliMapper::toDto);
+                map(userTiliMapper::toPassDto);
     }
 }

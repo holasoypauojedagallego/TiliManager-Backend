@@ -18,8 +18,8 @@ public class Team {
     private long id;
 
     @Column(unique = true, nullable = false)
-    @Size(min = 3, max = 16)
-    @Pattern(regexp = "^[a-zA-Z0-9._+-]+$", message = "Ha de tener caracteres válidos (a-zA-Z0-9._+-)")
+    @Size(min = 3, max = 20)
+    @Pattern(regexp = "^[a-zA-Z0-9._+-]([a-zA-Z0-9._+ -]*[a-zA-Z0-9._+-])?$")
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -29,6 +29,8 @@ public class Team {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner", referencedColumnName = "id", unique = true)
     private UserTili owner;
+
+    private Long price;
 
     public Team(long id, UserTili owner, String name, List<Player> players) {
         this.id = id;
@@ -77,5 +79,13 @@ public class Team {
     public void setOnePlayer(Player player) throws IllegalArgumentException {
         if (this.players.size() >= 7) throw new IllegalArgumentException("Max of 7 players allowed");
         this.players.add(player);
+    }
+
+    public Long getPrice() {
+        return price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
     }
 }

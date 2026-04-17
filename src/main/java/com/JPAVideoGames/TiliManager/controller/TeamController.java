@@ -1,12 +1,12 @@
 package com.JPAVideoGames.TiliManager.controller;
 
+import com.JPAVideoGames.TiliManager.dto.TeamUpdateDTO;
 import com.JPAVideoGames.TiliManager.dto.TeamDTO;
-import com.JPAVideoGames.TiliManager.model.Team;
+import com.JPAVideoGames.TiliManager.dto.UserTiliPassDTO;
 import com.JPAVideoGames.TiliManager.service.TeamService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +31,18 @@ public class TeamController {
     }
 
     @GetMapping("/name/{name}")
-    public ResponseEntity<TeamDTO> getTeamById(@PathVariable String name) {
+    public ResponseEntity<TeamDTO> getTeamByName(@PathVariable String name) {
         return teamService.getTeamByName(name).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/owner")
+    public ResponseEntity<TeamDTO> getTeamByOwner(@RequestBody @Valid UserTiliPassDTO userTiliPassDTO) {
+        return teamService.getTeamByOwner(userTiliPassDTO).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping
+    public ResponseEntity<TeamDTO> updateTeam(@RequestBody TeamUpdateDTO teamUpdateDTO) {
+        return teamService.updateTeam(teamUpdateDTO).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
 }
