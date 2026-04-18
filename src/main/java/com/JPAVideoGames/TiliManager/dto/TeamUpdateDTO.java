@@ -5,11 +5,11 @@ import com.JPAVideoGames.TiliManager.model.Player;
 import java.util.List;
 
 public class TeamUpdateDTO {
-
     private long id;
     private String name;
     private List<Player> players;
-    private long price;
+    private UserTiliPassDTO owner;
+    private Long money;
 
     public TeamUpdateDTO() {}
 
@@ -37,11 +37,19 @@ public class TeamUpdateDTO {
         this.players = players;
     }
 
-    public long getPrice() {
-        return price;
+    public UserTiliPassDTO getOwner() {
+        return owner;
     }
 
-    public void setPrice(long price) {
-        this.price = price;
+    public void setOwner(UserTiliPassDTO owner) {
+        this.owner = owner;
+    }
+
+    public Long getMoney() {
+        return money;
+    }
+
+    public void setMoney(Long money) {
+        this.money = money;
     }
 }

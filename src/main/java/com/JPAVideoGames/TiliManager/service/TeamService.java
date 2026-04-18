@@ -1,7 +1,8 @@
 package com.JPAVideoGames.TiliManager.service;
 
 import com.JPAVideoGames.TiliManager.dto.*;
-import com.JPAVideoGames.TiliManager.model.Team;
+import com.JPAVideoGames.TiliManager.exceptions.PlayersSizeException;
+import com.JPAVideoGames.TiliManager.model.Player;
 import com.JPAVideoGames.TiliManager.repository.TeamRepository;
 import com.JPAVideoGames.TiliManager.util.TeamMapper;
 import com.JPAVideoGames.TiliManager.util.UserTiliMapper;
@@ -49,18 +50,35 @@ public class TeamService {
         return teamRepository.findByOwner(userTiliMapper.toEntity(userTiliPassDTO)).map(teamMapper::toDto);
     }
 
-    public Optional<TeamDTO> updateTeam(TeamUpdateDTO teamUpdateDTO){
-        if (teamRepository.findById(teamUpdateDTO.getId()).isEmpty()){
-            return Optional.empty();
+    public Optional<TeamDTO> updateTeam(TeamUpdateDTO teamUpdateDTO) throws PlayersSizeException {
+        if (teamUpdateDTO.getPlayers().size() > 7 || teamUpdateDTO.getPlayers().size() < 0){
+            throw new PlayersSizeException("El jugador ha de tener como máximo 7 jugadores, y como mínimo 0");
         }
-        Team team = teamRepository.findById(teamUpdateDTO.getId()).get();
-        if (!teamUpdateDTO.getName().isBlank() && !teamUpdateDTO.getName().equals(team.getName())){
-            team.setName(teamUpdateDTO.getName());
-        }
-        if (teamUpdateDTO.getPrice() < 0 && teamUpdateDTO.getPrice() == team.getPrice()) {
-            team.setPrice(teamUpdateDTO.getPrice());
-        }
-        // team.setJugadores() todo ACABAR ESTO!!!!
+        return teamRepository.findByOwner(userTiliMapper.toEntity(teamUpdateDTO.getOwner())).map(team ->{
+            if (!teamUpdateDTO.getName().trim().isBlank() && teamUpdateDTO.getName() != null && !teamUpdateDTO.getName().trim().equals(team.getName())){
+                team.setName(teamUpdateDTO.getName().trim());
+            }
+            if (teamUpdateDTO.getMoney() >= 0 && teamUpdateDTO.getMoney() != null && !Objects.equals(teamUpdateDTO.getMoney(), team.getMoney())) {
+                team.setMoney(teamUpdateDTO.getMoney());
+            }
+            if (teamUpdateDTO.getPlayers() != team.getPlayers()) {
+                for (Player s: teamUpdateDTO.getPlayers()){
+                    if (s.getTeamId() == null && team.getPlayers().size() <= 6){
+                        s.setTeamId(team.getId());
+                        team.setOnePlayer(s);
+                    }
+                }
+            }
+            return teamMapper.toDto(teamRepository.save(team));
+        });
     }
 
+    public Optional<TeamDTO> venderJugador(TeamUpdateDTO teamDTO, Player player){
+        if (player.getTeamId() == null || player.getTeamId() != teamDTO.getId()){return Optional.empty();}
+        return teamRepository.findByOwner(userTiliMapper.toEntity(teamDTO.getOwner())).map(team ->{
+            player.setTeamId(null);
+            team.deleteOnePlayer(player);
+            return teamMapper.toDto(teamRepository.save(team));
+        });
+    }
 }

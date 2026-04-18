@@ -1,13 +1,9 @@
 package com.JPAVideoGames.TiliManager.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,18 +26,10 @@ public class Team {
     @JoinColumn(name = "owner", referencedColumnName = "id", unique = true)
     private UserTili owner;
 
-    private Long price;
+    @Column(nullable = false)
+    private Long money;
 
-    public Team(long id, UserTili owner, String name, List<Player> players) {
-        this.id = id;
-        this.owner = owner;
-        this.name = name;
-        if (players.size() > 7) throw new IllegalArgumentException("Max of 7 players allowed");
-        this.players = new ArrayList<>(players);
-    }
-
-    public Team() {
-    }
+    public Team() {}
 
     public long getId() {
         return id;
@@ -81,11 +69,16 @@ public class Team {
         this.players.add(player);
     }
 
-    public Long getPrice() {
-        return price;
+    public void deleteOnePlayer(Player player) throws IllegalArgumentException {
+        if (this.players.isEmpty()) throw new IllegalArgumentException("Min of 0 players allowed");
+        this.players.removeIf(p -> p.getId() == player.getId());
     }
 
-    public void setPrice(Long price) {
-        this.price = price;
+    public Long getMoney() {
+        return money;
+    }
+
+    public void setMoney(Long money) {
+        this.money = money;
     }
 }

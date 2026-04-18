@@ -3,6 +3,8 @@ package com.JPAVideoGames.TiliManager.controller;
 import com.JPAVideoGames.TiliManager.dto.TeamUpdateDTO;
 import com.JPAVideoGames.TiliManager.dto.TeamDTO;
 import com.JPAVideoGames.TiliManager.dto.UserTiliPassDTO;
+import com.JPAVideoGames.TiliManager.exceptions.PlayersSizeException;
+import com.JPAVideoGames.TiliManager.model.Player;
 import com.JPAVideoGames.TiliManager.service.TeamService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +43,13 @@ public class TeamController {
     }
 
     @PutMapping
-    public ResponseEntity<TeamDTO> updateTeam(@RequestBody TeamUpdateDTO teamUpdateDTO) {
+    public ResponseEntity<TeamDTO> updateTeam(@RequestBody TeamUpdateDTO teamUpdateDTO) throws PlayersSizeException {
         return teamService.updateTeam(teamUpdateDTO).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/vender")
+    public ResponseEntity<TeamDTO> sellPlayer(@RequestBody TeamUpdateDTO teamUpdateDTO, Player player) {
+        return teamService.venderJugador(teamUpdateDTO, player).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
 }

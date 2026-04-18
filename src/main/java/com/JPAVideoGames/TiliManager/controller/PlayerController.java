@@ -3,6 +3,7 @@ package com.JPAVideoGames.TiliManager.controller;
 import com.JPAVideoGames.TiliManager.dto.PartidoEncapsuladoDTO;
 import com.JPAVideoGames.TiliManager.model.Player;
 import com.JPAVideoGames.TiliManager.model.Team;
+import com.JPAVideoGames.TiliManager.model.UserTili;
 import com.JPAVideoGames.TiliManager.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -32,8 +33,20 @@ public class PlayerController {
 
     @GetMapping("/codigo")
     public ResponseEntity<List<PartidoEncapsuladoDTO>> codigoJugarSimulado() {
-        Team localTeamRating = playerService.getEquipo().get(0);
-        Team visitorTeamRating = playerService.getEquipo().get(1);
+        Team localTeamRating = new Team();
+        Team visitorTeamRating = new Team();
+        UserTili userTili = new UserTili();
+        userTili.setName("Pau");
+        UserTili userTili2 = new UserTili();
+        userTili2.setName("Adrian");
+        localTeamRating.setId(1);
+        localTeamRating.setOwner(userTili);
+        localTeamRating.setName("EquipoFinal");
+        localTeamRating.setPlayers(playerService.getJugadortt());
+        visitorTeamRating.setId(2);
+        visitorTeamRating.setOwner(userTili2);
+        visitorTeamRating.setName("Socialista");
+        visitorTeamRating.setPlayers(playerService.getJugadorff());
         return ResponseEntity.ok(playerService.codigo(localTeamRating, visitorTeamRating));
     }
 

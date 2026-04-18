@@ -9,7 +9,7 @@ public class TeamDTO {
     private String name;
     private List<Player> players;
     private UserTiliDTO owner;
-    private long price;
+    private Long money;
 
     public TeamDTO() {}
 
@@ -45,11 +45,11 @@ public class TeamDTO {
         this.owner = owner;
     }
 
-    public long getPrice() {
-        return price;
+    public Long getMoney() {
+        return money;
     }
 
-    public void setPrice(long price) {
-        this.price = price;
+    public void setMoney(Long money) {
+        this.money = money;
     }
 }

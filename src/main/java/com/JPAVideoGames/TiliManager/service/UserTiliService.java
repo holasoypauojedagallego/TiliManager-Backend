@@ -51,17 +51,20 @@ public class UserTiliService {
     }
 
     public UserTiliDTO registerUserTili(UserTiliCreateDTO userTiliCreateDTO) {
-        if (userTiliCreateDTO.getEmail().isEmpty() || userTiliCreateDTO.getPassword().isEmpty() || userTiliCreateDTO.getName().isEmpty()){
+        if (userTiliCreateDTO.getEmail().isBlank() || userTiliCreateDTO.getEmail() == null ||
+                userTiliCreateDTO.getPassword().isBlank() || userTiliCreateDTO.getPassword() == null ||
+                userTiliCreateDTO.getName().isBlank() || userTiliCreateDTO.getName() == null){
             return null;
         }
         UserTili userTili = userTiliMapper.toCreateEntity(userTiliCreateDTO);
         userTili.setPassword(passwordEncoder.encode(userTili.getPassword()));
 
+        UserTili savedUserTili = userTiliRepository.save(userTili);
+
         Team teamFromUserTili = new Team();
         int numeroaleatorio = (int) (Math.random() * 100000000);
         teamFromUserTili.setName("T_" + numeroaleatorio);
-
-        UserTili savedUserTili = userTiliRepository.save(userTili);
+        teamFromUserTili.setMoney(125000000L);
 
         teamFromUserTili.setOwner(savedUserTili);
         teamRepository.save(teamFromUserTili);
