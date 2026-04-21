@@ -37,6 +37,11 @@ public class TeamController {
         return teamService.getTeamByName(name).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/exists/name/{name}")
+    public ResponseEntity<Boolean> existsTeamByName(@PathVariable String name) {
+        return ResponseEntity.ok(teamService.getTeamByName(name).isPresent());
+    }
+
     @PostMapping("/owner")
     public ResponseEntity<TeamDTO> getTeamByOwner(@RequestBody @Valid UserTiliPassDTO userTiliPassDTO) {
         return teamService.getTeamByOwner(userTiliPassDTO).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());

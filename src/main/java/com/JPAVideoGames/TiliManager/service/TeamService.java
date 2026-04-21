@@ -51,8 +51,8 @@ public class TeamService {
     }
 
     public Optional<TeamDTO> updateTeam(TeamUpdateDTO teamUpdateDTO) throws PlayersSizeException {
-        if (teamUpdateDTO.getPlayers().size() > 7 || teamUpdateDTO.getPlayers().size() < 0){
-            throw new PlayersSizeException("El jugador ha de tener como máximo 7 jugadores, y como mínimo 0");
+        if (teamUpdateDTO.getPlayers().size() > 7 || teamUpdateDTO.getPlayers().size() < 5){
+            throw new PlayersSizeException("El jugador ha de tener como máximo 7 jugadores, y como mínimo 5");
         }
         return teamRepository.findByOwner(userTiliMapper.toEntity(teamUpdateDTO.getOwner())).map(team ->{
             if (!teamUpdateDTO.getName().trim().isBlank() && teamUpdateDTO.getName() != null && !teamUpdateDTO.getName().trim().equals(team.getName())){
