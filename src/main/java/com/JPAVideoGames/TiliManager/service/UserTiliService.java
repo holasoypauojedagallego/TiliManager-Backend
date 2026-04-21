@@ -64,7 +64,7 @@ public class UserTiliService {
         Team teamFromUserTili = new Team();
         int numeroaleatorio = (int) (Math.random() * 100000000);
         teamFromUserTili.setName("T_" + numeroaleatorio);
-        teamFromUserTili.setMoney(125000000L);
+        teamFromUserTili.setMoney(133000000L);
 
         teamFromUserTili.setOwner(savedUserTili);
         teamRepository.save(teamFromUserTili);
