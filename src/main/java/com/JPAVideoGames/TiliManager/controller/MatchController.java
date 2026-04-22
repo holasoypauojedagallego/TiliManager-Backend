@@ -1,0 +1,39 @@
+package com.JPAVideoGames.TiliManager.controller;
+
+import com.JPAVideoGames.TiliManager.dto.PartidoEncapsuladoDTO;
+import com.JPAVideoGames.TiliManager.dto.TeamDTO;
+import com.JPAVideoGames.TiliManager.model.Match;
+import com.JPAVideoGames.TiliManager.service.MatchService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+
+@RestController
+@RequestMapping("/partidos")
+public class MatchController {
+
+    @Autowired
+    @Lazy
+    private MatchService matchService;
+
+    @PostMapping
+    public ResponseEntity<List<PartidoEncapsuladoDTO>> codigoJugar(@RequestBody TeamDTO localTeam, TeamDTO visitorTeam) {
+        return ResponseEntity.ok(matchService.empezarCodigo(localTeam, visitorTeam));
+    }
+
+    @PostMapping("/t1")
+    public ResponseEntity<List<PartidoEncapsuladoDTO>> codigoTorneoSimulado(@RequestBody TeamDTO teamDTO) {
+        return ResponseEntity.ok(matchService.torneoSimuladoP1(teamDTO));
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<List<Match>> getPartidos() {
+        return ResponseEntity.ok(matchService.getPartidos());
+    }
+
+
+}

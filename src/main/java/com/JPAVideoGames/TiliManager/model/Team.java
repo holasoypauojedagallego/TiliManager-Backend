@@ -22,7 +22,7 @@ public class Team {
     @JoinColumn(name = "team_id", referencedColumnName = "id")
     private List<Player> players;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "owner", referencedColumnName = "id", unique = true)
     private UserTili owner;
 

@@ -28,8 +28,7 @@ public class Player {
     @Column
     private Long price;
 
-    public Player(long id, String name, int rating, int attack, int defense) {
-        this.id = id;
+    public Player(String name, int rating, int attack, int defense) {
         this.name = name;
         this.rating = rating;
         this.attack = attack;

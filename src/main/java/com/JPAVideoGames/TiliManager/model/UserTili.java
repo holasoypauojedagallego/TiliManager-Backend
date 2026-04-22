@@ -21,6 +21,8 @@ public class UserTili {
     @Column(nullable = false)
     private String password;
 
+    @OneToOne(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Team team;
 
     public UUID getId() {
         return id;
