@@ -1,5 +1,6 @@
 package com.JPAVideoGames.TiliManager.service;
 
+import com.JPAVideoGames.TiliManager.dto.MatchDTO;
 import com.JPAVideoGames.TiliManager.dto.PartidoEncapsuladoDTO;
 import com.JPAVideoGames.TiliManager.dto.TeamDTO;
 import com.JPAVideoGames.TiliManager.dto.TeamUpdateDTO;
@@ -7,6 +8,7 @@ import com.JPAVideoGames.TiliManager.model.Match;
 import com.JPAVideoGames.TiliManager.model.Player;
 import com.JPAVideoGames.TiliManager.model.Team;
 import com.JPAVideoGames.TiliManager.repository.MatchRepository;
+import com.JPAVideoGames.TiliManager.util.MatchMapper;
 import com.JPAVideoGames.TiliManager.util.TeamMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,10 @@ public class MatchService {
     @Autowired
     @Lazy
     private TeamService teamService;
+
+    @Autowired
+    @Lazy
+    private MatchMapper matchMapper;
 
     private final MatchRepository matchRepository;
 
@@ -63,8 +69,8 @@ public class MatchService {
         return jugadores2;
     }
 
-    public List<Match> getPartidos() {
-        return matchRepository.findAll();
+    public List<MatchDTO> getPartidos() {
+        return matchMapper.toDTO(matchRepository.findAll());
     }
 
     public List<PartidoEncapsuladoDTO> empezarCodigo(TeamDTO localteamDTO, TeamDTO visitorTeamDTO) {

@@ -1,5 +1,6 @@
 package com.JPAVideoGames.TiliManager.controller;
 
+import com.JPAVideoGames.TiliManager.dto.MatchDTO;
 import com.JPAVideoGames.TiliManager.dto.PartidoEncapsuladoDTO;
 import com.JPAVideoGames.TiliManager.dto.TeamDTO;
 import com.JPAVideoGames.TiliManager.dto.TeamUpdateDTO;
@@ -27,12 +28,12 @@ public class MatchController {
     }
 
     @PostMapping("/t1")
-    public ResponseEntity<List<PartidoEncapsuladoDTO>> codigoTorneoSimulado(@RequestBody TeamUpdateDTO   teamDTO) {
+    public ResponseEntity<List<PartidoEncapsuladoDTO>> codigoTorneoSimulado(@RequestBody TeamUpdateDTO teamDTO) {
         return ResponseEntity.ok(matchService.torneoSimuladoP1(teamDTO));
     }
 
     @GetMapping("/history")
-    public ResponseEntity<List<Match>> getPartidos() {
+    public ResponseEntity<List<MatchDTO>> getPartidos() {
         return ResponseEntity.ok(matchService.getPartidos());
     }
 
