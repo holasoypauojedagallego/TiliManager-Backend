@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -42,35 +43,12 @@ public class MatchService {
         this.matchRepository = matchRepository;
     }
 
-    private static final List<Player> jugadores = new ArrayList<>(List.of(
-            new Player("Pau", 87, 83, 92),
-            new Player("Adriutusn", 87, 87, 87 ),
-            new Player("Gustin", 87, 83, 92),
-            new Player("Tadi", 87, 83, 92),
-            new Player("Safu", 87, 86, 89),
-            new Player("MrGay", 87, 84, 91),
-            new Player("Arthur Morgan", 87, 85, 90)
-    ));
-
-    private static final List<Player> jugadores2 = new ArrayList<>(List.of(
-            new Player("CurriculumVitae", 87, 81, 75),
-            new Player("Adrian", 83, 83, 92),
-            new Player("Justin", 87, 95, 78),
-            new Player("TadiPro", 97, 83, 92),
-            new Player("John Marston", 82, 83, 92),
-            new Player("CuloGordo", 85, 80, 94),
-            new Player("MrPopo", 83, 97, 79)));
-
-    public List<Player> getJugadortt() {
-        return jugadores;
-    }
-
-    public List<Player> getJugadorff() {
-        return jugadores2;
-    }
-
     public List<MatchDTO> getPartidos() {
         return matchMapper.toDTO(matchRepository.findAll());
+    }
+
+    public Optional<MatchDTO> getPartidoById(long id) {
+        return matchRepository.findById(id).map(matchMapper::toDTO);
     }
 
     public List<PartidoEncapsuladoDTO> empezarCodigo(TeamDTO localteamDTO, TeamDTO visitorTeamDTO) {
