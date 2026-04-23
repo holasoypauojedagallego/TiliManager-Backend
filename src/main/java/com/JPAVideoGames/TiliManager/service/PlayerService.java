@@ -29,4 +29,12 @@ public class PlayerService {
         return playerRepository.findById(id);
     }
 
+    public List<Player> getJugadorByTeamId(Long id) {
+        return playerRepository.findByTeamId(id);
+    }
+
+    public List<Player> getJugadorByTeamIdNull() {
+        return playerRepository.findByTeamId(null);
+    }
+
 }

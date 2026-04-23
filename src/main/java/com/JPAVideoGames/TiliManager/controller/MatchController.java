@@ -2,6 +2,7 @@ package com.JPAVideoGames.TiliManager.controller;
 
 import com.JPAVideoGames.TiliManager.dto.PartidoEncapsuladoDTO;
 import com.JPAVideoGames.TiliManager.dto.TeamDTO;
+import com.JPAVideoGames.TiliManager.dto.TeamUpdateDTO;
 import com.JPAVideoGames.TiliManager.model.Match;
 import com.JPAVideoGames.TiliManager.service.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ public class MatchController {
     }
 
     @PostMapping("/t1")
-    public ResponseEntity<List<PartidoEncapsuladoDTO>> codigoTorneoSimulado(@RequestBody TeamDTO teamDTO) {
+    public ResponseEntity<List<PartidoEncapsuladoDTO>> codigoTorneoSimulado(@RequestBody TeamUpdateDTO   teamDTO) {
         return ResponseEntity.ok(matchService.torneoSimuladoP1(teamDTO));
     }
 

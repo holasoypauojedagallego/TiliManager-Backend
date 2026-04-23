@@ -2,6 +2,7 @@ package com.JPAVideoGames.TiliManager.service;
 
 import com.JPAVideoGames.TiliManager.dto.PartidoEncapsuladoDTO;
 import com.JPAVideoGames.TiliManager.dto.TeamDTO;
+import com.JPAVideoGames.TiliManager.dto.TeamUpdateDTO;
 import com.JPAVideoGames.TiliManager.model.Match;
 import com.JPAVideoGames.TiliManager.model.Player;
 import com.JPAVideoGames.TiliManager.model.Team;
@@ -67,28 +68,13 @@ public class MatchService {
     }
 
     public List<PartidoEncapsuladoDTO> empezarCodigo(TeamDTO localteamDTO, TeamDTO visitorTeamDTO) {
-        List<PartidoEncapsuladoDTO> partidoEncapsulados = codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(visitorTeamDTO));
-
-        Match match = new Match();
-        match.setPartidoEncapsulado(partidoEncapsulados);
-        match.setLocalTeam(teamMapper.toEntity(localteamDTO));
-        match.setVisitorTeam(teamMapper.toEntity(visitorTeamDTO));
-
-        matchRepository.save(match);
-        return partidoEncapsulados;
+        return codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(visitorTeamDTO));
     }
 
-    public List<PartidoEncapsuladoDTO> torneoSimuladoP1(TeamDTO localteamDTO) {
+    public List<PartidoEncapsuladoDTO> torneoSimuladoP1(TeamUpdateDTO localteamDTO) {
         TeamDTO visitorTeam = teamService.getTeamByName("SKATERS KFC").orElseThrow(() -> new RuntimeException("Equipo no encontrado"));
-        List<PartidoEncapsuladoDTO> partidoEncapsulados = codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(visitorTeam));
 
-        Match match = new Match();
-        match.setPartidoEncapsulado(partidoEncapsulados);
-        match.setLocalTeam(teamMapper.toEntity(localteamDTO));
-        match.setVisitorTeam(teamMapper.toEntity(visitorTeam));
-        matchRepository.save(match);
-
-        return partidoEncapsulados;
+        return codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(visitorTeam));
     }
 
     public List<PartidoEncapsuladoDTO> codigo(Team localTeam, Team visitorTeam) {
@@ -161,6 +147,14 @@ public class MatchService {
 
         System.out.println(porcentajeGanaLocal + "; Goles Local: " + localGoals);
         System.out.println(porcentajeGanaVisitante + "; Goles Visitante: " + visitorGoals);
+
+        Match match = new Match();
+        match.setPartidoEncapsulado(partidoEncapsulados);
+        match.setLocalTeam(localTeam);
+        match.setVisitorTeam(visitorTeam);
+        match.setLocalTeamGoals(localGoals);
+        match.setVisitorTeamGoals(visitorGoals);
+        matchRepository.save(match);
 
         return partidoEncapsulados;
     }

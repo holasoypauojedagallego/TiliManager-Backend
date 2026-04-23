@@ -28,4 +28,14 @@ public class PlayerController {
         return playerService.getJugador(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/teamid")
+    public ResponseEntity<List<Player>> getJugadoresByTeamIDNull() {
+        return ResponseEntity.ok(playerService.getJugadorByTeamIdNull());
+    }
+
+    @GetMapping("/teamid/{id}")
+    public ResponseEntity<List<Player>> getJugadoresByTeamID(@PathVariable long id) {
+        return ResponseEntity.ok(playerService.getJugadorByTeamId(id));
+    }
+
 }

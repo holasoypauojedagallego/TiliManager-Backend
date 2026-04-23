@@ -30,6 +30,12 @@ public class Match {
     @JoinColumn(name = "visitor_team_id", referencedColumnName = "id")
     private Team visitorTeam;
 
+    @Column
+    private int localTeamGoals = 0;
+
+    @Column
+    private int visitorTeamGoals = 0;
+
     public long getId() {
         return id;
     }
@@ -64,5 +70,21 @@ public class Match {
 
     public void setVisitorTeam(Team visitorTeam) {
         this.visitorTeam = visitorTeam;
+    }
+
+    public int getLocalTeamGoals() {
+        return localTeamGoals;
+    }
+
+    public void setLocalTeamGoals(int localTeamGoals) {
+        this.localTeamGoals = localTeamGoals;
+    }
+
+    public int getVisitorTeamGoals() {
+        return visitorTeamGoals;
+    }
+
+    public void setVisitorTeamGoals(int visitorTeamGoals) {
+        this.visitorTeamGoals = visitorTeamGoals;
     }
 }

@@ -42,12 +42,12 @@ public class DataInitialitzer implements CommandLineRunner {
 
             List<Player> jugadores3 = new ArrayList<>(List.of(
                     new Player("Chuampi", 84, 84, 84),
-                    new Player("MrPopo", 79, 76, 82),
-                    new Player("Curriculum", 73, 75, 71),
-                    new Player("Religion", 77, 87, 67),
-                    new Player("John Marston", 82, 83, 81),
-                    new Player("Payico", 76, 80, 72),
-                    new Player("Payisman", 75, 76, 74)));
+                    new Player("Umtiti", 79, 76, 82),
+                    new Player("Yamcha", 73, 75, 71),
+                    new Player("Andrew Tate", 77, 87, 67),
+                    new Player("Pepe Viyuela", 82, 83, 81),
+                    new Player("Tadi Sambaudelio", 76, 80, 72),
+                    new Player("Naranjito", 75, 76, 74)));
 
             Team teamFromUserTili = new Team();
             teamFromUserTili.setName("SKATERS KFC");
