@@ -1,6 +1,8 @@
 package com.JPAVideoGames.TiliManager.service;
 
+import com.JPAVideoGames.TiliManager.dto.MercadoDTO;
 import com.JPAVideoGames.TiliManager.model.Player;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -12,27 +14,33 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-@Component
 @EnableScheduling
 public class MarketService {
 
     @Autowired
     private PlayerService playerService;
 
-    private List<Player> players;
-    private boolean fichable = false;
+    private MercadoDTO mercadoDTO;
 
-    @Scheduled(fixedRate = 6000) // (cron = "00 59 23 * * * ")
-    public void scheduled() {
+    private List<Player> players;
+
+    @PostConstruct
+    public void init() {
         mercadoJugadores();
-        setFichable(false);
-        System.out.println(isFichable());
+        this.mercadoDTO = new MercadoDTO(getPlayers(), false);
     }
 
-    @Scheduled(fixedRate = 4000) // (cron = "00 59 11 * * * ")
+    @Scheduled(cron = "00 59 23 * * * ")
+    public void scheduled() {
+        mercadoJugadores();
+        setMercadoDTO(new MercadoDTO(getPlayers(), false));
+    }
+
+    @Scheduled(cron = "00 21 16 * * * ")
     public void scheduledFichable() {
-        setFichable(true);
-        System.out.println("a" +isFichable());
+        if (this.mercadoDTO != null) {
+            this.mercadoDTO.setFichable(true);
+        }
     }
 
     public void mercadoJugadores() {
@@ -45,19 +53,20 @@ public class MarketService {
         setPlayers(jugadoresAnte.subList(0, 20));
     }
 
-    public List<Player> getPlayers() {
+    public MercadoDTO getMercadoDTO() {
+        return mercadoDTO;
+    }
+
+    private void setMercadoDTO(MercadoDTO mercadoDTO) {
+        this.mercadoDTO = mercadoDTO;
+    }
+
+    private List<Player> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<Player> players) {
+    private void setPlayers(List<Player> players) {
         this.players = players;
     }
 
-    public boolean isFichable() {
-        return fichable;
-    }
-
-    public void setFichable(boolean fichable) {
-        this.fichable = fichable;
-    }
 }
