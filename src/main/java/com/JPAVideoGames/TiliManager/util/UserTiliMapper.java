@@ -12,11 +12,8 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface UserTiliMapper {
     UserTiliDTO toDto(UserTili user);
-    UserTili toEntity(UserTiliDTO dto);
-    UserTiliCreateDTO toCreateDTO(UserTili user);
     UserTili toCreateEntity(UserTiliCreateDTO dto);
     List<UserTiliDTO> toDto(List<UserTili> userTiliList);
     UserTiliPassDTO toPassDto(UserTili user);
     UserTili toEntity(UserTiliPassDTO dto);
-    UserTiliLoginDTO toLoginDto(UserTiliPassDTO userTiliLoginDTO);
 }
