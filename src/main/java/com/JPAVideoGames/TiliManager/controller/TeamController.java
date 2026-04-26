@@ -48,8 +48,8 @@ public class TeamController {
     }
 
     @PutMapping
-    public ResponseEntity<TeamDTO> updateTeam(@RequestBody TeamUpdateDTO teamUpdateDTO) throws PlayersSizeException {
-        return teamService.updateTeam(teamUpdateDTO).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<TeamDTO> updateCreateTeam(@RequestBody TeamUpdateDTO teamUpdateDTO) throws PlayersSizeException {
+        return teamService.updateCreateTeam(teamUpdateDTO).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/vender")

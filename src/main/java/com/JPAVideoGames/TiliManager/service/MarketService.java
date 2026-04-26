@@ -33,12 +33,12 @@ public class MarketService {
     @Scheduled(cron = "00 59 23 * * * ")
     public void scheduled() {
         mercadoJugadores();
-        setMercadoDTO(new MercadoDTO(getPlayers(), false));
+        this.mercadoDTO = new MercadoDTO(getPlayers(), false);
     }
 
     @Scheduled(cron = "00 21 16 * * * ")
     public void scheduledFichable() {
-        if (this.mercadoDTO != null) {
+        if (this.mercadoDTO != null && !this.mercadoDTO.getPlayers().isEmpty()) {
             this.mercadoDTO.setFichable(true);
         }
     }

@@ -51,7 +51,9 @@ public class MatchService {
         return matchRepository.findById(id).map(matchMapper::toDTO);
     }
 
-    public List<PartidoEncapsuladoDTO> empezarCodigo(TeamDTO localteamDTO, TeamDTO visitorTeamDTO) {
+    public List<PartidoEncapsuladoDTO> empezarCodigo(TeamUpdateDTO localteamDTO) {
+        List<TeamDTO> equipos = teamService.getTeams();
+        TeamDTO visitorTeamDTO = equipos.get((int) (Math.random() * equipos.size()));
         return codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(visitorTeamDTO));
     }
 

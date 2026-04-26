@@ -22,8 +22,8 @@ public class MatchController {
     private MatchService matchService;
 
     @PostMapping
-    public ResponseEntity<List<PartidoEncapsuladoDTO>> codigoJugar(@RequestBody TeamDTO localTeam, TeamDTO visitorTeam) {
-        return ResponseEntity.ok(matchService.empezarCodigo(localTeam, visitorTeam));
+    public ResponseEntity<List<PartidoEncapsuladoDTO>> codigoJugar(@RequestBody TeamUpdateDTO localTeam) {
+        return ResponseEntity.ok(matchService.empezarCodigo(localTeam));
     }
 
     @PostMapping("/t1")
