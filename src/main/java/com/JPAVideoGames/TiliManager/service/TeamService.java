@@ -86,28 +86,34 @@ public class TeamService {
             throw new PlayersSizeException("El jugador ha de tener como máximo 7 jugadores, y como mínimo 5");
         }
         return teamRepository.findByOwner(userTiliMapper.toEntity(teamUpdateDTO.getOwner())).map(team ->{
-            long dineroCostado = 0;
+            long dineroPorJugadores = 0;
             if (teamUpdateDTO.getPlayers() != team.getPlayers()) {
-                for (Player p: teamUpdateDTO.getPlayers()){
-                    if (p.getTeamId() == null && team.getPlayers().size() <= 6){
-                        p.setTeamId(team.getId());
-                        dineroCostado = dineroCostado + p.getPrice();
-                        team.setOnePlayer(p);
+                for (Player s: teamUpdateDTO.getPlayers()){
+                    if (s.getTeamId() == null && team.getPlayers().size() <= 6){
+                        s.setTeamId(team.getId());
+                        dineroPorJugadores = dineroPorJugadores + s.getPrice();
+                        team.setOnePlayer(s);
                     }
                 }
             }
-            if (teamUpdateDTO.getMoney() >= 0 && teamUpdateDTO.getMoney() != null && !Objects.equals(teamUpdateDTO.getMoney(), team.getMoney())) {
-                team.setMoney(teamUpdateDTO.getMoney());
+            if (teamUpdateDTO.getMoney() < 0 || teamUpdateDTO.getMoney() == null || (dineroPorJugadores + teamUpdateDTO.getMoney()) != team.getMoney()) {
+                try {
+                    throw new InvalidMoneyException("El dinero no cuadra");
+                } catch (InvalidMoneyException e) {
+                    throw new RuntimeException(e);
+                }
             }
+            team.setMoney(teamUpdateDTO.getMoney());
             return teamMapper.toDto(teamRepository.save(team));
         });
     }
 
-    public Optional<TeamDTO> venderJugador(TeamUpdateDTO teamDTO, Player player){
-        if (player.getTeamId() == null || player.getTeamId() != teamDTO.getId()){return Optional.empty();}
-        return teamRepository.findByOwner(userTiliMapper.toEntity(teamDTO.getOwner())).map(team ->{
-            player.setTeamId(null);
-            team.deleteOnePlayer(player);
+    public Optional<TeamDTO> venderJugador(VenderDTO venderDTO) throws PlayersSizeException{
+        if (venderDTO.getPlayer().getTeamId() == null || venderDTO.getPlayer().getTeamId() != venderDTO.getTeamUpdateDTO().getId()){return Optional.empty();}
+        if (venderDTO.getTeamUpdateDTO().getPlayers().size() < 6) {throw new PlayersSizeException("El jugador ha de tener como máximo 7 jugadores, y como mínimo 5");}
+        return teamRepository.findByOwner(userTiliMapper.toEntity(venderDTO.getTeamUpdateDTO().getOwner())).map(team ->{
+            venderDTO.getPlayer().setTeamId(null);
+            team.deleteOnePlayer(venderDTO.getPlayer());
             return teamMapper.toDto(teamRepository.save(team));
         });
     }
