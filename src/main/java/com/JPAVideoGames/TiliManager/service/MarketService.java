@@ -27,7 +27,7 @@ public class MarketService {
     @PostConstruct
     public void init() {
         mercadoJugadores();
-        this.mercadoDTO = new MercadoDTO(getPlayers(), false);
+        this.mercadoDTO = new MercadoDTO(getPlayers(), true);
     }
 
     @Scheduled(cron = "00 59 23 * * * ")
@@ -51,6 +51,14 @@ public class MarketService {
         }
         Collections.shuffle(jugadoresAnte);
         setPlayers(jugadoresAnte.subList(0, 20));
+    }
+
+    public void actualizarMercado(Player p){
+        for (int i = 0; i < getPlayers().size(); i++) {
+            if (p == getPlayers().get(i)){
+                this.players.set(i, p);
+            }
+        }
     }
 
     public MercadoDTO getMercadoDTO() {

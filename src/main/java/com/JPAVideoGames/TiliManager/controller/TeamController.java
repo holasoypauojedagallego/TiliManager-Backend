@@ -58,4 +58,9 @@ public class TeamController {
         return teamService.venderJugador(venderDTO).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/comprar")
+    public ResponseEntity<TeamDTO> buyPlayer(@RequestBody VenderDTO venderDTO) throws PlayersSizeException{
+        return teamService.comprarJugador(venderDTO).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
 }
