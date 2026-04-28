@@ -36,7 +36,7 @@ public class MarketService {
         this.mercadoDTO = new MercadoDTO(getPlayers(), false);
     }
 
-    @Scheduled(cron = "00 21 16 * * * ")
+    @Scheduled(cron = "00 00 16 * * * ")
     public void scheduledFichable() {
         if (this.mercadoDTO != null && !this.mercadoDTO.getPlayers().isEmpty()) {
             this.mercadoDTO.setFichable(true);
@@ -55,7 +55,7 @@ public class MarketService {
 
     public void actualizarMercado(Player p){
         for (int i = 0; i < getPlayers().size(); i++) {
-            if (p == getPlayers().get(i)){
+            if (p.getId() == getPlayers().get(i).getId()){
                 this.players.set(i, p);
             }
         }
