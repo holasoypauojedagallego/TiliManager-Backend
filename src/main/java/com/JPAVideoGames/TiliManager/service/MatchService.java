@@ -103,7 +103,7 @@ public class MatchService {
             if (porcentajeGanaLocal >= porcentajeGanaVisitante) {
                 porcentajeGanaLocal--;
                 partidoalgo.setEquipo(localTeam);
-                partidoalgo.setJugador(localTeam.getPlayers().get((int)(Math.random() * 7)));
+                partidoalgo.setJugador(localTeam.getPlayers().get((int)(Math.random() * localTeam.getPlayers().size())));
                 partidoalgo.setLocal(true);
 
                 if (queSucede < 0.3) {
@@ -115,7 +115,7 @@ public class MatchService {
             } else  {
                 porcentajeGanaVisitante--;
                 partidoalgo.setEquipo(visitorTeam);
-                partidoalgo.setJugador(visitorTeam.getPlayers().get((int)(Math.random() * 7)));
+                partidoalgo.setJugador(visitorTeam.getPlayers().get((int)(Math.random() * visitorTeam.getPlayers().size())));
 
                 partidoalgo.setLocal(false);
 
