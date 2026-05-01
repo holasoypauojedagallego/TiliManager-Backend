@@ -37,4 +37,8 @@ public class PlayerService {
         return playerRepository.findByTeamId(null);
     }
 
+    public void savePlayer(Player player) {
+        playerRepository.save(player);
+    }
+
 }

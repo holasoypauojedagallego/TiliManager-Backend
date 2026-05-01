@@ -134,9 +134,11 @@ public class TeamService {
                     throw new RuntimeException(e);
                 }
             }
-            venderDTO.getPlayer().setTeamId(null);
-            team.deleteOnePlayer(venderDTO.getPlayer());
+            p.get().setTeamId(null);
+            team.deleteOnePlayer(p.get());
             team.setMoney(team.getMoney() + p.get().getPrice());
+            marketService.actualizarMercado(p.get());
+            playerService.savePlayer(p.get());
             return teamMapper.toDto(teamRepository.save(team));
         });
     }
@@ -177,11 +179,11 @@ public class TeamService {
                     throw new RuntimeException(e);
                 }
             }
-            venderDTO.getPlayer().setTeamId(team.getId());
             p.get().setTeamId(team.getId());
-            team.setOnePlayer(venderDTO.getPlayer());
+            team.setOnePlayer(p.get());
             marketService.actualizarMercado(p.get());
             team.setMoney(team.getMoney() - p.get().getPrice());
+            playerService.savePlayer(p.get());
             return teamMapper.toDto(teamRepository.save(team));
         });
     }
