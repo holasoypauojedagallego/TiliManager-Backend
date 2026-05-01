@@ -138,7 +138,6 @@ public class TeamService {
             team.deleteOnePlayer(p.get());
             team.setMoney(team.getMoney() + p.get().getPrice());
             marketService.actualizarMercado(p.get());
-            playerService.savePlayer(p.get());
             return teamMapper.toDto(teamRepository.save(team));
         });
     }
@@ -183,7 +182,6 @@ public class TeamService {
             team.setOnePlayer(p.get());
             marketService.actualizarMercado(p.get());
             team.setMoney(team.getMoney() - p.get().getPrice());
-            playerService.savePlayer(p.get());
             return teamMapper.toDto(teamRepository.save(team));
         });
     }

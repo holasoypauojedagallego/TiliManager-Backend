@@ -7,7 +7,7 @@ public class MatchDTO {
 
     private long id;
     private List<PartidoEncapsuladoDTO> partidoEncapsulado;
-    private final Date date = new Date();
+    private Date date;
     private TeamDTO localTeam;
     private TeamDTO visitorTeam;
     private int localTeamGoals = 0;
@@ -31,6 +31,10 @@ public class MatchDTO {
 
     public Date getDate() {
         return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public TeamDTO getLocalTeam() {
