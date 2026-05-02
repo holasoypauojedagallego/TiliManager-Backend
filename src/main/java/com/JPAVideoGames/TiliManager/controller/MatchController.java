@@ -4,6 +4,7 @@ import com.JPAVideoGames.TiliManager.dto.MatchDTO;
 import com.JPAVideoGames.TiliManager.dto.PartidoEncapsuladoDTO;
 import com.JPAVideoGames.TiliManager.dto.TeamDTO;
 import com.JPAVideoGames.TiliManager.dto.TeamUpdateDTO;
+import com.JPAVideoGames.TiliManager.exceptions.TeamException;
 import com.JPAVideoGames.TiliManager.service.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -22,7 +23,7 @@ public class MatchController {
     private MatchService matchService;
 
     @PostMapping
-    public ResponseEntity<List<PartidoEncapsuladoDTO>> codigoJugar(@RequestBody TeamUpdateDTO localTeam) {
+    public ResponseEntity<List<PartidoEncapsuladoDTO>> codigoJugar(@RequestBody TeamUpdateDTO localTeam) throws TeamException {
         return ResponseEntity.ok(matchService.empezarCodigo(localTeam));
     }
 

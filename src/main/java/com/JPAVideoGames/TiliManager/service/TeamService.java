@@ -185,4 +185,20 @@ public class TeamService {
             return teamMapper.toDto(teamRepository.save(team));
         });
     }
+
+    public void dineroPorResultado(TeamUpdateDTO localteamDTO, int diferencia) {
+        teamRepository.findByOwner(userTiliMapper.toEntity(localteamDTO.getOwner())).map(team ->  {
+            if (diferencia > 0) {
+                team.setMoney(team.getMoney() + 100000);
+            } else if (diferencia < 0) {
+                if (team.getMoney() - 100000 < 0) {
+                    team.setMoney(0L);
+                } else {
+                    team.setMoney(team.getMoney() - 100000);
+                }
+
+            }
+            return teamRepository.save(team);
+        });
+    }
 }

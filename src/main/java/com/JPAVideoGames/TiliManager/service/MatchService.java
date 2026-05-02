@@ -4,6 +4,7 @@ import com.JPAVideoGames.TiliManager.dto.MatchDTO;
 import com.JPAVideoGames.TiliManager.dto.PartidoEncapsuladoDTO;
 import com.JPAVideoGames.TiliManager.dto.TeamDTO;
 import com.JPAVideoGames.TiliManager.dto.TeamUpdateDTO;
+import com.JPAVideoGames.TiliManager.exceptions.TeamException;
 import com.JPAVideoGames.TiliManager.model.Match;
 import com.JPAVideoGames.TiliManager.model.Player;
 import com.JPAVideoGames.TiliManager.model.Team;
@@ -51,19 +52,31 @@ public class MatchService {
         return matchRepository.findById(id).map(matchMapper::toDTO);
     }
 
-    public List<PartidoEncapsuladoDTO> empezarCodigo(TeamUpdateDTO localteamDTO) {
+    public List<PartidoEncapsuladoDTO> empezarCodigo(TeamUpdateDTO localteamDTO) throws TeamException {
         List<TeamDTO> equipos = teamService.getTeams();
+        if (equipos.size() <= 2) {throw new TeamException("No hay suficientes equipos disponibles");}
+        boolean equipoEscogible = false;
         TeamDTO visitorTeamDTO = equipos.get((int) (Math.random() * equipos.size()));
-        return codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(visitorTeamDTO));
+        while (!equipoEscogible) {
+            if (visitorTeamDTO.getId() == localteamDTO.getId() || visitorTeamDTO.getId() == 1) {
+                visitorTeamDTO = equipos.get((int) (Math.random() * equipos.size()));
+            } else  {
+                equipoEscogible = true;
+            }
+        }
+        return codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(visitorTeamDTO)).getPartidoEncapsulado();
     }
 
     public List<PartidoEncapsuladoDTO> torneoSimuladoP1(TeamUpdateDTO localteamDTO) {
         TeamDTO visitorTeam = teamService.getTeamByName("SKATERS KFC").orElseThrow(() -> new RuntimeException("Equipo no encontrado"));
 
-        return codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(visitorTeam));
+        Match partido = codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(visitorTeam));
+
+        teamService.dineroPorResultado(localteamDTO, (partido.getLocalTeamGoals() - partido.getVisitorTeamGoals()));
+        return partido.getPartidoEncapsulado();
     }
 
-    public List<PartidoEncapsuladoDTO> codigo(Team localTeam, Team visitorTeam) {
+    public Match codigo(Team localTeam, Team visitorTeam) {
         int localTeamRating = localTeam.getPlayers().stream().mapToInt(Player::getRating).sum() / (localTeam.getPlayers().size() - 2);
         int visitorTeamRating = visitorTeam.getPlayers().stream().mapToInt(Player::getRating).sum() / (visitorTeam.getPlayers().size() - 2);
 
@@ -142,7 +155,7 @@ public class MatchService {
         match.setVisitorTeamGoals(visitorGoals);
         matchRepository.save(match);
 
-        return partidoEncapsulados;
+        return match;
     }
 
     public int gol(int attackTeamRating, int defenseTeamRating) {
