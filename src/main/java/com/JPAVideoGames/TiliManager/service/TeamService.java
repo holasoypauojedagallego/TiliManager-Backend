@@ -66,10 +66,18 @@ public class TeamService {
             long dineroPorJugadores = 0;
             if (teamUpdateDTO.getPlayers() != team.getPlayers()) {
                 for (Player s: teamUpdateDTO.getPlayers()){
-                    if (s.getTeamId() == null && team.getPlayers().size() <= 6){
-                        s.setTeamId(team.getId());
-                        dineroPorJugadores = dineroPorJugadores + s.getPrice();
-                        team.setOnePlayer(s);
+                    Optional<Player> p = playerService.getJugador(s.getId());
+                    if (p.isPresent() && p.get().getTeamId() == null && team.getPlayers().size() <= 6){
+                        p.get().setTeamId(team.getId());
+                        dineroPorJugadores = dineroPorJugadores + p.get().getPrice();
+                        marketService.actualizarMercado(p.get());
+                        team.setOnePlayer(p.get());
+                    } else {
+                        try {
+                            throw new PlayersSizeException("Este jugador no se puede comprar");
+                        } catch (PlayersSizeException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 }
             }
