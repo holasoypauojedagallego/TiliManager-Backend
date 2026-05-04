@@ -36,6 +36,10 @@ public class Match {
     @Column
     private int visitorTeamGoals = 0;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "league_id")
+    private League league;
+
     public long getId() {
         return id;
     }
@@ -86,5 +90,13 @@ public class Match {
 
     public void setVisitorTeamGoals(int visitorTeamGoals) {
         this.visitorTeamGoals = visitorTeamGoals;
+    }
+
+    public League getLeague() {
+        return league;
+    }
+
+    public void setLeague(League league) {
+        this.league = league;
     }
 }

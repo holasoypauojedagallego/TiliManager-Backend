@@ -15,10 +15,10 @@ INSERT INTO player (attack, defense, rating, name, price) values(82,82,82, 'Tod 
 INSERT INTO player (attack, defense, rating, name, price) values(81,78,79, 'Sam Kincaid', 17000000);
 INSERT INTO player (attack, defense, rating, name, price) values(79,84,82, 'Timmy Saunders', 29000000);
 INSERT INTO player (attack, defense, rating, name, price) values(81,75,78, 'Steve Grim', 16000000);
-INSERT INTO player (attack, defense, rating, name, price) values(89,83,86, 'Erik Eagle', 90000000);
+INSERT INTO player (attack, defense, rating, name, price) values(89,85,87, 'Erik Eagle', 90000000);
 INSERT INTO player (attack, defense, rating, name, price) values(96,90,93, 'Xavier Foster', 131000000);
 INSERT INTO player (attack, defense, rating, name, price) values(95,89,92, 'Austin Hobbes', 120000000);
-INSERT INTO player (attack, defense, rating, name, price) values(76,82,79, 'Adrian Speed', 17000000);
+INSERT INTO player (attack, defense, rating, name, price) values(84,82,83, 'Adrian Speed', 35000000);
 INSERT INTO player (attack, defense, rating, name, price) values(90,96,93, 'Hector Helio', 132000000);
 INSERT INTO player (attack, defense, rating, name, price) values(94,87,91, 'Torch', 116000000);
 INSERT INTO player (attack, defense, rating, name, price) values(94,87,91, 'Gazelle', 116000000);
@@ -54,3 +54,16 @@ INSERT INTO player (attack, defense, rating, name, price) values(77,75,76, 'Plan
 INSERT INTO player (attack, defense, rating, name, price) values(79,79,79, 'Randall', 19000000);
 INSERT INTO player (attack, defense, rating, name, price) values(78,77,78, 'Riverside', 16000000);
 INSERT INTO player (attack, defense, rating, name, price) values(78,80,79, 'Silver', 19000000);
+
+UPDATE player SET 
+    attack = 89,
+    defense = 85,
+    rating = 87,
+    price = 90000000
+WHERE name = 'Erik Eagle';
+UPDATE player SET
+    attack = 84,
+    defense = 82,
+    rating = 83,
+    price = 35000000
+WHERE name = 'Adrian Speed';
