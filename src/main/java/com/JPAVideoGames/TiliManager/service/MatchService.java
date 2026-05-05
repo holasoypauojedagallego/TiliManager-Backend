@@ -8,6 +8,7 @@ import com.JPAVideoGames.TiliManager.exceptions.TeamException;
 import com.JPAVideoGames.TiliManager.model.Match;
 import com.JPAVideoGames.TiliManager.model.Player;
 import com.JPAVideoGames.TiliManager.model.Team;
+import com.JPAVideoGames.TiliManager.model.UserTiliRole;
 import com.JPAVideoGames.TiliManager.repository.MatchRepository;
 import com.JPAVideoGames.TiliManager.util.MatchMapper;
 import com.JPAVideoGames.TiliManager.util.TeamMapper;
@@ -53,22 +54,13 @@ public class MatchService {
     }
 
     public List<PartidoEncapsuladoDTO> empezarCodigo(TeamUpdateDTO localteamDTO) throws TeamException {
-        List<TeamDTO> equipos = teamService.getTeams();
-        if (equipos.size() <= 2) {throw new TeamException("No hay suficientes equipos disponibles");}
-        boolean equipoEscogible = false;
-        TeamDTO visitorTeamDTO = equipos.get((int) (Math.random() * equipos.size()));
-        while (!equipoEscogible) {
-            if (visitorTeamDTO.getId() == localteamDTO.getId() || visitorTeamDTO.getId() == 1) {
-                visitorTeamDTO = equipos.get((int) (Math.random() * equipos.size()));
-            } else  {
-                equipoEscogible = true;
-            }
-        }
-        return codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(visitorTeamDTO)).getPartidoEncapsulado();
+        return codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(teamService.searchRivalTeam(localteamDTO.getId()))).getPartidoEncapsulado();
     }
 
     public List<PartidoEncapsuladoDTO> torneoSimuladoP1(TeamUpdateDTO localteamDTO) {
-        TeamDTO visitorTeam = teamService.getTeamByName("SKATERS KFC").orElseThrow(() -> new RuntimeException("Equipo no encontrado"));
+        // TeamDTO visitorTeam = teamService.getTeamByName("SKATERS KFC").orElseThrow(() -> new RuntimeException("Equipo no encontrado")); Para concretamente el Yali
+        List<TeamDTO> equipos = teamService.getTeamByRole(UserTiliRole.BOT);
+        TeamDTO visitorTeam = equipos.get((int) (Math.random() * equipos.size()));
 
         Match partido = codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(visitorTeam));
 

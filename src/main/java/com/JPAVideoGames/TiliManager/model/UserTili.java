@@ -24,6 +24,10 @@ public class UserTili {
     @OneToOne(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private Team team;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserTiliRole role =  UserTiliRole.USUARIO;
+
     public UUID getId() {
         return id;
     }
@@ -52,8 +56,23 @@ public class UserTili {
         return password;
     }
 
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
 
+    public UserTiliRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserTiliRole role) {
+        this.role = role;
+    }
 }

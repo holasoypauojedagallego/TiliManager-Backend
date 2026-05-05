@@ -19,5 +19,50 @@ public class League {
     private UserTili owner;
 
     @OneToMany(mappedBy = "league", cascade = CascadeType.ALL)
-    private List<LeagueTeam> equipos;
+    private List<LeagueTeam> teams;
+
+    @Column
+    private boolean closed = false; // Liga privada = true, liga pública = false
+
+    public League() {}
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public UserTili getOwner() {
+        return owner;
+    }
+
+    public void setOwner(UserTili owner) {
+        this.owner = owner;
+    }
+
+    public List<LeagueTeam> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(List<LeagueTeam> teams) {
+        this.teams = teams;
+    }
+
+    public boolean isClosed() {
+        return closed;
+    }
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+    }
 }

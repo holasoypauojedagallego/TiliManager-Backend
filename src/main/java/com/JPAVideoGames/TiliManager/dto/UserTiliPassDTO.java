@@ -1,13 +1,11 @@
 package com.JPAVideoGames.TiliManager.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.util.UUID;
 
 public class UserTiliPassDTO {
+    @NotNull
     private UUID id;
 
     @NotBlank(message = "El nombre de usuario es obligatorio")

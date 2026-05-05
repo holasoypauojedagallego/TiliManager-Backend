@@ -4,7 +4,10 @@ import com.JPAVideoGames.TiliManager.dto.*;
 import com.JPAVideoGames.TiliManager.exceptions.InvalidMoneyException;
 import com.JPAVideoGames.TiliManager.exceptions.MarketException;
 import com.JPAVideoGames.TiliManager.exceptions.PlayersSizeException;
+import com.JPAVideoGames.TiliManager.exceptions.TeamException;
 import com.JPAVideoGames.TiliManager.model.Player;
+import com.JPAVideoGames.TiliManager.model.Team;
+import com.JPAVideoGames.TiliManager.model.UserTiliRole;
 import com.JPAVideoGames.TiliManager.repository.TeamRepository;
 import com.JPAVideoGames.TiliManager.util.TeamMapper;
 import com.JPAVideoGames.TiliManager.util.UserTiliMapper;
@@ -47,12 +50,33 @@ public class TeamService {
         return teamRepository.findByName(name).map(teamMapper::toDto);
     }
 
+    public List<TeamDTO> getTeamByRole(UserTiliRole userTiliRole){
+        return teamMapper.toDto(teamRepository.findAllByOwnerRole(userTiliRole));
+    }
+
     public Optional<TeamDTO> getTeamByOwner(UserTiliPassDTO userTiliPassDTO){
         Optional<UserTiliDTO> userTiliPrueba = userTiliService.getById(userTiliPassDTO.getId());
         if (userTiliPrueba.isEmpty()){
             return Optional.empty();
         }
         return teamRepository.findByOwner(userTiliMapper.toEntity(userTiliPassDTO)).map(teamMapper::toDto);
+    }
+
+    public TeamDTO searchRivalTeam(long localteamId) throws TeamException {
+        List<Team> equipos = teamRepository.findAll();
+        if (equipos.size() <= 2) {
+            throw new TeamException("No hay suficientes equipos disponibles");
+        }
+        boolean equipoEscogible = false;
+        Team visitorTeam = equipos.get((int) (Math.random() * equipos.size()));
+        while (!equipoEscogible) {
+            if (visitorTeam.getId() == localteamId || visitorTeam.getOwner().getRole() == UserTiliRole.BOT || visitorTeam.getOwner().getRole() == UserTiliRole.ADMIN) {
+                visitorTeam = equipos.get((int) (Math.random() * equipos.size()));
+            } else  {
+                equipoEscogible = true;
+            }
+        }
+        return teamMapper.toDto(visitorTeam);
     }
 
     public Optional<TeamDTO> updateCreateTeam(TeamUpdateDTO teamUpdateDTO) throws PlayersSizeException {

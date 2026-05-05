@@ -1,32 +1,17 @@
-package com.JPAVideoGames.TiliManager.model;
+package com.JPAVideoGames.TiliManager.dto;
 
-import jakarta.persistence.*;
+public class LeagueTeamDTO {
 
-@Entity
-@Table(name = "league_team")
-public class LeagueTeam {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne
-    @JoinColumn(name = "league_id")
-    private League league;
+    private LeagueDTO league;
 
-    @ManyToOne
-    @JoinColumn(name = "team_id")
-    private Team team;
+    private TeamDTO team;
 
-    @Column
     private int wins;
-    @Column
     private int losses;
-    @Column
     private int draws;
-
-    @Column
     private int goalsScored;
-    @Column
     private int goalsReceived;
 
     public long getId() {
@@ -37,19 +22,19 @@ public class LeagueTeam {
         this.id = id;
     }
 
-    public League getLeague() {
+    public LeagueDTO getLeague() {
         return league;
     }
 
-    public void setLeague(League league) {
+    public void setLeague(LeagueDTO league) {
         this.league = league;
     }
 
-    public Team getTeam() {
+    public TeamDTO getTeam() {
         return team;
     }
 
-    public void setTeam(Team team) {
+    public void setTeam(TeamDTO team) {
         this.team = team;
     }
 
@@ -75,6 +60,10 @@ public class LeagueTeam {
 
     public void setDraws(int draws) {
         this.draws = draws;
+    }
+
+    public int getPoints() {
+        return ((this.wins * 3 ) + this.draws);
     }
 
     public int getGoalsScored() {

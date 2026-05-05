@@ -3,6 +3,7 @@ package com.JPAVideoGames.TiliManager.util;
 import com.JPAVideoGames.TiliManager.model.Player;
 import com.JPAVideoGames.TiliManager.model.Team;
 import com.JPAVideoGames.TiliManager.model.UserTili;
+import com.JPAVideoGames.TiliManager.model.UserTiliRole;
 import com.JPAVideoGames.TiliManager.repository.PlayerRepository;
 import com.JPAVideoGames.TiliManager.repository.TeamRepository;
 import com.JPAVideoGames.TiliManager.repository.UserTiliRepository;
@@ -33,10 +34,18 @@ public class DataInitialitzer implements CommandLineRunner {
     public void run(String... args) throws Exception{
         if (teamRepository.count() == 0){
 
+            UserTili adminTili = new UserTili();
+            adminTili.setName("admin");
+            adminTili.setEmail("admin@elpuig.xeill.net");
+            adminTili.setPassword(passwordEncoder.encode("676767"));
+            adminTili.setRole(UserTiliRole.ADMIN);
+            userTiliRepository.save(adminTili);
+
             UserTili userTili = new UserTili();
             userTili.setName("BOT1-YALEL");
             userTili.setEmail("pojeda@elpuig.xeill.net");
             userTili.setPassword(passwordEncoder.encode("676767"));
+            userTili.setRole(UserTiliRole.BOT);
 
             UserTili savedUserTili = userTiliRepository.save(userTili);
 

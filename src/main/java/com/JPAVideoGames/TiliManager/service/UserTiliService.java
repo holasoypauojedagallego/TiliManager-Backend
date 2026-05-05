@@ -5,6 +5,7 @@ import com.JPAVideoGames.TiliManager.dto.UserTiliDTO;
 import com.JPAVideoGames.TiliManager.dto.UserTiliLoginDTO;
 import com.JPAVideoGames.TiliManager.dto.UserTiliPassDTO;
 import com.JPAVideoGames.TiliManager.model.Team;
+import com.JPAVideoGames.TiliManager.model.UserTiliRole;
 import com.JPAVideoGames.TiliManager.repository.TeamRepository;
 import com.JPAVideoGames.TiliManager.util.UserTiliMapper;
 import com.JPAVideoGames.TiliManager.model.UserTili;
@@ -72,9 +73,22 @@ public class UserTiliService {
         return userTiliMapper.toDto(savedUserTili);
     }
 
+    public UserTiliDTO registerAdminUserTili(UserTiliCreateDTO userTiliCreateDTO) {
+        if (userTiliCreateDTO.getEmail().isBlank() || userTiliCreateDTO.getEmail() == null ||
+                userTiliCreateDTO.getPassword().isBlank() || userTiliCreateDTO.getPassword() == null ||
+                userTiliCreateDTO.getName().isBlank() || userTiliCreateDTO.getName() == null){
+            return null;
+        }
+        UserTili userTili = userTiliMapper.toCreateEntity(userTiliCreateDTO);
+        userTili.setPassword(passwordEncoder.encode(userTili.getPassword()));
+        userTili.setRole(UserTiliRole.ADMIN);
+
+        return userTiliMapper.toDto(userTiliRepository.save(userTili));
+    }
+
     public Optional<UserTiliPassDTO> loginUserTili(UserTiliLoginDTO userTili) {
         return userTiliRepository.findByEmail(userTili.getEmail()).filter
-                (u -> passwordEncoder.matches((userTili.getPassword()), u.getPassword())).
-                map(userTiliMapper::toPassDto);
+                (u -> passwordEncoder.matches(userTili.getPassword(), u.getPassword()) && u.getRole() == UserTiliRole.USUARIO)
+                .map(userTiliMapper::toPassDto);
     }
 }
