@@ -4,6 +4,7 @@ import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueCreateDTO;
 import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueDTO;
 import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueDeleteDTO;
 import com.JPAVideoGames.TiliManager.dto.leagueteamdto.LeagueTeamCreateDTO;
+import com.JPAVideoGames.TiliManager.dto.teamdto.TeamUpdateDTO;
 import com.JPAVideoGames.TiliManager.exceptions.LeagueException;
 import com.JPAVideoGames.TiliManager.service.LeagueService;
 import jakarta.persistence.EntityNotFoundException;
@@ -44,9 +45,9 @@ public class LeagueController {
         return ResponseEntity.internalServerError().body("No se pudo borrar");
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<LeagueDTO> addTeamToLeague(@RequestBody @Valid LeagueTeamCreateDTO leagueTeamCreateDTO) throws LeagueException{
-        return ResponseEntity.ok(leagueService.addTeam(leagueTeamCreateDTO));
+    @PostMapping("/add/{id}")
+    public ResponseEntity<LeagueDTO> addTeamToLeague(@RequestBody @Valid TeamUpdateDTO teamUpdateDTO, @PathVariable Long id) throws LeagueException{
+        return ResponseEntity.ok(leagueService.addTeam(teamUpdateDTO, id));
     }
 
 

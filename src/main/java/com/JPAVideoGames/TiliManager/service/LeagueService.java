@@ -5,6 +5,7 @@ import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueDTO;
 import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueDeleteDTO;
 import com.JPAVideoGames.TiliManager.dto.leagueteamdto.LeagueTeamCreateDTO;
 import com.JPAVideoGames.TiliManager.dto.teamdto.TeamDTO;
+import com.JPAVideoGames.TiliManager.dto.teamdto.TeamUpdateDTO;
 import com.JPAVideoGames.TiliManager.exceptions.LeagueException;
 import com.JPAVideoGames.TiliManager.model.League;
 import com.JPAVideoGames.TiliManager.model.LeagueTeam;
@@ -60,14 +61,22 @@ public class LeagueService {
     }
 
     public void deleteLeague(LeagueDeleteDTO leagueDeleteDTO) throws LeagueException {
+        // Encuentra el dueño por Dueño y ID, para evitar errores y ser bien concretos (con ciertos mapper para pasarlo a entidad de forma más fácil)
         Optional<League> league = leagueRepository.findByOwnerAndId(userTiliMapper.toEntity(leagueDeleteDTO.getOwner()), leagueDeleteDTO.getId());
         if (league.isEmpty()) {throw new LeagueException("No se puede borrar porque no se encuentra la liga");}
-        leagueRepository.deleteById(league.get().getId());
+        if (!(league.get().getOwner().getId().equals(leagueDeleteDTO.getOwner().getId())) ||
+                !(league.get().getOwner().getName().equals(leagueDeleteDTO.getOwner().getName())) ||
+                !(league.get().getOwner().getEmail().equals(leagueDeleteDTO.getOwner().getEmail()))) {
+            throw new LeagueException("El dueño, no es el verdadero dueño");
+        }
+        // Comentario para que Rusben no llore, dos early returns, el primero es por si la liga no existe, lanze Exception, y el segundo,
+        // es por si acaso alguien intenta borrar con su cuenta la liga de otro usuario, que pete si el dueño no eres tú vaya
+        leagueRepository.deleteById(league.get().getId()); // Esto es sencillo, deleteById, y le doy el id poco más
     }
 
-    public LeagueDTO addTeam(LeagueTeamCreateDTO leagueTeamCreateDTO) throws LeagueException{
-        Optional<League> liga = leagueRepository.findById(leagueTeamCreateDTO.getIdliga());
-        Optional<TeamDTO> team = teamService.getTeamByOwner(leagueTeamCreateDTO.getTeamUpdateDTO().getOwner());
+    public LeagueDTO addTeam(TeamUpdateDTO teamUpdateDTO, Long id) throws LeagueException{
+        Optional<League> liga = leagueRepository.findById(id);
+        Optional<TeamDTO> team = teamService.getTeamByOwner(teamUpdateDTO.getOwner());
         if (liga.isEmpty()){
             throw new LeagueException("No es posible unirse a la liga");
         }
@@ -80,7 +89,7 @@ public class LeagueService {
         if (liga.get().getTeams().size() >= 20){throw new IllegalArgumentException("Max of 20 teams allowed");}
 
         LeagueTeam leagueTeam = new LeagueTeam();
-        leagueTeam.setTeam(teamMapper.toEntity(leagueTeamCreateDTO.getTeamUpdateDTO()));
+        leagueTeam.setTeam(teamMapper.toEntity(teamUpdateDTO));
         leagueTeam.setLeague(liga.get());
 
         liga.get().setOneTeam(leagueTeam);
