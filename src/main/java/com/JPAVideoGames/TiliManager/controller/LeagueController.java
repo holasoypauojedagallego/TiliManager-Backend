@@ -1,11 +1,12 @@
 package com.JPAVideoGames.TiliManager.controller;
 
-import com.JPAVideoGames.TiliManager.dto.LeagueCreateDTO;
-import com.JPAVideoGames.TiliManager.dto.LeagueDTO;
-import com.JPAVideoGames.TiliManager.dto.TeamUpdateDTO;
-import com.JPAVideoGames.TiliManager.exceptions.TeamException;
-import com.JPAVideoGames.TiliManager.model.League;
+import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueCreateDTO;
+import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueDTO;
+import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueDeleteDTO;
+import com.JPAVideoGames.TiliManager.dto.leagueteamdto.LeagueTeamCreateDTO;
+import com.JPAVideoGames.TiliManager.exceptions.LeagueException;
 import com.JPAVideoGames.TiliManager.service.LeagueService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -28,8 +29,24 @@ public class LeagueController {
     }
 
     @PostMapping
-    public ResponseEntity<LeagueDTO> createLeague(@RequestBody @Valid LeagueCreateDTO leagueCreateDTO) {
+    public ResponseEntity<LeagueDTO> createLeague(@RequestBody @Valid LeagueCreateDTO leagueCreateDTO) throws LeagueException{
         return ResponseEntity.ok(leagueService.createLeague(leagueCreateDTO));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteLeague(@RequestBody @Valid LeagueDeleteDTO leagueDeleteDTO) throws LeagueException {
+        try {
+            leagueService.deleteLeague(leagueDeleteDTO);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
+            ResponseEntity.notFound();
+        }
+        return ResponseEntity.internalServerError().body("No se pudo borrar");
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<LeagueDTO> addTeamToLeague(@RequestBody @Valid LeagueTeamCreateDTO leagueTeamCreateDTO) throws LeagueException{
+        return ResponseEntity.ok(leagueService.addTeam(leagueTeamCreateDTO));
     }
 
 

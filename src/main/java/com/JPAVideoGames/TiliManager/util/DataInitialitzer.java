@@ -1,5 +1,6 @@
 package com.JPAVideoGames.TiliManager.util;
 
+import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueCreateDTO;
 import com.JPAVideoGames.TiliManager.model.Player;
 import com.JPAVideoGames.TiliManager.model.Team;
 import com.JPAVideoGames.TiliManager.model.UserTili;
@@ -7,6 +8,7 @@ import com.JPAVideoGames.TiliManager.model.UserTiliRole;
 import com.JPAVideoGames.TiliManager.repository.PlayerRepository;
 import com.JPAVideoGames.TiliManager.repository.TeamRepository;
 import com.JPAVideoGames.TiliManager.repository.UserTiliRepository;
+import com.JPAVideoGames.TiliManager.service.LeagueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,6 +30,12 @@ public class DataInitialitzer implements CommandLineRunner {
     private PlayerRepository playerRepository;
 
     @Autowired
+    private LeagueService leagueService;
+
+    @Autowired
+    private UserTiliMapper userTiliMapper;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
@@ -39,14 +47,18 @@ public class DataInitialitzer implements CommandLineRunner {
             adminTili.setEmail("admin@elpuig.xeill.net");
             adminTili.setPassword(passwordEncoder.encode("676767"));
             adminTili.setRole(UserTiliRole.ADMIN);
-            userTiliRepository.save(adminTili);
+            UserTili adminSaved = userTiliRepository.save(adminTili);
+
+            LeagueCreateDTO leagueCreateDTO = new LeagueCreateDTO();
+            leagueCreateDTO.setName("Liga Inicial");
+            leagueCreateDTO.setOwner(userTiliMapper.toPassDto(adminSaved));
+            leagueService.createLeague(leagueCreateDTO);
 
             UserTili userTili = new UserTili();
             userTili.setName("BOT1-YALEL");
             userTili.setEmail("pojeda@elpuig.xeill.net");
             userTili.setPassword(passwordEncoder.encode("676767"));
             userTili.setRole(UserTiliRole.BOT);
-
             UserTili savedUserTili = userTiliRepository.save(userTili);
 
             List<Player> jugadores3 = new ArrayList<>(List.of(

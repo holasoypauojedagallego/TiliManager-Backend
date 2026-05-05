@@ -1,9 +1,9 @@
 package com.JPAVideoGames.TiliManager.service;
 
-import com.JPAVideoGames.TiliManager.dto.UserTiliCreateDTO;
-import com.JPAVideoGames.TiliManager.dto.UserTiliDTO;
-import com.JPAVideoGames.TiliManager.dto.UserTiliLoginDTO;
-import com.JPAVideoGames.TiliManager.dto.UserTiliPassDTO;
+import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliCreateDTO;
+import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliDTO;
+import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliLoginDTO;
+import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
 import com.JPAVideoGames.TiliManager.model.Team;
 import com.JPAVideoGames.TiliManager.model.UserTiliRole;
 import com.JPAVideoGames.TiliManager.repository.TeamRepository;

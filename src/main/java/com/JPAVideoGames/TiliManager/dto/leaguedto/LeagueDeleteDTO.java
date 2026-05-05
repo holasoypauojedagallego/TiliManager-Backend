@@ -1,10 +1,15 @@
-package com.JPAVideoGames.TiliManager.dto;
+package com.JPAVideoGames.TiliManager.dto.leaguedto;
 
+import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public class LeagueCreateDTO {
+public class LeagueDeleteDTO {
+
+    @NotNull
+    long id;
 
     @NotBlank()
     @Size(min = 3, max = 33)
@@ -14,6 +19,14 @@ public class LeagueCreateDTO {
     private UserTiliPassDTO owner;
 
     private boolean closed = false;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

@@ -1,5 +1,6 @@
-package com.JPAVideoGames.TiliManager.dto;
+package com.JPAVideoGames.TiliManager.dto.teamdto;
 
+import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliDTO;
 import com.JPAVideoGames.TiliManager.model.Player;
 import java.util.List;
 

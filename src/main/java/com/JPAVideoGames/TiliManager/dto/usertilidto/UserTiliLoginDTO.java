@@ -1,4 +1,4 @@
-package com.JPAVideoGames.TiliManager.dto;
+package com.JPAVideoGames.TiliManager.dto.usertilidto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

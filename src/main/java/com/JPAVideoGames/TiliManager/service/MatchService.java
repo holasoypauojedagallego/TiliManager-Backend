@@ -1,9 +1,9 @@
 package com.JPAVideoGames.TiliManager.service;
 
-import com.JPAVideoGames.TiliManager.dto.MatchDTO;
-import com.JPAVideoGames.TiliManager.dto.PartidoEncapsuladoDTO;
-import com.JPAVideoGames.TiliManager.dto.TeamDTO;
-import com.JPAVideoGames.TiliManager.dto.TeamUpdateDTO;
+import com.JPAVideoGames.TiliManager.dto.matchdto.MatchDTO;
+import com.JPAVideoGames.TiliManager.dto.matchdto.PartidoEncapsuladoDTO;
+import com.JPAVideoGames.TiliManager.dto.teamdto.TeamDTO;
+import com.JPAVideoGames.TiliManager.dto.teamdto.TeamUpdateDTO;
 import com.JPAVideoGames.TiliManager.exceptions.TeamException;
 import com.JPAVideoGames.TiliManager.model.Match;
 import com.JPAVideoGames.TiliManager.model.Player;

@@ -1,15 +1,13 @@
 package com.JPAVideoGames.TiliManager.service;
 
-import com.JPAVideoGames.TiliManager.dto.MercadoDTO;
+import com.JPAVideoGames.TiliManager.dto.marketdto.MercadoDTO;
 import com.JPAVideoGames.TiliManager.model.Player;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 

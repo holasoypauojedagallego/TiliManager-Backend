@@ -1,7 +1,7 @@
 package com.JPAVideoGames.TiliManager.util;
 
-import com.JPAVideoGames.TiliManager.dto.TeamDTO;
-import com.JPAVideoGames.TiliManager.dto.TeamUpdateDTO;
+import com.JPAVideoGames.TiliManager.dto.teamdto.TeamDTO;
+import com.JPAVideoGames.TiliManager.dto.teamdto.TeamUpdateDTO;
 import com.JPAVideoGames.TiliManager.model.Team;
 import org.mapstruct.Mapper;
 

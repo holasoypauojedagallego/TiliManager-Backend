@@ -1,5 +1,6 @@
-package com.JPAVideoGames.TiliManager.dto;
+package com.JPAVideoGames.TiliManager.dto.matchdto;
 
+import com.JPAVideoGames.TiliManager.dto.teamdto.TeamDTO;
 import com.JPAVideoGames.TiliManager.model.League;
 
 import java.util.Date;

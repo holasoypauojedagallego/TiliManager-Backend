@@ -1,6 +1,6 @@
 package com.JPAVideoGames.TiliManager.model;
 
-import com.JPAVideoGames.TiliManager.dto.PartidoEncapsuladoDTO;
+import com.JPAVideoGames.TiliManager.dto.matchdto.PartidoEncapsuladoDTO;
 import jakarta.persistence.*;
 
 

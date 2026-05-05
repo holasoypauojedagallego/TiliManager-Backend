@@ -3,7 +3,9 @@ package com.JPAVideoGames.TiliManager.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "league_team")
+@Table(name = "league_team", uniqueConstraints = {
+        @UniqueConstraint(name = "liga_unique_team_unique", columnNames = {"league_id", "team_id"})
+})
 public class LeagueTeam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,16 +20,16 @@ public class LeagueTeam {
     private Team team;
 
     @Column
-    private int wins;
+    private int wins = 0;
     @Column
-    private int losses;
+    private int losses = 0;
     @Column
-    private int draws;
+    private int draws = 0;
 
     @Column
-    private int goalsScored;
+    private int goalsScored = 0;
     @Column
-    private int goalsReceived;
+    private int goalsReceived = 0;
 
     public long getId() {
         return id;

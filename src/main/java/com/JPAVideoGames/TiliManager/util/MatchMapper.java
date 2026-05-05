@@ -1,6 +1,6 @@
 package com.JPAVideoGames.TiliManager.util;
 
-import com.JPAVideoGames.TiliManager.dto.MatchDTO;
+import com.JPAVideoGames.TiliManager.dto.matchdto.MatchDTO;
 import com.JPAVideoGames.TiliManager.model.Match;
 import org.mapstruct.Mapper;
 

@@ -1,4 +1,7 @@
-package com.JPAVideoGames.TiliManager.dto;
+package com.JPAVideoGames.TiliManager.dto.leaguedto;
+
+import com.JPAVideoGames.TiliManager.dto.leagueteamdto.LeagueTeamDTO;
+import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliDTO;
 
 import java.util.List;
 

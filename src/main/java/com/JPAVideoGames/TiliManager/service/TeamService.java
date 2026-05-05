@@ -1,6 +1,10 @@
 package com.JPAVideoGames.TiliManager.service;
 
-import com.JPAVideoGames.TiliManager.dto.*;
+import com.JPAVideoGames.TiliManager.dto.teamdto.TeamDTO;
+import com.JPAVideoGames.TiliManager.dto.teamdto.TeamUpdateDTO;
+import com.JPAVideoGames.TiliManager.dto.teamdto.VenderDTO;
+import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliDTO;
+import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
 import com.JPAVideoGames.TiliManager.exceptions.InvalidMoneyException;
 import com.JPAVideoGames.TiliManager.exceptions.MarketException;
 import com.JPAVideoGames.TiliManager.exceptions.PlayersSizeException;

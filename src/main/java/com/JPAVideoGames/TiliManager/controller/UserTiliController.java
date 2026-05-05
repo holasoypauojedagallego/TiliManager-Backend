@@ -1,9 +1,9 @@
 package com.JPAVideoGames.TiliManager.controller;
 
-import com.JPAVideoGames.TiliManager.dto.UserTiliCreateDTO;
-import com.JPAVideoGames.TiliManager.dto.UserTiliDTO;
-import com.JPAVideoGames.TiliManager.dto.UserTiliLoginDTO;
-import com.JPAVideoGames.TiliManager.dto.UserTiliPassDTO;
+import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliCreateDTO;
+import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliDTO;
+import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliLoginDTO;
+import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
 import com.JPAVideoGames.TiliManager.service.UserTiliService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController

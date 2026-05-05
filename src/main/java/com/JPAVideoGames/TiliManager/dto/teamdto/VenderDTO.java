@@ -1,8 +1,13 @@
-package com.JPAVideoGames.TiliManager.dto;
+package com.JPAVideoGames.TiliManager.dto.teamdto;
 
 import com.JPAVideoGames.TiliManager.model.Player;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 public class VenderDTO {
+
+    @Valid
+    @NotNull
     private TeamUpdateDTO teamUpdateDTO;
     private Player player;
 

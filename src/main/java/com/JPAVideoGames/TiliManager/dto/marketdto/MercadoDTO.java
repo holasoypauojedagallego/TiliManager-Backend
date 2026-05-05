@@ -1,4 +1,4 @@
-package com.JPAVideoGames.TiliManager.dto;
+package com.JPAVideoGames.TiliManager.dto.marketdto;
 
 import com.JPAVideoGames.TiliManager.model.Player;
 

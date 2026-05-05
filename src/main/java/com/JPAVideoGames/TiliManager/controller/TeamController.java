@@ -1,11 +1,10 @@
 package com.JPAVideoGames.TiliManager.controller;
 
-import com.JPAVideoGames.TiliManager.dto.TeamUpdateDTO;
-import com.JPAVideoGames.TiliManager.dto.TeamDTO;
-import com.JPAVideoGames.TiliManager.dto.UserTiliPassDTO;
-import com.JPAVideoGames.TiliManager.dto.VenderDTO;
+import com.JPAVideoGames.TiliManager.dto.teamdto.TeamUpdateDTO;
+import com.JPAVideoGames.TiliManager.dto.teamdto.TeamDTO;
+import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
+import com.JPAVideoGames.TiliManager.dto.teamdto.VenderDTO;
 import com.JPAVideoGames.TiliManager.exceptions.PlayersSizeException;
-import com.JPAVideoGames.TiliManager.model.Player;
 import com.JPAVideoGames.TiliManager.service.TeamService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

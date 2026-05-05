@@ -11,7 +11,7 @@ public class League {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String name;
 
     @ManyToOne
@@ -55,7 +55,13 @@ public class League {
     }
 
     public void setTeams(List<LeagueTeam> teams) {
+        if (teams.size() > 20) throw new IllegalArgumentException("Max of 20 teams allowed");
         this.teams = teams;
+    }
+
+    public void setOneTeam(LeagueTeam team){
+        if (this.teams.size() >= 20) throw new IllegalArgumentException("Max of 20 teams allowed");
+        this.teams.add(team);
     }
 
     public boolean isClosed() {

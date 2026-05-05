@@ -1,6 +1,9 @@
-package com.JPAVideoGames.TiliManager.dto;
+package com.JPAVideoGames.TiliManager.dto.teamdto;
 
+import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
 import com.JPAVideoGames.TiliManager.model.Player;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -8,7 +11,11 @@ public class TeamUpdateDTO {
     private long id;
     private String name;
     private List<Player> players;
+
+    @Valid
+    @NotNull
     private UserTiliPassDTO owner;
+
     private Long money;
 
     public TeamUpdateDTO() {}

@@ -1,4 +1,4 @@
-package com.JPAVideoGames.TiliManager.dto;
+package com.JPAVideoGames.TiliManager.dto.usertilidto;
 
 public class UserTiliDTO {
     private String name;

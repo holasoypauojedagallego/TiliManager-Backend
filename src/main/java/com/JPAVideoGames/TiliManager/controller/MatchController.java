@@ -1,9 +1,8 @@
 package com.JPAVideoGames.TiliManager.controller;
 
-import com.JPAVideoGames.TiliManager.dto.MatchDTO;
-import com.JPAVideoGames.TiliManager.dto.PartidoEncapsuladoDTO;
-import com.JPAVideoGames.TiliManager.dto.TeamDTO;
-import com.JPAVideoGames.TiliManager.dto.TeamUpdateDTO;
+import com.JPAVideoGames.TiliManager.dto.matchdto.MatchDTO;
+import com.JPAVideoGames.TiliManager.dto.matchdto.PartidoEncapsuladoDTO;
+import com.JPAVideoGames.TiliManager.dto.teamdto.TeamUpdateDTO;
 import com.JPAVideoGames.TiliManager.exceptions.TeamException;
 import com.JPAVideoGames.TiliManager.service.MatchService;
 import org.springframework.beans.factory.annotation.Autowired;
