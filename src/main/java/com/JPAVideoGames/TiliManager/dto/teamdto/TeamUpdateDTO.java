@@ -1,14 +1,18 @@
 package com.JPAVideoGames.TiliManager.dto.teamdto;
 
+import com.JPAVideoGames.TiliManager.dto.leagueteamdto.LeagueTeamIdDTO;
 import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
 import com.JPAVideoGames.TiliManager.model.Player;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
 public class TeamUpdateDTO {
     private long id;
+
+    @NotBlank
     private String name;
     private List<Player> players;
 
@@ -17,6 +21,9 @@ public class TeamUpdateDTO {
     private UserTiliPassDTO owner;
 
     private Long money;
+
+    @NotNull
+    private LeagueTeamIdDTO leagueTeam;
 
     public TeamUpdateDTO() {}
 
@@ -58,5 +65,14 @@ public class TeamUpdateDTO {
 
     public void setMoney(Long money) {
         this.money = money;
+    }
+
+
+    public LeagueTeamIdDTO getLeagueTeam() {
+        return leagueTeam;
+    }
+
+    public void setLeagueTeam(LeagueTeamIdDTO leagueTeam) {
+        this.leagueTeam = leagueTeam;
     }
 }

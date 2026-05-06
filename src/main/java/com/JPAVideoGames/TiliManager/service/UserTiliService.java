@@ -43,6 +43,10 @@ public class UserTiliService {
         return userTiliRepository.findById(id).map(userTiliMapper::toDto);
     }
 
+    public Optional<UserTili> getByIdConfirmacion(UUID id){
+        return userTiliRepository.findById(id);
+    }
+
     public Optional<UserTiliDTO> getByName(String name){
         return userTiliRepository.findByName(name).map(userTiliMapper::toDto);
     }
@@ -61,14 +65,6 @@ public class UserTiliService {
         userTili.setPassword(passwordEncoder.encode(userTili.getPassword()));
 
         UserTili savedUserTili = userTiliRepository.save(userTili);
-
-        Team teamFromUserTili = new Team();
-        int numeroaleatorio = (int) (Math.random() * 100000000);
-        teamFromUserTili.setName("T_" + numeroaleatorio);
-        teamFromUserTili.setMoney(133000000L);
-
-        teamFromUserTili.setOwner(savedUserTili);
-        teamRepository.save(teamFromUserTili);
 
         return userTiliMapper.toDto(savedUserTili);
     }

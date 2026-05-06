@@ -11,6 +11,7 @@ import com.JPAVideoGames.TiliManager.exceptions.PlayersSizeException;
 import com.JPAVideoGames.TiliManager.exceptions.TeamException;
 import com.JPAVideoGames.TiliManager.model.Player;
 import com.JPAVideoGames.TiliManager.model.Team;
+import com.JPAVideoGames.TiliManager.model.UserTili;
 import com.JPAVideoGames.TiliManager.model.UserTiliRole;
 import com.JPAVideoGames.TiliManager.repository.TeamRepository;
 import com.JPAVideoGames.TiliManager.util.TeamMapper;
@@ -236,5 +237,14 @@ public class TeamService {
             }
             return teamRepository.save(team);
         });
+    }
+
+    public Team guardarEquipoPrimero(UserTili userTili) {
+        Team teamFromUserTili = new Team();
+        int numeroaleatorio = (int) (Math.random() * 100000000);
+        teamFromUserTili.setName("T_" + numeroaleatorio);
+        teamFromUserTili.setMoney(133000000L);
+        teamFromUserTili.setOwner(userTili);
+        return teamRepository.save(teamFromUserTili);
     }
 }

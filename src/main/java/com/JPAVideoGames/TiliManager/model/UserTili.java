@@ -2,6 +2,7 @@ package com.JPAVideoGames.TiliManager.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,8 +22,8 @@ public class UserTili {
     @Column(nullable = false)
     private String password;
 
-    @OneToOne(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Team team;
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Team> teams;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

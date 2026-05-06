@@ -22,12 +22,15 @@ public class Team {
     @JoinColumn(name = "team_id", referencedColumnName = "id")
     private List<Player> players;
 
-    @OneToOne
-    @JoinColumn(name = "owner", referencedColumnName = "id", unique = true)
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
     private UserTili owner;
 
     @Column(nullable = false)
     private Long money;
+
+    @OneToOne(mappedBy = "team")
+    private LeagueTeam leagueTeam;
 
     public Team() {}
 
@@ -80,5 +83,13 @@ public class Team {
 
     public void setMoney(Long money) {
         this.money = money;
+    }
+
+    public LeagueTeam getLeagueTeam() {
+        return leagueTeam;
+    }
+
+    public void setLeagueTeam(LeagueTeam leagueTeam) {
+        this.leagueTeam = leagueTeam;
     }
 }

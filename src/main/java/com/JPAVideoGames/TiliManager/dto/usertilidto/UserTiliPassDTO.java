@@ -1,5 +1,6 @@
 package com.JPAVideoGames.TiliManager.dto.usertilidto;
 
+import com.JPAVideoGames.TiliManager.model.UserTiliRole;
 import jakarta.validation.constraints.*;
 
 import java.util.UUID;
@@ -16,6 +17,8 @@ public class UserTiliPassDTO {
     @NotBlank
     @Email
     private String email;
+
+    private UserTiliRole role;
 
     public UUID getId() {
         return id;
@@ -41,4 +44,11 @@ public class UserTiliPassDTO {
         this.email = email;
     }
 
+    public UserTiliRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserTiliRole role) {
+        this.role = role;
+    }
 }

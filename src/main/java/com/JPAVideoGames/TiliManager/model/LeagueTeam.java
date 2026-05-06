@@ -15,7 +15,7 @@ public class LeagueTeam {
     @JoinColumn(name = "league_id")
     private League league;
 
-    @ManyToOne
+    @OneToOne // Esto recuerda que hace: OneToOne es un equipo en una liga, ManyToOne sería un equipo en diversas ligas
     @JoinColumn(name = "team_id")
     private Team team;
 

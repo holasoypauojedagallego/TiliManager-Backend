@@ -1,5 +1,6 @@
 package com.JPAVideoGames.TiliManager.dto.teamdto;
 
+import com.JPAVideoGames.TiliManager.dto.leagueteamdto.LeagueTeamIdDTO;
 import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliDTO;
 import com.JPAVideoGames.TiliManager.model.Player;
 import java.util.List;
@@ -11,6 +12,7 @@ public class TeamDTO {
     private List<Player> players;
     private UserTiliDTO owner;
     private Long money;
+    private LeagueTeamIdDTO leagueTeam;
 
     public TeamDTO() {}
 
@@ -52,5 +54,13 @@ public class TeamDTO {
 
     public void setMoney(Long money) {
         this.money = money;
+    }
+
+    public LeagueTeamIdDTO getLeagueTeam() {
+        return leagueTeam;
+    }
+
+    public void setLeagueTeam(LeagueTeamIdDTO leagueTeam) {
+        this.leagueTeam = leagueTeam;
     }
 }

@@ -3,12 +3,12 @@ package com.JPAVideoGames.TiliManager.service;
 import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueCreateDTO;
 import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueDTO;
 import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueDeleteDTO;
-import com.JPAVideoGames.TiliManager.dto.leagueteamdto.LeagueTeamCreateDTO;
-import com.JPAVideoGames.TiliManager.dto.teamdto.TeamDTO;
-import com.JPAVideoGames.TiliManager.dto.teamdto.TeamUpdateDTO;
+import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
 import com.JPAVideoGames.TiliManager.exceptions.LeagueException;
 import com.JPAVideoGames.TiliManager.model.League;
 import com.JPAVideoGames.TiliManager.model.LeagueTeam;
+import com.JPAVideoGames.TiliManager.model.Team;
+import com.JPAVideoGames.TiliManager.model.UserTili;
 import com.JPAVideoGames.TiliManager.repository.LeagueRepository;
 import com.JPAVideoGames.TiliManager.util.LeagueMapper;
 import com.JPAVideoGames.TiliManager.util.TeamMapper;
@@ -25,6 +25,10 @@ import java.util.Optional;
 @Lazy
 @Transactional
 public class LeagueService {
+
+    @Autowired
+    @Lazy
+    private UserTiliService userTiliService;
 
     @Autowired
     @Lazy
@@ -78,22 +82,24 @@ public class LeagueService {
         leagueRepository.deleteById(league.get().getId()); // Esto es sencillo, deleteById, y le doy el id poco más
     }
 
-    public LeagueDTO addTeam(TeamUpdateDTO teamUpdateDTO, Long id) throws LeagueException{
+    public LeagueDTO addTeam(UserTiliPassDTO userTiliPassDTO, Long id) throws LeagueException{
         Optional<League> liga = leagueRepository.findById(id);
-        Optional<TeamDTO> team = teamService.getTeamByOwner(teamUpdateDTO.getOwner());
+        Optional<UserTili> userTili = userTiliService.getByIdConfirmacion(userTiliPassDTO.getId());
         if (liga.isEmpty()){
             throw new LeagueException("No es posible unirse a la liga");
         }
-        if (team.isEmpty()){
-            throw new LeagueException("Mal equipo");
+        if (userTili.isEmpty()){
+            throw new LeagueException("Usuario erroneo");
         }
         if (liga.get().isClosed()) {
             throw new LeagueException("La liga es privada");
         }
         if (liga.get().getTeams().size() >= 20){throw new IllegalArgumentException("Max of 20 teams allowed");}
 
+        Team teamFromUserTili = teamService.guardarEquipoPrimero(userTili.get());
+
         LeagueTeam leagueTeam = new LeagueTeam();
-        leagueTeam.setTeam(teamMapper.toEntity(teamUpdateDTO));
+        leagueTeam.setTeam(teamFromUserTili);
         leagueTeam.setLeague(liga.get());
 
         liga.get().setOneTeam(leagueTeam);

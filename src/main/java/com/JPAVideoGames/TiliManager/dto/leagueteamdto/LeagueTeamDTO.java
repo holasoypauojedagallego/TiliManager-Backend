@@ -1,12 +1,13 @@
 package com.JPAVideoGames.TiliManager.dto.leagueteamdto;
 
+import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueIdDTO;
 import com.JPAVideoGames.TiliManager.dto.teamdto.TeamDTO;
 
 public class LeagueTeamDTO {
 
     private long id;
 
-    private Long league;
+    private LeagueIdDTO league;
 
     private TeamDTO team;
 
@@ -24,11 +25,11 @@ public class LeagueTeamDTO {
         this.id = id;
     }
 
-    public Long getLeague() {
+    public LeagueIdDTO getLeague() {
         return league;
     }
 
-    public void setLeague(Long league) {
+    public void setLeague(LeagueIdDTO league) {
         this.league = league;
     }
 

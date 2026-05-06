@@ -1,10 +1,15 @@
 package com.JPAVideoGames.TiliManager.controller;
 
+import com.JPAVideoGames.TiliManager.dto.leagueteamdto.LeagueTeamDTO;
 import com.JPAVideoGames.TiliManager.dto.teamdto.TeamUpdateDTO;
 import com.JPAVideoGames.TiliManager.exceptions.TeamException;
+import com.JPAVideoGames.TiliManager.service.LeagueTeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/equipo-ligas")
@@ -12,10 +17,11 @@ public class LeagueTeamController {
 
     @Autowired
     @Lazy
+    private LeagueTeamService leagueTeamService;
 
     @GetMapping
-    public void getLeagueTeams() {
-
+    public ResponseEntity<List<LeagueTeamDTO>> getLeagueTeams() {
+        return ResponseEntity.ok(leagueTeamService.getAll());
     }
 
     @PostMapping
