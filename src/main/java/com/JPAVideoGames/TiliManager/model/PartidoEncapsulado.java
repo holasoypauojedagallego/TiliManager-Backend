@@ -1,20 +1,38 @@
-package com.JPAVideoGames.TiliManager.dto.matchdto;
+package com.JPAVideoGames.TiliManager.model;
 
-import com.JPAVideoGames.TiliManager.dto.teamdto.TeamDTO;
-import com.JPAVideoGames.TiliManager.model.Player;
-import com.JPAVideoGames.TiliManager.model.Team;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
-public class PartidoEncapsuladoDTO {
+@Embeddable
+public class PartidoEncapsulado {
 
+    @Column
     private int minuto;
-    private TeamDTO equipo;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team equipo;
+
+    @ManyToOne
+    @JoinColumn(name = "player_id")
     private Player jugador;
+
+    @Column
     private boolean local;
+    @Column
     private int sucede;
+    @Column
     private int golesLocal;
+    @Column
     private int golesVisitante;
 
-    public PartidoEncapsuladoDTO() {}
+    public PartidoEncapsulado(int minuto) {
+        this.minuto = minuto;
+    }
+
+    public PartidoEncapsulado() {}
 
     public int getMinuto() {
         return minuto;
@@ -24,11 +42,11 @@ public class PartidoEncapsuladoDTO {
         this.minuto = minuto;
     }
 
-    public TeamDTO getEquipo() {
+    public Team getEquipo() {
         return equipo;
     }
 
-    public void setEquipo(TeamDTO equipo) {
+    public void setEquipo(Team equipo) {
         this.equipo = equipo;
     }
 

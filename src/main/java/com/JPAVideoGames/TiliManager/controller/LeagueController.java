@@ -29,6 +29,11 @@ public class LeagueController {
         return ResponseEntity.ok(leagueService.getAll());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<LeagueDTO> getLeagues(@PathVariable long id) {
+        return leagueService.getById(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<LeagueDTO> createLeague(@RequestBody @Valid LeagueCreateDTO leagueCreateDTO) throws LeagueException{
         return ResponseEntity.ok(leagueService.createLeague(leagueCreateDTO));

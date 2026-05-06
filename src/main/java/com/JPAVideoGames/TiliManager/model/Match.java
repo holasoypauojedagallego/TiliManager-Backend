@@ -1,6 +1,5 @@
 package com.JPAVideoGames.TiliManager.model;
 
-import com.JPAVideoGames.TiliManager.dto.matchdto.PartidoEncapsuladoDTO;
 import jakarta.persistence.*;
 
 
@@ -17,7 +16,7 @@ public class Match {
 
     @ElementCollection
     @Column(nullable = false)
-    private List<PartidoEncapsuladoDTO> partidoEncapsulado;
+    private List<PartidoEncapsulado> partidoEncapsulado;
 
     @Column(nullable = false)
     private final Date date = new Date();
@@ -48,11 +47,11 @@ public class Match {
         this.id = id;
     }
 
-    public List<PartidoEncapsuladoDTO> getPartidoEncapsulado() {
+    public List<PartidoEncapsulado> getPartidoEncapsulado() {
         return partidoEncapsulado;
     }
 
-    public void setPartidoEncapsulado(List<PartidoEncapsuladoDTO> partidoEncapsulado) {
+    public void setPartidoEncapsulado(List<PartidoEncapsulado> partidoEncapsulado) {
         this.partidoEncapsulado = partidoEncapsulado;
     }
 

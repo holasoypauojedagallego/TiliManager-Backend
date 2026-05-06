@@ -52,6 +52,10 @@ public class LeagueService {
         return leagueMapper.toDTO(leagueRepository.findAll());
     }
 
+    public Optional<LeagueDTO> getById(long id){
+        return leagueRepository.findById(id).map(leagueMapper::toDTO);
+    }
+
     public LeagueDTO createLeague(LeagueCreateDTO leagueCreateDTO) throws LeagueException{
         long ligasPorUser = leagueRepository.countByOwner(userTiliMapper.toEntity(leagueCreateDTO.getOwner()));
         if (ligasPorUser >= 5) {

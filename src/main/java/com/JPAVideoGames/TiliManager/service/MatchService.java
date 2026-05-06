@@ -2,15 +2,14 @@ package com.JPAVideoGames.TiliManager.service;
 
 import com.JPAVideoGames.TiliManager.dto.matchdto.MatchDTO;
 import com.JPAVideoGames.TiliManager.dto.matchdto.PartidoEncapsuladoDTO;
+import com.JPAVideoGames.TiliManager.model.*;
+import com.JPAVideoGames.TiliManager.model.PartidoEncapsulado;
 import com.JPAVideoGames.TiliManager.dto.teamdto.TeamDTO;
 import com.JPAVideoGames.TiliManager.dto.teamdto.TeamUpdateDTO;
 import com.JPAVideoGames.TiliManager.exceptions.TeamException;
-import com.JPAVideoGames.TiliManager.model.Match;
-import com.JPAVideoGames.TiliManager.model.Player;
-import com.JPAVideoGames.TiliManager.model.Team;
-import com.JPAVideoGames.TiliManager.model.UserTiliRole;
 import com.JPAVideoGames.TiliManager.repository.MatchRepository;
 import com.JPAVideoGames.TiliManager.util.MatchMapper;
+import com.JPAVideoGames.TiliManager.util.PartidoEncapsuladoMapper;
 import com.JPAVideoGames.TiliManager.util.TeamMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +38,10 @@ public class MatchService {
     @Lazy
     private MatchMapper matchMapper;
 
+    @Autowired
+    @Lazy
+    private PartidoEncapsuladoMapper partidoEncapsuladoMapper;
+
     private final MatchRepository matchRepository;
 
     public MatchService(MatchRepository matchRepository) {
@@ -54,7 +57,7 @@ public class MatchService {
     }
 
     public List<PartidoEncapsuladoDTO> empezarCodigo(TeamUpdateDTO localteamDTO) throws TeamException {
-        return codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(teamService.searchRivalTeam(localteamDTO.getId()))).getPartidoEncapsulado();
+        return partidoEncapsuladoMapper.toDTO(codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(teamService.searchRivalTeam(localteamDTO.getId()))).getPartidoEncapsulado());
     }
 
     public List<PartidoEncapsuladoDTO> torneoSimuladoP1(TeamUpdateDTO localteamDTO) {
@@ -65,7 +68,7 @@ public class MatchService {
         Match partido = codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(visitorTeam));
 
         teamService.dineroPorResultado(localteamDTO, (partido.getLocalTeamGoals() - partido.getVisitorTeamGoals()));
-        return partido.getPartidoEncapsulado();
+        return partidoEncapsuladoMapper.toDTO(partido.getPartidoEncapsulado());
     }
 
     public Match codigo(Team localTeam, Team visitorTeam) {
@@ -86,11 +89,11 @@ public class MatchService {
         if (porcentajeGanaVisitante <= 0){ porcentajeGanaVisitante = 1; porcentajeGanaLocal = 89; }
 
         int contador = 0;
-        List<PartidoEncapsuladoDTO> partidoEncapsulados = new ArrayList<>();
+        List<PartidoEncapsulado> partidoEncapsulados = new ArrayList<>();
 
         while (porcentajeGanaLocal > 0  || porcentajeGanaVisitante > 0) {
             contador++;
-            PartidoEncapsuladoDTO partidoalgo = new PartidoEncapsuladoDTO(contador);
+            PartidoEncapsulado partidoalgo = new PartidoEncapsulado(contador);
 
             System.out.println("Minuto: " + contador);
 

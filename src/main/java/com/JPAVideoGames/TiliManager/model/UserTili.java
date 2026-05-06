@@ -56,14 +56,6 @@ public class UserTili {
         return password;
     }
 
-    public Team getTeam() {
-        return team;
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
-    }
-
     public void setPassword(String password) {
         this.password = password;
     }

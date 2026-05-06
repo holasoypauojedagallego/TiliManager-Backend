@@ -2,6 +2,7 @@ package com.JPAVideoGames.TiliManager.controller;
 
 import com.JPAVideoGames.TiliManager.dto.matchdto.MatchDTO;
 import com.JPAVideoGames.TiliManager.dto.matchdto.PartidoEncapsuladoDTO;
+import com.JPAVideoGames.TiliManager.model.PartidoEncapsulado;
 import com.JPAVideoGames.TiliManager.dto.teamdto.TeamUpdateDTO;
 import com.JPAVideoGames.TiliManager.exceptions.TeamException;
 import com.JPAVideoGames.TiliManager.service.MatchService;
