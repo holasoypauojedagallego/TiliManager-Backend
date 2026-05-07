@@ -12,7 +12,7 @@ public class PlayerLeague {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Player player;
 
     @ManyToOne

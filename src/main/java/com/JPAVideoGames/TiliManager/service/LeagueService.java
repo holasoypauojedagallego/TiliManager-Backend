@@ -68,8 +68,8 @@ public class LeagueService {
 
     public LeagueDTO createLeague(LeagueCreateDTO leagueCreateDTO) throws LeagueException{
         long ligasPorUser = leagueRepository.countByOwner(userTiliMapper.toEntity(leagueCreateDTO.getOwner()));
-        if (ligasPorUser >= 5) {
-            throw new LeagueException("Solo se permiten un máximo de 5 ligas por usuario");
+        if (ligasPorUser >= 3) {
+            throw new LeagueException("Solo se permiten un máximo de 3 ligas por usuario");
         }
         League league = leagueRepository.save(leagueMapper.toCreateEntity(leagueCreateDTO));
         playerLeagueService.createJugadoresLeague(league);

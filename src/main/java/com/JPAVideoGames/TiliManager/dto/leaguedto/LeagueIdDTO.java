@@ -2,6 +2,7 @@ package com.JPAVideoGames.TiliManager.dto.leaguedto;
 
 public class LeagueIdDTO {
     private long id;
+    private String name;
 
     public long getId() {
         return id;
@@ -9,5 +10,13 @@ public class LeagueIdDTO {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
