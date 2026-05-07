@@ -21,6 +21,9 @@ public class League {
     @OneToMany(mappedBy = "league", cascade = CascadeType.ALL)
     private List<LeagueTeam> teams;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<PlayerLeague> players;
+
     @Column
     private boolean closed = false; // Liga privada = true, liga pública = false
 
@@ -62,6 +65,14 @@ public class League {
     public void setOneTeam(LeagueTeam team){
         if (this.teams.size() >= 20) throw new IllegalArgumentException("Max of 20 teams allowed");
         this.teams.add(team);
+    }
+
+    public List<PlayerLeague> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<PlayerLeague> players) {
+        this.players = players;
     }
 
     public boolean isClosed() {

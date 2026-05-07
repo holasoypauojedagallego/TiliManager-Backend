@@ -1,25 +1,36 @@
 package com.JPAVideoGames.TiliManager.dto.marketdto;
 
-import com.JPAVideoGames.TiliManager.model.Player;
+import com.JPAVideoGames.TiliManager.dto.playerleague.PlayerLeagueDTO;
+import com.JPAVideoGames.TiliManager.model.PlayerLeague;
 
 import java.util.List;
 
 public class MercadoDTO {
-    private List<Player> players;
+    private long id;
+    private List<PlayerLeagueDTO> players;
     private boolean fichable;
 
     public MercadoDTO() {}
 
-    public MercadoDTO(List<Player> players, boolean fichable) {
+    public MercadoDTO(long id,List<PlayerLeagueDTO> players, boolean fichable) {
+        this.id = id;
         this.players = players;
         this.fichable = fichable;
     }
 
-    public List<Player> getPlayers() {
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public List<PlayerLeagueDTO> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<Player> players) {
+    public void setPlayers(List<PlayerLeagueDTO> players) {
         this.players = players;
     }
 

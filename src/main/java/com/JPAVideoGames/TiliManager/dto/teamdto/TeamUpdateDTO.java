@@ -1,6 +1,7 @@
 package com.JPAVideoGames.TiliManager.dto.teamdto;
 
 import com.JPAVideoGames.TiliManager.dto.leagueteamdto.LeagueTeamIdDTO;
+import com.JPAVideoGames.TiliManager.dto.playerleague.PlayerLeagueDTO;
 import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
 import com.JPAVideoGames.TiliManager.model.Player;
 import jakarta.validation.Valid;
@@ -14,7 +15,7 @@ public class TeamUpdateDTO {
 
     @NotBlank
     private String name;
-    private List<Player> players;
+    private List<PlayerLeagueDTO> players;
 
     @Valid
     @NotNull
@@ -43,11 +44,11 @@ public class TeamUpdateDTO {
         this.name = name;
     }
 
-    public List<Player> getPlayers() {
+    public List<PlayerLeagueDTO> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<Player> players) {
+    public void setPlayers(List<PlayerLeagueDTO> players) {
         this.players = players;
     }
 

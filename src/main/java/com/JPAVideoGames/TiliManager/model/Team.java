@@ -20,7 +20,7 @@ public class Team {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "team_id", referencedColumnName = "id")
-    private List<Player> players;
+    private List<PlayerLeague> players;
 
     @ManyToOne
     @JoinColumn(name = "owner_id")
@@ -58,23 +58,23 @@ public class Team {
         this.name = name;
     }
 
-    public List<Player> getPlayers() {
+    public List<PlayerLeague> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<Player> players) throws IllegalArgumentException {
+    public void setPlayers(List<PlayerLeague> players) throws IllegalArgumentException {
         if (players.size() > 7) throw new IllegalArgumentException("Max of 7 players allowed");
         this.players = players;
     }
 
-    public void setOnePlayer(Player player) throws IllegalArgumentException {
+    public void setOnePlayer(PlayerLeague player) throws IllegalArgumentException {
         if (this.players.size() >= 7) throw new IllegalArgumentException("Max of 7 players allowed");
         this.players.add(player);
     }
 
-    public void deleteOnePlayer(Player player) throws IllegalArgumentException {
+    public void deleteOnePlayer(PlayerLeague player) throws IllegalArgumentException {
         if (this.players.isEmpty()) throw new IllegalArgumentException("Min of 0 players allowed");
-        this.players.removeIf(p -> p.getId() == player.getId());
+        this.players.removeIf(p -> p.getPlayer().getId() == player.getId());
     }
 
     public Long getMoney() {

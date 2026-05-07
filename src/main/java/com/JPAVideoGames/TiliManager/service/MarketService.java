@@ -1,7 +1,10 @@
 package com.JPAVideoGames.TiliManager.service;
 
+import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueDTO;
 import com.JPAVideoGames.TiliManager.dto.marketdto.MercadoDTO;
-import com.JPAVideoGames.TiliManager.model.Player;
+import com.JPAVideoGames.TiliManager.dto.playerleague.PlayerLeagueDTO;
+import com.JPAVideoGames.TiliManager.model.PlayerLeague;
+import com.JPAVideoGames.TiliManager.util.PlayerLeagueMapper;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -10,69 +13,81 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @EnableScheduling
 public class MarketService {
 
     @Autowired
-    private PlayerService playerService;
+    private PlayerLeagueService playerLeagueService;
 
-    private MercadoDTO mercadoDTO;
+    @Autowired
+    private LeagueService leagueService;
 
-    private List<Player> players;
+    @Autowired
+    private PlayerLeagueMapper playerLeagueMapper;
+
+    private List<MercadoDTO> mercados;
+
+    private List<LeagueDTO> leagues;
 
     @PostConstruct
     public void init() {
-        mercadoJugadores();
-        this.mercadoDTO = new MercadoDTO(getPlayers(), true);
+        setLeagues();
+        for (int i = 0; i < getLeagues().size(); i++) {
+            this.mercados.add(new MercadoDTO(i, mercadoJugadores(getLeagues().get(i).getId()), true));
+        }
     }
 
     @Scheduled(cron = "00 59 23 * * * ")
     public void scheduled() {
-        mercadoJugadores();
-        this.mercadoDTO = new MercadoDTO(getPlayers(), false);
+        setLeagues();
+        for (int i = 0; i < getLeagues().size(); i++) {
+            this.mercados.add(new MercadoDTO(i, mercadoJugadores(getLeagues().get(i).getId()), false));
+        }
     }
 
     @Scheduled(cron = "00 00 16 * * * ")
     public void scheduledFichable() {
-        if (this.mercadoDTO != null && !this.mercadoDTO.getPlayers().isEmpty()) {
-            this.mercadoDTO.setFichable(true);
+        for (MercadoDTO mercado : this.mercados) {
+            mercado.setFichable(true);
         }
     }
 
-    public void mercadoJugadores() {
-        List<Player> jugadoresAnte = playerService.getJugadorByTeamIdNull();
+    public List<PlayerLeagueDTO> mercadoJugadores(long leagueId) {
+        List<PlayerLeagueDTO> jugadoresAnte = playerLeagueService.getJugadoresByLeagueAndTeamIdNull(leagueId);
         if (jugadoresAnte.size() <= 20) {
-            setPlayers(jugadoresAnte);
-            return;
+            return jugadoresAnte;
         }
         Collections.shuffle(jugadoresAnte);
-        setPlayers(jugadoresAnte.subList(0, 20));
+        return jugadoresAnte.subList(0, 20);
     }
 
-    public void actualizarMercado(Player p){
-        for (int i = 0; i < getPlayers().size(); i++) {
-            if (p.getId() == getPlayers().get(i).getId()){
-                this.players.set(i, p);
+    public void actualizarMercado(PlayerLeagueDTO p){
+        for (MercadoDTO mercado : this.mercados) {
+            List<PlayerLeagueDTO> playerLeagues = mercado.getPlayers();
+            for (int i = 0; i < playerLeagues.size(); i++) {
+                if (playerLeagues.get(i).getId() == p.getId() && playerLeagues.get(i).getLeague().getId() == p.getLeague().getId()) {
+                    playerLeagues.set(i, p);
+                }
             }
         }
     }
 
-    public MercadoDTO getMercadoDTO() {
-        return mercadoDTO;
+    public List<MercadoDTO> getMercados() {
+        return mercados;
     }
 
-    private void setMercadoDTO(MercadoDTO mercadoDTO) {
-        this.mercadoDTO = mercadoDTO;
+    public Optional<MercadoDTO> getMercado(long id) {
+        return getMercados().stream().filter(mercad -> mercad.getId() == id).findFirst();
     }
 
-    private List<Player> getPlayers() {
-        return players;
+    public List<LeagueDTO> getLeagues() {
+        return leagues;
     }
 
-    private void setPlayers(List<Player> players) {
-        this.players = players;
+    public void setLeagues() {
+        this.leagues = leagueService.getAll();
     }
-
 }

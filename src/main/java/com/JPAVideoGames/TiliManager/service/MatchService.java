@@ -72,15 +72,15 @@ public class MatchService {
     }
 
     public Match codigo(Team localTeam, Team visitorTeam) {
-        int localTeamRating = localTeam.getPlayers().stream().mapToInt(Player::getRating).sum() / (localTeam.getPlayers().size() - 2);
-        int visitorTeamRating = visitorTeam.getPlayers().stream().mapToInt(Player::getRating).sum() / (visitorTeam.getPlayers().size() - 2);
+        int localTeamRating = localTeam.getPlayers().stream().mapToInt(p -> p.getPlayer().getRating()).sum() / (localTeam.getPlayers().size() - 2);
+        int visitorTeamRating = visitorTeam.getPlayers().stream().mapToInt(p -> p.getPlayer().getRating()).sum() / (visitorTeam.getPlayers().size() - 2);
 
-        int localAttackRating = localTeam.getPlayers().stream().mapToInt(Player::getAttack).sum();
-        int localDefenseRating = localTeam.getPlayers().stream().mapToInt(Player::getDefense).sum();
+        int localAttackRating = localTeam.getPlayers().stream().mapToInt(p -> p.getPlayer().getAttack()).sum();
+        int localDefenseRating = localTeam.getPlayers().stream().mapToInt(p -> p.getPlayer().getDefense()).sum();
         int localGoals = 0;
 
-        int visitorAttackRating = visitorTeam.getPlayers().stream().mapToInt(Player::getAttack).sum();
-        int visitorDefenseRating = visitorTeam.getPlayers().stream().mapToInt(Player::getDefense).sum();
+        int visitorAttackRating = visitorTeam.getPlayers().stream().mapToInt(p -> p.getPlayer().getAttack()).sum();
+        int visitorDefenseRating = visitorTeam.getPlayers().stream().mapToInt(p -> p.getPlayer().getDefense()).sum();
         int visitorGoals = 0;
 
         int porcentajeGanaLocal = 45 + (localTeamRating - visitorTeamRating);

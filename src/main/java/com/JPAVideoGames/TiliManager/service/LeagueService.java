@@ -5,10 +5,7 @@ import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueDTO;
 import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueDeleteDTO;
 import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
 import com.JPAVideoGames.TiliManager.exceptions.LeagueException;
-import com.JPAVideoGames.TiliManager.model.League;
-import com.JPAVideoGames.TiliManager.model.LeagueTeam;
-import com.JPAVideoGames.TiliManager.model.Team;
-import com.JPAVideoGames.TiliManager.model.UserTili;
+import com.JPAVideoGames.TiliManager.model.*;
 import com.JPAVideoGames.TiliManager.repository.LeagueRepository;
 import com.JPAVideoGames.TiliManager.util.LeagueMapper;
 import com.JPAVideoGames.TiliManager.util.TeamMapper;
@@ -34,6 +31,11 @@ public class LeagueService {
     @Lazy
     private TeamService teamService;
 
+
+    @Autowired
+    @Lazy
+    private PlayerLeagueService playerLeagueService;
+
     @Autowired
     @Lazy
     private LeagueMapper leagueMapper;
@@ -56,6 +58,10 @@ public class LeagueService {
         return leagueMapper.toDTO(leagueRepository.findAll());
     }
 
+    public long countAll(){
+        return leagueRepository.count();
+    }
+
     public Optional<LeagueDTO> getById(long id){
         return leagueRepository.findById(id).map(leagueMapper::toDTO);
     }
@@ -65,7 +71,9 @@ public class LeagueService {
         if (ligasPorUser >= 5) {
             throw new LeagueException("Solo se permiten un máximo de 5 ligas por usuario");
         }
-        return leagueMapper.toDTO(leagueRepository.save(leagueMapper.toCreateEntity(leagueCreateDTO)));
+        League league = leagueRepository.save(leagueMapper.toCreateEntity(leagueCreateDTO));
+        playerLeagueService.createJugadoresLeague(league);
+        return leagueMapper.toDTO(league);
     }
 
     public void deleteLeague(LeagueDeleteDTO leagueDeleteDTO) throws LeagueException {

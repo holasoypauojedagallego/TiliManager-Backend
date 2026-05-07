@@ -22,17 +22,18 @@ public class Player {
     @Column
     private int defense;
 
-    @Column(name = "team_id")
-    private Long teamId;
-
     @Column
     private Long price;
 
-    public Player(String name, int rating, int attack, int defense) {
+    @Column
+    private boolean special = false;
+
+    public Player(String name, int rating, int attack, int defense, boolean special) {
         this.name = name;
         this.rating = rating;
         this.attack = attack;
         this.defense = defense;
+        this.special = special;
     }
 
     public Player() {}
@@ -77,19 +78,19 @@ public class Player {
         this.defense = defense;
     }
 
-    public Long getTeamId() {
-        return teamId;
-    }
-
-    public void setTeamId(Long teamId) {
-        this.teamId = teamId;
-    }
-
     public Long getPrice() {
         return price;
     }
 
     public void setPrice(Long price) {
         this.price = price;
+    }
+
+    public boolean isSpecial() {
+        return special;
+    }
+
+    public void setSpecial(boolean special) {
+        this.special = special;
     }
 }
