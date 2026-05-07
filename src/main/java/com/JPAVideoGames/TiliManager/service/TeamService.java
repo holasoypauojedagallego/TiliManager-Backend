@@ -9,6 +9,7 @@ import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliDTO;
 import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
 import com.JPAVideoGames.TiliManager.exceptions.*;
 import com.JPAVideoGames.TiliManager.model.*;
+import com.JPAVideoGames.TiliManager.repository.AdminRepository;
 import com.JPAVideoGames.TiliManager.repository.TeamRepository;
 import com.JPAVideoGames.TiliManager.util.PlayerLeagueMapper;
 import com.JPAVideoGames.TiliManager.util.TeamMapper;
@@ -30,8 +31,10 @@ public class TeamService {
     private final MarketService marketService;
     private final PlayerLeagueService playerLeagueService;
     private final PlayerLeagueMapper playerLeagueMapper;
+    private final AdminRepository adminRepository;
 
-    public TeamService(TeamRepository teamRepository, TeamMapper teamMapper, MarketService marketService, PlayerLeagueMapper playerLeagueMapper,
+    public TeamService(TeamRepository teamRepository, TeamMapper teamMapper, MarketService marketService,
+                       PlayerLeagueMapper playerLeagueMapper, AdminRepository adminRepository,
                        UserTiliService userTiliService, UserTiliMapper userTiliMapper, PlayerLeagueService playerLeagueService) {
         this.teamRepository = teamRepository;
         this.teamMapper = teamMapper;
@@ -40,6 +43,7 @@ public class TeamService {
         this.marketService = marketService;
         this.playerLeagueService = playerLeagueService;
         this.playerLeagueMapper = playerLeagueMapper;
+        this.adminRepository = adminRepository;
     }
 
     public List<TeamDTO> getTeams() {
@@ -156,6 +160,9 @@ public class TeamService {
             team.deleteOnePlayer(p.get());
             team.setMoney(team.getMoney() + p.get().getPlayer().getPrice());
             marketService.actualizarMercado(playerLeagueMapper.toDTO(p.get()));
+            Admin admin = new Admin();
+            admin.setLog("El usuario" + team.getOwner().getName() + ", con id: " + team.getOwner().getId() + ", para el equipo: " + team + ", ha vendido el jugador " + p.get());
+            adminRepository.save(admin);
             return teamMapper.toDto(teamRepository.save(team));
         });
     }
@@ -208,6 +215,9 @@ public class TeamService {
             team.setOnePlayer(p.get());
             marketService.actualizarMercado(playerLeagueMapper.toDTO(p.get()));
             team.setMoney(team.getMoney() - p.get().getPlayer().getPrice());
+            Admin admin = new Admin();
+            admin.setLog("El usuario" + team.getOwner().getName() + ", con id: " + team.getOwner().getId() + ", para el equipo: " + team + ", ha comprado el jugador " + p.get());
+            adminRepository.save(admin);
             return teamMapper.toDto(teamRepository.save(team));
         });
     }

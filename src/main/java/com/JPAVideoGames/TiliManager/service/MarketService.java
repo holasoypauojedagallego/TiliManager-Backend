@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,7 @@ public class MarketService {
     @Autowired
     private PlayerLeagueMapper playerLeagueMapper;
 
-    private List<MercadoDTO> mercados;
+    private final List<MercadoDTO> mercados = new ArrayList<>();
 
     private List<LeagueDTO> leagues;
 
@@ -50,6 +51,7 @@ public class MarketService {
 
     @Scheduled(cron = "00 00 16 * * * ")
     public void scheduledFichable() {
+        if (this.mercados.isEmpty()) {return;}
         for (MercadoDTO mercado : this.mercados) {
             mercado.setFichable(true);
         }

@@ -84,7 +84,7 @@ public class UserTiliService {
 
     public Optional<UserTiliPassDTO> loginUserTili(UserTiliLoginDTO userTili) {
         return userTiliRepository.findByEmail(userTili.getEmail()).filter
-                (u -> passwordEncoder.matches(userTili.getPassword(), u.getPassword()) && u.getRole() == UserTiliRole.USUARIO)
+                (u -> passwordEncoder.matches(userTili.getPassword(), u.getPassword()))
                 .map(userTiliMapper::toPassDto);
     }
 }

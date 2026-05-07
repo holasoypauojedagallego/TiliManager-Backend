@@ -1,0 +1,55 @@
+package com.JPAVideoGames.TiliManager.model;
+
+import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueIdDTO;
+import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
+import jakarta.persistence.*;
+
+import java.util.UUID;
+
+@Entity
+@Table(name = "admin_logs")
+public class Admin {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @Column
+    private String log;
+
+    @Column
+    private UUID userTiliId;
+
+    @Column
+    private Long leagueId;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getLog() {
+        return log;
+    }
+
+    public void setLog(String log) {
+        this.log = log;
+    }
+
+    public UUID getUserTili() {
+        return userTiliId;
+    }
+
+    public void setUserTili(UUID userTili) {
+        this.userTiliId = userTili;
+    }
+
+    public Long getLeague() {
+        return leagueId;
+    }
+
+    public void setLeague(Long league) {
+        this.leagueId = league;
+    }
+}
