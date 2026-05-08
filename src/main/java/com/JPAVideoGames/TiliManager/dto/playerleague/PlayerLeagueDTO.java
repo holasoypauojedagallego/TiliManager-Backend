@@ -33,11 +33,11 @@ public class PlayerLeagueDTO {
         this.league = league;
     }
 
-    public Long getTeam() {
+    public Long getTeamId() {
         return teamId;
     }
 
-    public void setTeam(Long teamId) {
+    public void setTeamId(Long teamId) {
         this.teamId = teamId;
     }
 }

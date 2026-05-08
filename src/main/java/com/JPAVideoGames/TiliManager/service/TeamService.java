@@ -138,10 +138,10 @@ public class TeamService {
     }
 
     public Optional<TeamDTO> venderJugador(VenderDTO venderDTO) throws PlayersSizeException{
-        if (venderDTO.getPlayer().getTeam() == null || venderDTO.getPlayer().getTeam() != venderDTO.getTeamUpdateDTO().getId()){return Optional.empty();}
+        if (venderDTO.getPlayer().getTeamId() == null || venderDTO.getPlayer().getTeamId() != venderDTO.getTeamUpdateDTO().getId()){return Optional.empty();}
         if (venderDTO.getTeamUpdateDTO().getPlayers().size() < 6 || venderDTO.getTeamUpdateDTO().getPlayers().size() > 7)
         {throw new PlayersSizeException("El equipo ha de tener como máximo 7 jugadores, y como mínimo 5");}
-        return teamRepository.findByOwner(userTiliMapper.toEntity(venderDTO.getTeamUpdateDTO().getOwner())).map(team ->{
+        return teamRepository.findByOwnerAndLeagueTeamId(userTiliMapper.toEntity(venderDTO.getTeamUpdateDTO().getOwner()), venderDTO.getTeamUpdateDTO().getLeagueTeam().getId()).map(team ->{
             Optional<PlayerLeague> p = playerLeagueService.getJugadorPuro(venderDTO.getPlayer().getId());
             // Early return por si no cuadran los equipo, o por si te vas a quedar con menos de 5 jugadores
             if (venderDTO.getTeamUpdateDTO().getMoney().longValue() != team.getMoney().longValue()
@@ -172,10 +172,10 @@ public class TeamService {
     }
 
     public Optional<TeamDTO> comprarJugador(VenderDTO venderDTO) throws PlayersSizeException{
-        if (venderDTO.getPlayer().getTeam() != null){return Optional.empty();}
+        if (venderDTO.getPlayer().getTeamId() != null){return Optional.empty();}
         if (venderDTO.getTeamUpdateDTO().getPlayers().size() < 5 || venderDTO.getTeamUpdateDTO().getPlayers().size() > 6)
         {throw new PlayersSizeException("El equipo ha de tener como máximo 7 jugadores, y como mínimo 5");}
-        return teamRepository.findByOwner(userTiliMapper.toEntity(venderDTO.getTeamUpdateDTO().getOwner())).map(team ->{
+        return teamRepository.findByOwnerAndLeagueTeamId(userTiliMapper.toEntity(venderDTO.getTeamUpdateDTO().getOwner()), venderDTO.getTeamUpdateDTO().getLeagueTeam().getId()).map(team ->{
             Optional<PlayerLeague> p = playerLeagueService.getJugadorPuro(venderDTO.getPlayer().getId());
             if (venderDTO.getTeamUpdateDTO().getMoney().longValue() != team.getMoney().longValue() || p.isEmpty()
                     || p.get().getPlayer().getPrice() > team.getMoney() || p.get().getTeamId() != null) {
@@ -227,7 +227,7 @@ public class TeamService {
     }
 
     public void dineroPorResultado(TeamUpdateDTO localteamDTO, int diferencia) {
-        teamRepository.findByOwner(userTiliMapper.toEntity(localteamDTO.getOwner())).map(team ->  {
+        teamRepository.findByOwnerAndLeagueTeamId(userTiliMapper.toEntity(localteamDTO.getOwner()), localteamDTO.getLeagueTeam().getId()).map(team ->  {
             if (diferencia > 0) {
                 team.setMoney(team.getMoney() + 100000);
             } else if (diferencia < 0) {
