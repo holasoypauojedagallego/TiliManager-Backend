@@ -88,22 +88,25 @@ public class TeamService {
     }
 
     public Optional<TeamDTO> updateCreateTeam(TeamUpdateDTO teamUpdateDTO) throws PlayersSizeException {
+        adminRepository.save(new Admin(("El usuario " + teamUpdateDTO.getOwner().getEmail() + ", esta intentando crear e actualizar el equipo: " + teamUpdateDTO.getName() + " en el teamService"), teamUpdateDTO.getOwner().getId()));
         if (teamUpdateDTO.getPlayers().size() > 7 || teamUpdateDTO.getPlayers().size() < 5){
             throw new PlayersSizeException("El jugador ha de tener como máximo 7 jugadores, y como mínimo 5");
         }
-        return teamRepository.findByOwner(userTiliMapper.toEntity(teamUpdateDTO.getOwner())).map(team ->{
+        return teamRepository.findByOwnerAndLeagueTeamId(userTiliMapper.toEntity(teamUpdateDTO.getOwner()), teamUpdateDTO.getLeagueTeam().getId()).map(team ->{
             if (!teamUpdateDTO.getName().trim().isBlank() && teamUpdateDTO.getName() != null && !teamUpdateDTO.getName().trim().equals(team.getName())){
                 team.setName(teamUpdateDTO.getName().trim());
             }
             long dineroPorJugadores = 0;
             boolean equipoNoIgual = false;
-            for (int i = 0; teamUpdateDTO.getPlayers().size() > i; i++) {
-                if (teamUpdateDTO.getPlayers().get(i).getId() != team.getPlayers().get(i).getId() ||
-                        teamUpdateDTO.getPlayers().size() != team.getPlayers().size()) {
-                    equipoNoIgual = true;
-                    break;
+            if (!teamUpdateDTO.getPlayers().isEmpty() && !team.getPlayers().isEmpty() && teamUpdateDTO.getPlayers().size() == team.getPlayers().size()) {
+                for (int i = 0; teamUpdateDTO.getPlayers().size() > i; i++) {
+                    if (teamUpdateDTO.getPlayers().get(i).getId() != team.getPlayers().get(i).getId() ||
+                            teamUpdateDTO.getPlayers().size() != team.getPlayers().size()) {
+                        equipoNoIgual = true;
+                        break;
+                    }
                 }
-            }
+            } else {equipoNoIgual = true;}
             if (equipoNoIgual) {
                 for (PlayerLeagueDTO s: teamUpdateDTO.getPlayers()){
                     Optional<PlayerLeague> p = playerLeagueService.getJugadorPuro(s.getId());
@@ -129,6 +132,7 @@ public class TeamService {
                 }
             }
             team.setMoney(teamUpdateDTO.getMoney());
+            adminRepository.save(new Admin(("El usuario " + teamUpdateDTO.getOwner().getEmail() + ", ha creado e actualizado el equipo: " + teamUpdateDTO.getName() + " en el teamService"), teamUpdateDTO.getOwner().getId()));
             return teamMapper.toDto(teamRepository.save(team));
         });
     }

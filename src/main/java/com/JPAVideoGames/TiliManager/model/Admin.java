@@ -4,6 +4,7 @@ import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueIdDTO;
 import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
 import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -20,6 +21,16 @@ public class Admin {
 
     @Column
     private Long leagueId;
+
+    @Column
+    private final Date date = new Date();
+
+    public Admin() {}
+
+    public Admin(String log, UUID userTiliId) {
+        this.log = log;
+        this.userTiliId = userTiliId;
+    }
 
     public long getId() {
         return id;
@@ -51,5 +62,9 @@ public class Admin {
 
     public void setLeague(Long league) {
         this.leagueId = league;
+    }
+
+    public Date getDate() {
+        return date;
     }
 }

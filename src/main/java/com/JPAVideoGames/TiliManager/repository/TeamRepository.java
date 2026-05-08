@@ -14,5 +14,6 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
     Optional<Team> findById(long id);
     Optional<Team> findByName(String name);
     Optional<Team> findByOwner(UserTili owner);
+    Optional<Team> findByOwnerAndLeagueTeamId(UserTili owner, long id);
     List<Team> findAllByOwnerRole(UserTiliRole role);
 }
