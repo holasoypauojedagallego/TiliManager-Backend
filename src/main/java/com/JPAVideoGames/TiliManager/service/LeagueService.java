@@ -3,11 +3,13 @@ package com.JPAVideoGames.TiliManager.service;
 import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueCreateDTO;
 import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueDTO;
 import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueDeleteDTO;
+import com.JPAVideoGames.TiliManager.dto.matchdto.PartidoEncapsuladoDTO;
 import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
 import com.JPAVideoGames.TiliManager.exceptions.LeagueException;
 import com.JPAVideoGames.TiliManager.model.*;
 import com.JPAVideoGames.TiliManager.repository.LeagueRepository;
 import com.JPAVideoGames.TiliManager.util.LeagueMapper;
+import com.JPAVideoGames.TiliManager.util.PartidoEncapsuladoMapper;
 import com.JPAVideoGames.TiliManager.util.TeamMapper;
 import com.JPAVideoGames.TiliManager.util.UserTiliMapper;
 import jakarta.transaction.Transactional;
@@ -31,6 +33,18 @@ public class LeagueService {
     @Lazy
     private TeamService teamService;
 
+    @Autowired
+    @Lazy
+    private MatchService matchService;
+
+    @Autowired
+    @Lazy
+    private MarketService marketService;
+
+    @Autowired
+    @Lazy
+    private LeagueTeamService leagueTeamService;
+
 
     @Autowired
     @Lazy
@@ -46,11 +60,11 @@ public class LeagueService {
 
     @Autowired
     @Lazy
-    private MarketService marketService;
+    private TeamMapper teamMapper;
 
     @Autowired
     @Lazy
-    private TeamMapper teamMapper;
+    private PartidoEncapsuladoMapper partidoEncapsuladoMapper;
 
     private final LeagueRepository leagueRepository;
 
@@ -117,6 +131,41 @@ public class LeagueService {
 
         liga.get().setOneTeam(leagueTeam);
         return leagueMapper.toDTO(leagueRepository.save(liga.get()));
+    }
+
+    public List<PartidoEncapsuladoDTO> playMatch(UserTiliPassDTO userTiliPassDTO, Long id) throws LeagueException{
+        Optional<League> liga = leagueRepository.findById(id);
+        if (liga.isEmpty()){
+            throw new LeagueException("No existe esa liga");
+        }
+        if (!(liga.get().getTeams().stream().filter(t->t.getTeam().getPlayers().size() >= 5).count() >= 2)) throw new LeagueException("No hay suficientes jugadores en la liga");
+        LeagueTeam leagueTeamUser = new LeagueTeam();
+        for (LeagueTeam lTeam: liga.get().getTeams()) {
+            if (lTeam.getTeam().getOwner().getId().equals(userTiliPassDTO.getId())) {
+                leagueTeamUser = lTeam;
+            }
+        }
+        if (leagueTeamUser.getTeam() == null) throw new LeagueException("No existe ese usuario con equipo en esta liga");
+        boolean t = false;
+        LeagueTeam rival = liga.get().getTeams().get((int)(Math.random() * liga.get().getTeams().size()));
+        while (!t) {
+            if (rival.getId() == leagueTeamUser.getId() || rival.getTeam().getPlayers().size() < 5) rival = liga.get().getTeams().get((int)(Math.random() * liga.get().getTeams().size()));
+            else t = true;
+        }
+        Match match = matchService.codigo(leagueTeamUser.getTeam(), rival.getTeam(), liga);
+        match.setLeague(liga.get());
+        if (match.getLocalTeamGoals() > match.getVisitorTeamGoals()) {
+            leagueTeamUser.setWins(leagueTeamUser.getWins() + 1);
+            rival.setLosses(rival.getLosses() + 1);
+        } else if (match.getVisitorTeamGoals() > match.getLocalTeamGoals()) {
+            rival.setWins(rival.getWins() + 1);
+            leagueTeamUser.setLosses(leagueTeamUser.getLosses() + 1);
+        } else {
+            leagueTeamUser.setDraws(leagueTeamUser.getDraws() + 1);
+            rival.setDraws(rival.getDraws() + 1);
+        }
+        leagueRepository.save(liga.get());
+        return partidoEncapsuladoMapper.toDTO(match.getPartidoEncapsulado());
     }
 
 }

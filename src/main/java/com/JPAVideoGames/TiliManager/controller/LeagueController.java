@@ -4,6 +4,7 @@ import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueCreateDTO;
 import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueDTO;
 import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueDeleteDTO;
 import com.JPAVideoGames.TiliManager.dto.leagueteamdto.LeagueTeamCreateDTO;
+import com.JPAVideoGames.TiliManager.dto.matchdto.PartidoEncapsuladoDTO;
 import com.JPAVideoGames.TiliManager.dto.teamdto.TeamUpdateDTO;
 import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
 import com.JPAVideoGames.TiliManager.exceptions.LeagueException;
@@ -54,6 +55,11 @@ public class LeagueController {
     @PostMapping("/add/{id}")
     public ResponseEntity<LeagueDTO> addTeamToLeague(@RequestBody @Valid UserTiliPassDTO userTiliPassDTO, @PathVariable Long id) throws LeagueException{
         return ResponseEntity.ok(leagueService.addTeam(userTiliPassDTO, id));
+    }
+
+    @PostMapping("/jugarliga/{id}")
+    public ResponseEntity<List<PartidoEncapsuladoDTO>> playLeagueMatch(@RequestBody @Valid UserTiliPassDTO userTiliPassDTO, @PathVariable Long id) throws LeagueException{
+        return ResponseEntity.ok(leagueService.playMatch(userTiliPassDTO, id));
     }
 
 

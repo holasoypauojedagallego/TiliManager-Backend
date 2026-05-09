@@ -57,7 +57,7 @@ public class MatchService {
     }
 
     public List<PartidoEncapsuladoDTO> empezarCodigo(TeamUpdateDTO localteamDTO) throws TeamException {
-        return partidoEncapsuladoMapper.toDTO(codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(teamService.searchRivalTeam(localteamDTO.getId()))).getPartidoEncapsulado());
+        return partidoEncapsuladoMapper.toDTO(codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(teamService.searchRivalTeam(localteamDTO.getId())), Optional.empty()).getPartidoEncapsulado());
     }
 
     public List<PartidoEncapsuladoDTO> torneoSimuladoP1(TeamUpdateDTO localteamDTO) {
@@ -65,13 +65,13 @@ public class MatchService {
         List<TeamDTO> equipos = teamService.getTeamByRole(UserTiliRole.BOT);
         TeamDTO visitorTeam = equipos.get((int) (Math.random() * equipos.size()));
 
-        Match partido = codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(visitorTeam));
+        Match partido = codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(visitorTeam), Optional.empty());
 
         teamService.dineroPorResultado(localteamDTO, (partido.getLocalTeamGoals() - partido.getVisitorTeamGoals()));
         return partidoEncapsuladoMapper.toDTO(partido.getPartidoEncapsulado());
     }
 
-    public Match codigo(Team localTeam, Team visitorTeam) {
+    public Match codigo(Team localTeam, Team visitorTeam, Optional<League> league) {
         int localTeamRating = localTeam.getPlayers().stream().mapToInt(p -> p.getPlayer().getRating()).sum() / (localTeam.getPlayers().size() - 2);
         int visitorTeamRating = visitorTeam.getPlayers().stream().mapToInt(p -> p.getPlayer().getRating()).sum() / (visitorTeam.getPlayers().size() - 2);
 
@@ -119,6 +119,7 @@ public class MatchService {
                 }
 
                 partidoalgo.setSucede(localGoals);
+                partidoalgo.setGolesLocal(localGoals);
                 System.out.println("Local: " + localGoals);
             } else  {
                 porcentajeGanaVisitante--;
@@ -132,6 +133,7 @@ public class MatchService {
                 }
 
                 partidoalgo.setSucede(visitorGoals);
+                partidoalgo.setGolesVisitante(visitorGoals);
                 System.out.println("Visitante: " + visitorGoals);
             }
             if (!partidoalgo.getEquipo().getName().isEmpty() && partidoalgo.getJugador() != null){
@@ -148,6 +150,7 @@ public class MatchService {
         match.setVisitorTeam(visitorTeam);
         match.setLocalTeamGoals(localGoals);
         match.setVisitorTeamGoals(visitorGoals);
+        league.ifPresent(match::setLeague);
         matchRepository.save(match);
 
         return match;

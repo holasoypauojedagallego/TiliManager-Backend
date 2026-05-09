@@ -1,7 +1,7 @@
 package com.JPAVideoGames.TiliManager.dto.matchdto;
 
+import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueIdDTO;
 import com.JPAVideoGames.TiliManager.dto.teamdto.TeamDTO;
-import com.JPAVideoGames.TiliManager.model.League;
 
 import java.util.Date;
 import java.util.List;
@@ -15,7 +15,7 @@ public class MatchDTO {
     private TeamDTO visitorTeam;
     private int localTeamGoals = 0;
     private int visitorTeamGoals = 0;
-    private League league;
+    private LeagueIdDTO league;
 
     public long getId() {
         return id;
@@ -73,11 +73,11 @@ public class MatchDTO {
         this.visitorTeamGoals = visitorTeamGoals;
     }
 
-    public League getLeague() {
+    public LeagueIdDTO getLeague() {
         return league;
     }
 
-    public void setLeague(League league) {
+    public void setLeague(LeagueIdDTO league) {
         this.league = league;
     }
 }
