@@ -26,9 +26,6 @@ public class MarketService {
     @Autowired
     private LeagueService leagueService;
 
-    @Autowired
-    private PlayerLeagueMapper playerLeagueMapper;
-
     private final List<MercadoDTO> mercados = new ArrayList<>();
 
     private List<LeagueDTO> leagues;
@@ -37,7 +34,7 @@ public class MarketService {
     public void init() {
         setLeagues();
         for (int i = 0; i < getLeagues().size(); i++) {
-            this.mercados.add(new MercadoDTO(i, mercadoJugadores(getLeagues().get(i).getId()), true));
+            this.mercados.add(new MercadoDTO(getLeagues().get(i).getId(), mercadoJugadores(getLeagues().get(i).getId()), true));
         }
     }
 
@@ -45,7 +42,18 @@ public class MarketService {
     public void scheduled() {
         setLeagues();
         for (int i = 0; i < getLeagues().size(); i++) {
-            this.mercados.add(new MercadoDTO(i, mercadoJugadores(getLeagues().get(i).getId()), false));
+            this.mercados.get(i).setPlayers(mercadoJugadores(getLeagues().get(i).getId()));
+            this.mercados.get(i).setFichable(false);
+        }
+    }
+
+    public void anadir(long id) {
+        setLeagues();
+        for (int i = 0; i < getLeagues().size(); i++) {
+            if (getLeagues().get(i).getId() == id) {
+                this.mercados.add(new MercadoDTO(getLeagues().get(i).getId(), mercadoJugadores(getLeagues().get(i).getId()), true));
+                break;
+            }
         }
     }
 

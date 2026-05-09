@@ -46,6 +46,10 @@ public class LeagueService {
 
     @Autowired
     @Lazy
+    private MarketService marketService;
+
+    @Autowired
+    @Lazy
     private TeamMapper teamMapper;
 
     private final LeagueRepository leagueRepository;
@@ -73,6 +77,7 @@ public class LeagueService {
         }
         League league = leagueRepository.save(leagueMapper.toCreateEntity(leagueCreateDTO));
         playerLeagueService.createJugadoresLeague(league);
+        marketService.anadir(league.getId());
         return leagueMapper.toDTO(league);
     }
 

@@ -1,7 +1,6 @@
 package com.JPAVideoGames.TiliManager.dto.marketdto;
 
 import com.JPAVideoGames.TiliManager.dto.playerleague.PlayerLeagueDTO;
-import com.JPAVideoGames.TiliManager.model.PlayerLeague;
 
 import java.util.List;
 
