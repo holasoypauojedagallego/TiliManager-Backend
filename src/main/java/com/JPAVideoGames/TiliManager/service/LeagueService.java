@@ -164,6 +164,10 @@ public class LeagueService {
             leagueTeamUser.setDraws(leagueTeamUser.getDraws() + 1);
             rival.setDraws(rival.getDraws() + 1);
         }
+        leagueTeamUser.setGoalsScored(leagueTeamUser.getGoalsScored() + match.getLocalTeamGoals());
+        leagueTeamUser.setGoalsReceived(leagueTeamUser.getGoalsReceived() + match.getVisitorTeamGoals());
+        rival.setGoalsScored(rival.getGoalsScored() + match.getVisitorTeamGoals());
+        rival.setGoalsReceived(rival.getGoalsReceived() + match.getLocalTeamGoals());
         leagueRepository.save(liga.get());
         return partidoEncapsuladoMapper.toDTO(match.getPartidoEncapsulado());
     }
