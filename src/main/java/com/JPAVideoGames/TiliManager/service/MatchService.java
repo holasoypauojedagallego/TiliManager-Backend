@@ -111,29 +111,39 @@ public class MatchService {
             if (porcentajeGanaLocal >= porcentajeGanaVisitante) {
                 porcentajeGanaLocal--;
                 partidoalgo.setEquipo(localTeam);
-                partidoalgo.setJugador(localTeam.getPlayers().get((int)(Math.random() * localTeam.getPlayers().size())));
+                PlayerLeague jugador = localTeam.getPlayers().get((int)(Math.random() * localTeam.getPlayers().size()));
+                partidoalgo.setJugador(jugador);
                 partidoalgo.setLocal(true);
 
+                int golito = 0;
+
                 if (queSucede < 0.3) {
-                    localGoals = localGoals + gol( localAttackRating, visitorDefenseRating);
+                    golito = gol( localAttackRating, visitorDefenseRating);
+                    localGoals = localGoals + golito;
                 }
 
                 partidoalgo.setSucede(localGoals);
                 partidoalgo.setGolesLocal(localGoals);
+                if (league.isPresent()) jugador.setGoles(jugador.getGoles() + golito);
                 System.out.println("Local: " + localGoals);
             } else  {
                 porcentajeGanaVisitante--;
                 partidoalgo.setEquipo(visitorTeam);
-                partidoalgo.setJugador(visitorTeam.getPlayers().get((int)(Math.random() * visitorTeam.getPlayers().size())));
+                PlayerLeague jugador = visitorTeam.getPlayers().get((int)(Math.random() * visitorTeam.getPlayers().size()));
+                partidoalgo.setJugador(jugador);
 
                 partidoalgo.setLocal(false);
 
+                int golito = 0;
+
                 if (queSucede < 0.3) {
-                    visitorGoals += gol(visitorAttackRating, localDefenseRating);
+                    golito = gol(visitorAttackRating, localDefenseRating);
+                    visitorGoals += golito;
                 }
 
                 partidoalgo.setSucede(visitorGoals);
                 partidoalgo.setGolesVisitante(visitorGoals);
+                if (league.isPresent()) jugador.setGoles(jugador.getGoles() + golito);
                 System.out.println("Visitante: " + visitorGoals);
             }
             if (!partidoalgo.getEquipo().getName().isEmpty() && partidoalgo.getJugador() != null){

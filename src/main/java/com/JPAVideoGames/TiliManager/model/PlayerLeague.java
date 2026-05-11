@@ -22,6 +22,9 @@ public class PlayerLeague {
     @Column(name = "team_id")
     private Long teamId;
 
+    @Column
+    private int goles = 0;
+
     public PlayerLeague() {
     }
 
@@ -59,5 +62,13 @@ public class PlayerLeague {
 
     public void setTeamId(Long teamId) {
         this.teamId = teamId;
+    }
+
+    public int getGoles() {
+        return goles;
+    }
+
+    public void setGoles(int goles) {
+        this.goles = goles;
     }
 }

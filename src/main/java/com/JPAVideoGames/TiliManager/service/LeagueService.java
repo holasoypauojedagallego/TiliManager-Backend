@@ -156,12 +156,16 @@ public class LeagueService {
         match.setLeague(liga.get());
         if (match.getLocalTeamGoals() > match.getVisitorTeamGoals()) {
             leagueTeamUser.setWins(leagueTeamUser.getWins() + 1);
+            leagueTeamUser.getTeam().setMoney(leagueTeamUser.getTeam().getMoney() + 1000000);
             rival.setLosses(rival.getLosses() + 1);
         } else if (match.getVisitorTeamGoals() > match.getLocalTeamGoals()) {
             rival.setWins(rival.getWins() + 1);
+            rival.getTeam().setMoney(rival.getTeam().getMoney() + 1000000);
             leagueTeamUser.setLosses(leagueTeamUser.getLosses() + 1);
         } else {
             leagueTeamUser.setDraws(leagueTeamUser.getDraws() + 1);
+            leagueTeamUser.getTeam().setMoney(leagueTeamUser.getTeam().getMoney() + 400000);
+            rival.getTeam().setMoney(rival.getTeam().getMoney() + 400000);
             rival.setDraws(rival.getDraws() + 1);
         }
         leagueTeamUser.setGoalsScored(leagueTeamUser.getGoalsScored() + match.getLocalTeamGoals());

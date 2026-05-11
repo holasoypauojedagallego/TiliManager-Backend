@@ -1,5 +1,6 @@
 package com.JPAVideoGames.TiliManager.dto.matchdto;
 
+import com.JPAVideoGames.TiliManager.dto.playerleague.PlayerLeagueDTO;
 import com.JPAVideoGames.TiliManager.dto.teamdto.TeamDTO;
 import com.JPAVideoGames.TiliManager.model.Player;
 import com.JPAVideoGames.TiliManager.model.Team;
@@ -8,7 +9,7 @@ public class PartidoEncapsuladoDTO {
 
     private int minuto;
     private TeamDTO equipo;
-    private Player jugador;
+    private PlayerLeagueDTO jugador;
     private boolean local;
     private int sucede;
     private int golesLocal;
@@ -32,11 +33,11 @@ public class PartidoEncapsuladoDTO {
         this.equipo = equipo;
     }
 
-    public Player getJugador() {
+    public PlayerLeagueDTO getJugador() {
         return jugador;
     }
 
-    public void setJugador(Player jugador) {
+    public void setJugador(PlayerLeagueDTO jugador) {
         this.jugador = jugador;
     }
 

@@ -8,6 +8,7 @@ public class PlayerLeagueDTO {
     private Player player;
     private LeagueIdDTO league;
     private Long teamId;
+    private int goles;
 
     public long getId() {
         return id;
@@ -39,5 +40,13 @@ public class PlayerLeagueDTO {
 
     public void setTeamId(Long teamId) {
         this.teamId = teamId;
+    }
+
+    public int getGoles() {
+        return goles;
+    }
+
+    public void setGoles(int goles) {
+        this.goles = goles;
     }
 }
