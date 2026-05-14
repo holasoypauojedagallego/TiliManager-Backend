@@ -26,10 +26,16 @@ public class LeagueTeamController {
         return ResponseEntity.ok(leagueTeamService.getAll());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<LeagueTeamDTO> getTeamsByOwner(@PathVariable Long id) {
+        return leagueTeamService.getByIdDTO(id).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<List<LeagueTeamDTO>> getTeamsByOwner(@RequestBody @Valid UserTiliPassDTO userTiliPassDTO) {
         return ResponseEntity.ok(leagueTeamService.getAllByTeamOwnerId(userTiliPassDTO));
     }
+
 
 
 }

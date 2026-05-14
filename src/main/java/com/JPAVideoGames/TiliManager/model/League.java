@@ -18,7 +18,7 @@ public class League {
     @JoinColumn(name = "owner_id")
     private UserTili owner;
 
-    @OneToMany(mappedBy = "league", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "league", cascade = CascadeType.ALL, orphanRemoval = true) // orphanRemoval = true mi salvador, hace que borre la lista, con un .remove de java que fácil
     private List<LeagueTeam> teams;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "league")

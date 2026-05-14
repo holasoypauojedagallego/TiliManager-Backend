@@ -121,7 +121,7 @@ public class LeagueService {
         if (liga.get().isClosed()) {
             throw new LeagueException("La liga es privada");
         }
-        if (liga.get().getTeams().size() >= 20){throw new IllegalArgumentException("Max of 20 teams allowed");}
+        if (liga.get().getTeams().size() >= 20){throw new IllegalArgumentException("Max of 20 equipos permitidos");}
 
         Team teamFromUserTili = teamService.guardarEquipoPrimero(userTili.get());
 
@@ -130,6 +130,31 @@ public class LeagueService {
         leagueTeam.setLeague(liga.get());
 
         liga.get().setOneTeam(leagueTeam);
+        return leagueMapper.toDTO(leagueRepository.save(liga.get()));
+    }
+
+    public LeagueDTO deleteTeam(UserTiliPassDTO userTiliPassDTO, Long id, Long idTeam) throws LeagueException{
+        Optional<UserTili> userTili = userTiliService.getByIdConfirmacion(userTiliPassDTO.getId());
+        if (userTili.isEmpty()){
+            throw new LeagueException("Usuario erroneo");
+        }
+        Optional<League> liga = leagueRepository.findByOwnerAndId(userTili.get(), id);
+        if (liga.isEmpty()){
+            throw new LeagueException("Liga de usuario no encontrada");
+        }
+        if (liga.get().getTeams().isEmpty()){throw new IllegalArgumentException("No hay equipos que borrar");}
+
+        Optional<LeagueTeam> equipoLiga = leagueTeamService.getById(idTeam);
+        if (equipoLiga.isEmpty()){throw new LeagueException("Equipo de Liga no encontrada");}
+        if (equipoLiga.get().getTeam().getOwner().getId() == userTili.get().getId()){throw new LeagueException("El equipo, es el del administrador");}
+
+        equipoLiga.get().getTeam().getPlayers().forEach(player -> player.setTeamId(null));
+        equipoLiga.get().getTeam().getPlayers().clear();
+        equipoLiga.get().getTeam().setLeagueTeam(null);
+        liga.get().getTeams().remove(equipoLiga.get());
+        // Orgulloso de decir que este código funciona
+
+        leagueTeamService.delete(equipoLiga.get().getId());
         return leagueMapper.toDTO(leagueRepository.save(liga.get()));
     }
 

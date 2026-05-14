@@ -57,6 +57,11 @@ public class LeagueController {
         return ResponseEntity.ok(leagueService.addTeam(userTiliPassDTO, id));
     }
 
+    @DeleteMapping("/delete/{id}/{idTeam}")
+    public ResponseEntity<LeagueDTO> deleteTeamToLeague(@RequestBody @Valid UserTiliPassDTO userTiliPassDTO, @PathVariable Long id, @PathVariable Long idTeam) throws LeagueException{
+        return ResponseEntity.ok(leagueService.deleteTeam(userTiliPassDTO, id, idTeam));
+    }
+
     @PostMapping("/jugarliga/{id}")
     public ResponseEntity<List<PartidoEncapsuladoDTO>> playLeagueMatch(@RequestBody @Valid UserTiliPassDTO userTiliPassDTO, @PathVariable Long id) throws LeagueException{
         return ResponseEntity.ok(leagueService.playMatch(userTiliPassDTO, id));

@@ -4,6 +4,7 @@ import com.JPAVideoGames.TiliManager.dto.leagueteamdto.LeagueTeamDTO;
 import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliDTO;
 import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
 import com.JPAVideoGames.TiliManager.exceptions.UserTiliException;
+import com.JPAVideoGames.TiliManager.model.LeagueTeam;
 import com.JPAVideoGames.TiliManager.repository.LeagueTeamRepository;
 import com.JPAVideoGames.TiliManager.util.LeagueTeamMapper;
 import jakarta.transaction.Transactional;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Lazy
@@ -27,7 +29,7 @@ public class LeagueTeamService {
     @Lazy
     private UserTiliService userTiliService;
 
-    public final LeagueTeamRepository leagueTeamRepository;
+    private final LeagueTeamRepository leagueTeamRepository;
 
     public LeagueTeamService(LeagueTeamRepository leagueTeamRepository) {
         this.leagueTeamRepository = leagueTeamRepository;
@@ -41,6 +43,18 @@ public class LeagueTeamService {
         Optional<UserTiliDTO> userTiliDTO = userTiliService.getById(userTiliPassDTO.getId());
         if (userTiliDTO.isEmpty()) throw new UserTiliException("Este usuario no existe");
         return  leagueTeamMapper.toDTO(leagueTeamRepository.findAllByTeamOwnerId(userTiliPassDTO.getId()));
+    }
+
+    public Optional<LeagueTeam> getById(Long id) {
+        return leagueTeamRepository.findById(id);
+    }
+
+    public Optional<LeagueTeamDTO> getByIdDTO(Long id) {
+        return leagueTeamRepository.findById(id).map(leagueTeamMapper::toDTO);
+    }
+
+    public void delete(Long id) {
+         leagueTeamRepository.deleteById(id);
     }
 
 
