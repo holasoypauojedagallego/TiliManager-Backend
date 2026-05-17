@@ -56,6 +56,14 @@ public class MatchService {
         return matchRepository.findById(id).map(matchMapper::toDTO);
     }
 
+    public void borrarLigaPartdios(Long id) {
+        List<Match> matches = matchRepository.findAllByLeagueId(id);
+        for (Match match : matches) {
+            match.setLeague(null);
+        }
+        matchRepository.saveAll(matches);
+    }
+
     public List<PartidoEncapsuladoDTO> empezarCodigo(TeamUpdateDTO localteamDTO) throws TeamException {
         return partidoEncapsuladoMapper.toDTO(codigo(teamMapper.toEntity(localteamDTO), teamMapper.toEntity(teamService.searchRivalTeam(localteamDTO.getId())), Optional.empty()).getPartidoEncapsulado());
     }
@@ -112,7 +120,7 @@ public class MatchService {
                 porcentajeGanaLocal--;
                 partidoalgo.setEquipo(localTeam);
                 PlayerLeague jugador = localTeam.getPlayers().get((int)(Math.random() * localTeam.getPlayers().size()));
-                partidoalgo.setJugador(jugador);
+                partidoalgo.setJugador(jugador.getPlayer());
                 partidoalgo.setLocal(true);
 
                 int golito = 0;
@@ -130,7 +138,7 @@ public class MatchService {
                 porcentajeGanaVisitante--;
                 partidoalgo.setEquipo(visitorTeam);
                 PlayerLeague jugador = visitorTeam.getPlayers().get((int)(Math.random() * visitorTeam.getPlayers().size()));
-                partidoalgo.setJugador(jugador);
+                partidoalgo.setJugador(jugador.getPlayer());
 
                 partidoalgo.setLocal(false);
 

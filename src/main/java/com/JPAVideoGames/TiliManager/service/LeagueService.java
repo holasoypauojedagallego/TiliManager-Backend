@@ -104,6 +104,11 @@ public class LeagueService {
                 !(league.get().getOwner().getEmail().equals(leagueDeleteDTO.getOwner().getEmail()))) {
             throw new LeagueException("El dueño, no es el verdadero dueño");
         }
+        int e = league.get().getTeams().size(); // Esto, 1: Primero guardo cuantos Equipos hay en una variable
+        for (int i = 0; i < e; i++) { // Y después en el fori, las voy borrando
+            deleteTeam(leagueDeleteDTO.getOwner(), league.get().getId(), league.get().getTeams().get(0).getId()); // Pero pongo get(0), porque al irse borrando, la primera va desapareciendo siempre, es por eso que no hago un get(i)
+        }
+        matchService.borrarLigaPartdios(league.get().getId());
         // Comentario para que Rusben no llore, dos early returns, el primero es por si la liga no existe, lanze Exception, y el segundo,
         // es por si acaso alguien intenta borrar con su cuenta la liga de otro usuario, que pete si el dueño no eres tú vaya
         leagueRepository.deleteById(league.get().getId()); // Esto es sencillo, deleteById, y le doy el id poco más
@@ -146,7 +151,6 @@ public class LeagueService {
 
         Optional<LeagueTeam> equipoLiga = leagueTeamService.getById(idTeam);
         if (equipoLiga.isEmpty()){throw new LeagueException("Equipo de Liga no encontrada");}
-        if (equipoLiga.get().getTeam().getOwner().getId() == userTili.get().getId()){throw new LeagueException("El equipo, es el del administrador");}
 
         equipoLiga.get().getTeam().getPlayers().forEach(player -> player.setTeamId(null));
         equipoLiga.get().getTeam().getPlayers().clear();

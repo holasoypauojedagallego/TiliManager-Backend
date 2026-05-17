@@ -17,7 +17,7 @@ public class PartidoEncapsulado {
 
     @ManyToOne
     @JoinColumn(name = "player_id")
-    private PlayerLeague jugador;
+    private Player jugador;
 
     @Column
     private boolean local;
@@ -50,11 +50,11 @@ public class PartidoEncapsulado {
         this.equipo = equipo;
     }
 
-    public PlayerLeague getJugador() {
+    public Player getJugador() {
         return jugador;
     }
 
-    public void setJugador(PlayerLeague jugador) {
+    public void setJugador(Player jugador) {
         this.jugador = jugador;
     }
 

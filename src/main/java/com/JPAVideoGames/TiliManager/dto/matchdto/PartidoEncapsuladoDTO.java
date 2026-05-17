@@ -9,7 +9,7 @@ public class PartidoEncapsuladoDTO {
 
     private int minuto;
     private TeamDTO equipo;
-    private PlayerLeagueDTO jugador;
+    private Player jugador;
     private boolean local;
     private int sucede;
     private int golesLocal;
@@ -33,11 +33,11 @@ public class PartidoEncapsuladoDTO {
         this.equipo = equipo;
     }
 
-    public PlayerLeagueDTO getJugador() {
+    public Player getJugador() {
         return jugador;
     }
 
-    public void setJugador(PlayerLeagueDTO jugador) {
+    public void setJugador(Player jugador) {
         this.jugador = jugador;
     }
 
