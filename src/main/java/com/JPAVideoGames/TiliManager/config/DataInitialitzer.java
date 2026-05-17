@@ -1,4 +1,4 @@
-package com.JPAVideoGames.TiliManager.util;
+package com.JPAVideoGames.TiliManager.config;
 
 import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueCreateDTO;
 import com.JPAVideoGames.TiliManager.model.*;
@@ -6,6 +6,7 @@ import com.JPAVideoGames.TiliManager.repository.PlayerRepository;
 import com.JPAVideoGames.TiliManager.repository.TeamRepository;
 import com.JPAVideoGames.TiliManager.repository.UserTiliRepository;
 import com.JPAVideoGames.TiliManager.service.LeagueService;
+import com.JPAVideoGames.TiliManager.util.UserTiliMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
