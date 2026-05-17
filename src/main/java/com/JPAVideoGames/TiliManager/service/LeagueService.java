@@ -7,10 +7,10 @@ import com.JPAVideoGames.TiliManager.dto.matchdto.PartidoEncapsuladoDTO;
 import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
 import com.JPAVideoGames.TiliManager.exceptions.LeagueException;
 import com.JPAVideoGames.TiliManager.model.*;
+import com.JPAVideoGames.TiliManager.repository.AdminRepository;
 import com.JPAVideoGames.TiliManager.repository.LeagueRepository;
 import com.JPAVideoGames.TiliManager.util.LeagueMapper;
 import com.JPAVideoGames.TiliManager.util.PartidoEncapsuladoMapper;
-import com.JPAVideoGames.TiliManager.util.TeamMapper;
 import com.JPAVideoGames.TiliManager.util.UserTiliMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +60,7 @@ public class LeagueService {
 
     @Autowired
     @Lazy
-    private TeamMapper teamMapper;
+    private AdminRepository adminRepository;
 
     @Autowired
     @Lazy
@@ -92,6 +92,7 @@ public class LeagueService {
         League league = leagueRepository.save(leagueMapper.toCreateEntity(leagueCreateDTO));
         playerLeagueService.createJugadoresLeague(league);
         marketService.anadir(league.getId());
+        adminRepository.save(new Admin(("La liga: " + league.getName() + ", ha sido creada"), league.getId()));
         return leagueMapper.toDTO(league);
     }
 
@@ -112,6 +113,7 @@ public class LeagueService {
         // Comentario para que Rusben no llore, dos early returns, el primero es por si la liga no existe, lanze Exception, y el segundo,
         // es por si acaso alguien intenta borrar con su cuenta la liga de otro usuario, que pete si el dueño no eres tú vaya
         leagueRepository.deleteById(league.get().getId()); // Esto es sencillo, deleteById, y le doy el id poco más
+        adminRepository.save(new Admin(("La liga: " + league.get().getName() + ", ha sido borrada"), league.get().getOwner().getId()));
     }
 
     public LeagueDTO addTeam(UserTiliPassDTO userTiliPassDTO, Long id) throws LeagueException{
@@ -135,6 +137,7 @@ public class LeagueService {
         leagueTeam.setLeague(liga.get());
 
         liga.get().setOneTeam(leagueTeam);
+        adminRepository.save(new Admin(("La liga: " + liga.get().getName() + ", ha añadido el equipoo: " + teamFromUserTili.getName() + " a la liga"), liga.get().getId()));
         return leagueMapper.toDTO(leagueRepository.save(liga.get()));
     }
 
@@ -159,6 +162,7 @@ public class LeagueService {
         // Orgulloso de decir que este código funciona
 
         leagueTeamService.delete(equipoLiga.get().getId());
+        adminRepository.save(new Admin(("La liga: " + liga.get().getName() + ", ha eliminado al equipo: " + equipoLiga.get().getTeam().getName() + " de la liga"), liga.get().getId()));
         return leagueMapper.toDTO(leagueRepository.save(liga.get()));
     }
 

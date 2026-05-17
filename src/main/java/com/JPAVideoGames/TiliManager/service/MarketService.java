@@ -3,8 +3,6 @@ package com.JPAVideoGames.TiliManager.service;
 import com.JPAVideoGames.TiliManager.dto.leaguedto.LeagueDTO;
 import com.JPAVideoGames.TiliManager.dto.marketdto.MercadoDTO;
 import com.JPAVideoGames.TiliManager.dto.playerleague.PlayerLeagueDTO;
-import com.JPAVideoGames.TiliManager.model.PlayerLeague;
-import com.JPAVideoGames.TiliManager.util.PlayerLeagueMapper;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;

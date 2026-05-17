@@ -4,7 +4,6 @@ import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliLoginDTO;
 import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
 import com.JPAVideoGames.TiliManager.exceptions.AdminException;
 import com.JPAVideoGames.TiliManager.model.Admin;
-import com.JPAVideoGames.TiliManager.model.UserTili;
 import com.JPAVideoGames.TiliManager.model.UserTiliRole;
 import com.JPAVideoGames.TiliManager.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;

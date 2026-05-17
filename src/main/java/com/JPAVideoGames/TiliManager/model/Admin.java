@@ -32,6 +32,11 @@ public class Admin {
         this.userTiliId = userTiliId;
     }
 
+    public Admin(String log, Long leagueId) {
+        this.log = log;
+        this.leagueId = leagueId;
+    }
+
     public long getId() {
         return id;
     }

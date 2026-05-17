@@ -4,9 +4,9 @@ import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliCreateDTO;
 import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliDTO;
 import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliLoginDTO;
 import com.JPAVideoGames.TiliManager.dto.usertilidto.UserTiliPassDTO;
-import com.JPAVideoGames.TiliManager.model.Team;
+import com.JPAVideoGames.TiliManager.model.Admin;
 import com.JPAVideoGames.TiliManager.model.UserTiliRole;
-import com.JPAVideoGames.TiliManager.repository.TeamRepository;
+import com.JPAVideoGames.TiliManager.repository.AdminRepository;
 import com.JPAVideoGames.TiliManager.util.UserTiliMapper;
 import com.JPAVideoGames.TiliManager.model.UserTili;
 import com.JPAVideoGames.TiliManager.repository.UserTiliRepository;
@@ -25,14 +25,14 @@ public class UserTiliService {
     private final UserTiliRepository userTiliRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserTiliMapper userTiliMapper;
-    private final TeamRepository teamRepository;
+    private final AdminRepository adminRepository;
 
     public UserTiliService(UserTiliRepository userTiliRepository, PasswordEncoder passwordEncoder,
-                           UserTiliMapper userTiliMapper,  TeamRepository teamRepository) {
+                           UserTiliMapper userTiliMapper,  AdminRepository adminRepository) {
         this.userTiliRepository = userTiliRepository;
         this.passwordEncoder = passwordEncoder;
         this.userTiliMapper = userTiliMapper;
-        this.teamRepository = teamRepository;
+        this.adminRepository = adminRepository;
     }
 
     public List<UserTiliDTO> getAll(){
@@ -65,7 +65,7 @@ public class UserTiliService {
         userTili.setPassword(passwordEncoder.encode(userTili.getPassword()));
 
         UserTili savedUserTili = userTiliRepository.save(userTili);
-
+        adminRepository.save(new Admin(("Se ha creado el usuario: " + userTili.getEmail()), userTili.getId()));
         return userTiliMapper.toDto(savedUserTili);
     }
 
@@ -78,7 +78,7 @@ public class UserTiliService {
         UserTili userTili = userTiliMapper.toCreateEntity(userTiliCreateDTO);
         userTili.setPassword(passwordEncoder.encode(userTili.getPassword()));
         userTili.setRole(UserTiliRole.ADMIN);
-
+        adminRepository.save(new Admin(("Se ha creado el usuario ADMIN: " + userTili.getEmail()), userTili.getId()));
         return userTiliMapper.toDto(userTiliRepository.save(userTili));
     }
 
