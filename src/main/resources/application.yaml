@@ -2,7 +2,7 @@ spring:
   application:
     name: tilimanager
   profiles:
-    active: prod
+    active: dev
 
 
   jpa:

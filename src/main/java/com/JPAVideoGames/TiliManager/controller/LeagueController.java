@@ -38,6 +38,7 @@ public class LeagueController {
 
     @PostMapping
     public ResponseEntity<LeagueDTO> createLeague(@RequestBody @Valid LeagueCreateDTO leagueCreateDTO) throws LeagueException{
+        if (leagueCreateDTO.isClosed()) return ResponseEntity.ok(leagueService.createPrivateLeague(leagueCreateDTO));
         return ResponseEntity.ok(leagueService.createLeague(leagueCreateDTO));
     }
 

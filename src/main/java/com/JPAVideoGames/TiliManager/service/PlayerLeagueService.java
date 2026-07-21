@@ -62,6 +62,10 @@ public class PlayerLeagueService {
         return playerLeagueMapper.toDTO(playerLeagueRepository.findByLeagueIdAndTeamId(leagueId, null));
     }
 
+    public List<PlayerLeague> getJugadoresByLeagueAndTeamIdNullClean(Long leagueId) {
+        return playerLeagueRepository.findByLeagueIdAndTeamId(leagueId, null);
+    }
+
     public void createJugadoresLeague(League league){
         List<Player> players = playerService.getJugadores();
         for(Player player : players){

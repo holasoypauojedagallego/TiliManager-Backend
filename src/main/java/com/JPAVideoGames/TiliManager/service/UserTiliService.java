@@ -55,6 +55,10 @@ public class UserTiliService {
         return userTiliRepository.findByEmail(email).map(userTiliMapper::toDto);
     }
 
+    public List<UserTili> getAllByEmailConfirmacion(){
+        return userTiliRepository.findAllByEmail();
+    }
+
     public UserTiliDTO registerUserTili(UserTiliCreateDTO userTiliCreateDTO) {
         if (userTiliCreateDTO.getEmail().isBlank() || userTiliCreateDTO.getEmail() == null ||
                 userTiliCreateDTO.getPassword().isBlank() || userTiliCreateDTO.getPassword() == null ||

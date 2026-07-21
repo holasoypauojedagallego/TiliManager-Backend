@@ -17,6 +17,7 @@ import com.JPAVideoGames.TiliManager.util.UserTiliMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,10 +90,19 @@ public class TeamService {
 
     public Optional<TeamDTO> updateCreateTeam(TeamUpdateDTO teamUpdateDTO) throws PlayersSizeException {
         adminRepository.save(new Admin(("El usuario " + teamUpdateDTO.getOwner().getEmail() + ", esta intentando crear e actualizar el equipo: " + teamUpdateDTO.getName() + " en el teamService"), teamUpdateDTO.getOwner().getId()));
-        if (teamUpdateDTO.getPlayers().size() > 7 || teamUpdateDTO.getPlayers().size() < 5){
+        if (teamUpdateDTO.getPlayers().size() > 7 || teamUpdateDTO.getPlayers().size() < 5) {
             throw new PlayersSizeException("El jugador ha de tener como máximo 7 jugadores, y como mínimo 5");
         }
         return teamRepository.findByOwnerAndLeagueTeamId(userTiliMapper.toEntity(teamUpdateDTO.getOwner()), teamUpdateDTO.getLeagueTeam().getId()).map(team ->{
+
+            if (team.getLeagueTeam().getLeague().getTeams().stream().anyMatch(t -> t.getTeam().getName().equals(teamUpdateDTO.getName()))) {
+                try {
+                    throw new TeamException("El nombre ya exitste en esta liga");
+                } catch (TeamException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
             if (!teamUpdateDTO.getName().trim().isBlank() && teamUpdateDTO.getName() != null && !teamUpdateDTO.getName().trim().equals(team.getName())){
                 team.setName(teamUpdateDTO.getName().trim());
             }
@@ -250,4 +260,42 @@ public class TeamService {
         teamFromUserTili.setOwner(userTili);
         return teamRepository.save(teamFromUserTili);
     }
+
+    public Team guardarEquipoBotsPrimero(UserTili userTili, String s , long liga) {
+        Team teamFromUserTili = new Team();
+        teamFromUserTili.setName(s);
+        teamFromUserTili.setMoney(133000000L);
+        teamFromUserTili.setOwner(userTili);
+        List<PlayerLeague> todosLosJugadores = new java.util.ArrayList<>(playerLeagueService.getJugadoresByLeagueAndTeamIdNullClean(liga).stream().filter(p -> p.getPlayer().getPrice() <= teamFromUserTili.getMoney() / 3).toList());
+        Collections.shuffle(todosLosJugadores);
+        long suma = 0;
+        for (int i = 0; i < 9; i++) {
+            suma = todosLosJugadores.get(0).getPlayer().getPrice() + todosLosJugadores.get(1).getPlayer().getPrice() + todosLosJugadores.get(2).getPlayer().getPrice() + todosLosJugadores.get(3).getPlayer().getPrice() + todosLosJugadores.get(4).getPlayer().getPrice() + todosLosJugadores.get(5).getPlayer().getPrice() + todosLosJugadores.get(6).getPlayer().getPrice();
+            if (suma <= teamFromUserTili.getMoney()) {
+                teamFromUserTili.setOnePlayer(todosLosJugadores.get(0));
+                teamFromUserTili.setOnePlayer(todosLosJugadores.get(1));
+                teamFromUserTili.setOnePlayer(todosLosJugadores.get(2));
+                teamFromUserTili.setOnePlayer(todosLosJugadores.get(3));
+                teamFromUserTili.setOnePlayer(todosLosJugadores.get(4));
+                teamFromUserTili.setOnePlayer(todosLosJugadores.get(5));
+                teamFromUserTili.setOnePlayer(todosLosJugadores.get(6));
+
+                marketService.actualizarMercado(playerLeagueMapper.toDTO(todosLosJugadores.get(0)));
+                marketService.actualizarMercado(playerLeagueMapper.toDTO(todosLosJugadores.get(1)));
+                marketService.actualizarMercado(playerLeagueMapper.toDTO(todosLosJugadores.get(2)));
+                marketService.actualizarMercado(playerLeagueMapper.toDTO(todosLosJugadores.get(3)));
+                marketService.actualizarMercado(playerLeagueMapper.toDTO(todosLosJugadores.get(4)));
+                marketService.actualizarMercado(playerLeagueMapper.toDTO(todosLosJugadores.get(5)));
+                marketService.actualizarMercado(playerLeagueMapper.toDTO(todosLosJugadores.get(6)));
+
+                break;
+            }
+            else {
+                Collections.shuffle(todosLosJugadores);
+            }
+        }
+
+        return teamRepository.save(teamFromUserTili);
+    }
+
 }

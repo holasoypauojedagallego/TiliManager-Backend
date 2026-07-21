@@ -4,14 +4,14 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://127.0.0.1:5432/tilimanager
     username: pau
-    password: pau
+    password: pau2704
 
   jpa:
     hibernate:
-      ddl-auto: validate # Poner 'create' la primera vez que lo instancies a tu base de datos, o error, ya después dejar 'validate'
+      ddl-auto: create # Poner 'create' la primera vez que lo instancies a tu base de datos, o error, ya después dejar 'validate' o 'update'
     defer-datasource-initialization: true
 
-#  sql:
-#    init:
-#      mode: always
+  sql:
+    init:
+      mode: always
 # Esto, es para hardcodear los jugadores, en el data.sql!!!

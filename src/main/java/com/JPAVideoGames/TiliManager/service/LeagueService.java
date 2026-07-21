@@ -17,8 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Lazy
@@ -96,6 +95,19 @@ public class LeagueService {
         return leagueMapper.toDTO(league);
     }
 
+    public LeagueDTO createPrivateLeague(LeagueCreateDTO leagueCreateDTO) throws LeagueException{
+        long ligasPorUser = leagueRepository.countByOwner(userTiliMapper.toEntity(leagueCreateDTO.getOwner()));
+        if (ligasPorUser >= 3) {
+            throw new LeagueException("Solo se permiten un máximo de 3 ligas por usuario");
+        }
+        League league = leagueRepository.save(leagueMapper.toCreateEntity(leagueCreateDTO));
+        playerLeagueService.createJugadoresLeague(league);
+        marketService.anadir(league.getId());
+        adminRepository.save(new Admin(("La liga PRIVADA: " + league.getName() + ", ha sido creada"), league.getId()));
+        addPrivateTeams(league);
+        return leagueMapper.toDTO(league);
+    }
+
     public void deleteLeague(LeagueDeleteDTO leagueDeleteDTO) throws LeagueException {
         // Encuentra el dueño por Dueño y ID, para evitar errores y ser bien concretos (con ciertos mapper para pasarlo a entidad de forma más fácil)
         Optional<League> league = leagueRepository.findByOwnerAndId(userTiliMapper.toEntity(leagueDeleteDTO.getOwner()), leagueDeleteDTO.getId());
@@ -125,7 +137,7 @@ public class LeagueService {
         if (userTili.isEmpty()){
             throw new LeagueException("Usuario erroneo");
         }
-        if (liga.get().isClosed()) {
+        if (liga.get().isClosed() && !Objects.equals(liga.get().getOwner().getEmail(), userTiliPassDTO.getEmail())) {
             throw new LeagueException("La liga es privada");
         }
         if (liga.get().getTeams().size() >= 20){throw new IllegalArgumentException("Max of 20 equipos permitidos");}
@@ -137,8 +149,29 @@ public class LeagueService {
         leagueTeam.setLeague(liga.get());
 
         liga.get().setOneTeam(leagueTeam);
-        adminRepository.save(new Admin(("La liga: " + liga.get().getName() + ", ha añadido el equipoo: " + teamFromUserTili.getName() + " a la liga"), liga.get().getId()));
+        adminRepository.save(new Admin(("La liga: " + liga.get().getName() + ", ha añadido el equipo: " + teamFromUserTili.getName() + " a la liga"), liga.get().getId()));
         return leagueMapper.toDTO(leagueRepository.save(liga.get()));
+    }
+
+    public LeagueDTO addPrivateTeams(League liga) throws LeagueException{
+        List<LeagueTeam> lieagueteam = new ArrayList<>();
+        liga.setTeams(lieagueteam);
+        List<UserTili> usuarios = userTiliService.getAllByEmailConfirmacion();
+
+        String[] nombres = {"Instituto Farm", "Instituto Otaku", "Instituto Occult", "Instituto Brain", "Instituto Shuriken", "Instituto Kirkwood", "Instituto Alpino", "Instituto Fauxshore", "Claustro Sagrado"};
+
+        for (int i = 0; i < usuarios.size(); i++){
+            Team teamFromUserTili = teamService.guardarEquipoBotsPrimero(usuarios.get(i), nombres[i], liga.getId());
+
+            LeagueTeam leagueTeam = new LeagueTeam();
+            leagueTeam.setTeam(teamFromUserTili);
+            leagueTeam.setLeague(liga);
+
+            liga.setOneTeam(leagueTeam);
+            adminRepository.save(new Admin(("La liga: " + liga.getName() + ", ha añadido el equipo: " + teamFromUserTili.getName() + " a la liga"), liga.getId()));
+        }
+
+        return leagueMapper.toDTO(leagueRepository.save(liga));
     }
 
     public LeagueDTO deleteTeam(UserTiliPassDTO userTiliPassDTO, Long id, Long idTeam) throws LeagueException{
@@ -171,6 +204,7 @@ public class LeagueService {
         if (liga.isEmpty()){
             throw new LeagueException("No existe esa liga");
         }
+        if (liga.get().isClosed()) { return playPrivateMatch(userTiliPassDTO, id); }
         if (!(liga.get().getTeams().stream().filter(t->t.getTeam().getPlayers().size() >= 5).count() >= 2)) throw new LeagueException("No hay suficientes jugadores en la liga");
         LeagueTeam leagueTeamUser = new LeagueTeam();
         for (LeagueTeam lTeam: liga.get().getTeams()) {
@@ -208,5 +242,59 @@ public class LeagueService {
         leagueRepository.save(liga.get());
         return partidoEncapsuladoMapper.toDTO(match.getPartidoEncapsulado());
     }
+
+    public List<PartidoEncapsuladoDTO> playPrivateMatch(UserTiliPassDTO userTiliPassDTO, Long id) throws LeagueException{
+        Optional<League> liga = leagueRepository.findById(id);
+        if (liga.isEmpty()){
+            throw new LeagueException("No existe esa liga");
+        }
+        if (!(liga.get().getTeams().stream().filter(t->t.getTeam().getPlayers().size() >= 5).count() >= 2)) throw new LeagueException("No hay suficientes jugadores en la liga");
+
+        List<LeagueTeam> partidos = liga.get().getTeams();
+        Collections.shuffle(partidos);
+
+        LeagueTeam leagueTeamUser = new LeagueTeam();
+        for (LeagueTeam lTeam: liga.get().getTeams()) {
+            if (lTeam.getTeam().getOwner().getId().equals(userTiliPassDTO.getId())) {
+                leagueTeamUser = lTeam;
+            }
+        }
+        if (leagueTeamUser.getTeam() == null) throw new LeagueException("No existe ese usuario con equipo en esta liga");
+
+        Match matchReal = new Match(); // Este será el match del usuario real, donde se guardaran los datos para pasarlos al front, los demás serán simulados
+
+        for (int i = 0; i < partidos.size(); i++) {
+            if (i % 2 == 1) continue;
+            LeagueTeam local = partidos.get(i);
+            LeagueTeam rival = partidos.get(i + 1);
+
+            Match match = matchService.codigo(local.getTeam(), rival.getTeam(), liga);
+            match.setLeague(liga.get());
+            if (local.getTeam().getOwner().getId().equals(userTiliPassDTO.getId()) || rival.getTeam().getOwner().getId().equals(userTiliPassDTO.getId())) {
+                matchReal = match;
+            }
+            if (match.getLocalTeamGoals() > match.getVisitorTeamGoals()) {
+                local.setWins(local.getWins() + 1);
+                local.getTeam().setMoney(local.getTeam().getMoney() + 3000000);
+                rival.setLosses(rival.getLosses() + 1);
+            } else if (match.getVisitorTeamGoals() > match.getLocalTeamGoals()) {
+                rival.setWins(rival.getWins() + 1);
+                rival.getTeam().setMoney(rival.getTeam().getMoney() + 3000000);
+                local.setLosses(local.getLosses() + 1);
+            } else {
+                local.setDraws(local.getDraws() + 1);
+                local.getTeam().setMoney(local.getTeam().getMoney() + 750000);
+                rival.getTeam().setMoney(rival.getTeam().getMoney() + 750000);
+                rival.setDraws(rival.getDraws() + 1);
+            }
+            local.setGoalsScored(local.getGoalsScored() + match.getLocalTeamGoals());
+            local.setGoalsReceived(local.getGoalsReceived() + match.getVisitorTeamGoals());
+            rival.setGoalsScored(rival.getGoalsScored() + match.getVisitorTeamGoals());
+            rival.setGoalsReceived(rival.getGoalsReceived() + match.getLocalTeamGoals());
+            leagueRepository.save(liga.get());
+        }
+        return partidoEncapsuladoMapper.toDTO(matchReal.getPartidoEncapsulado());
+    }
+
 
 }
