@@ -15,7 +15,7 @@ public class Team {
     private long id;
 
     @Column(nullable = false)
-    @Size(min = 3, max = 20)
+    @Size(min = 3, max = 30)
     @Pattern(regexp = "^[a-zA-Z0-9._+-]([a-zA-Z0-9._+ -]*[a-zA-Z0-9._+-])?$")
     private String name;
 
