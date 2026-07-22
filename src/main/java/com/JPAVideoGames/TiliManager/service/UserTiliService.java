@@ -55,6 +55,10 @@ public class UserTiliService {
         return userTiliRepository.findByEmail(email).map(userTiliMapper::toDto);
     }
 
+    public List<UserTili> getAllByEmailConfirmacion(){
+        return userTiliRepository.findAllByEmail();
+    }
+
     public UserTiliDTO registerUserTili(UserTiliCreateDTO userTiliCreateDTO) {
         if (userTiliCreateDTO.getEmail().isBlank() || userTiliCreateDTO.getEmail() == null ||
                 userTiliCreateDTO.getPassword().isBlank() || userTiliCreateDTO.getPassword() == null ||
@@ -69,7 +73,7 @@ public class UserTiliService {
         return userTiliMapper.toDto(savedUserTili);
     }
 
-    public UserTiliDTO registerAdminUserTili(UserTiliCreateDTO userTiliCreateDTO) {
+    public UserTiliDTO registerUserTiliBot(UserTiliCreateDTO userTiliCreateDTO) {
         if (userTiliCreateDTO.getEmail().isBlank() || userTiliCreateDTO.getEmail() == null ||
                 userTiliCreateDTO.getPassword().isBlank() || userTiliCreateDTO.getPassword() == null ||
                 userTiliCreateDTO.getName().isBlank() || userTiliCreateDTO.getName() == null){
@@ -77,8 +81,8 @@ public class UserTiliService {
         }
         UserTili userTili = userTiliMapper.toCreateEntity(userTiliCreateDTO);
         userTili.setPassword(passwordEncoder.encode(userTili.getPassword()));
-        userTili.setRole(UserTiliRole.ADMIN);
-        adminRepository.save(new Admin(("Se ha creado el usuario ADMIN: " + userTili.getEmail()), userTili.getId()));
+        userTili.setRole(UserTiliRole.BOT);
+        adminRepository.save(new Admin(("Se ha creado el usuario BOT: " + userTili.getEmail()), userTili.getId()));
         return userTiliMapper.toDto(userTiliRepository.save(userTili));
     }
 

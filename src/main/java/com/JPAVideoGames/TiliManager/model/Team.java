@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,8 +14,8 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(unique = true, nullable = false)
-    @Size(min = 3, max = 20)
+    @Column(nullable = false)
+    @Size(min = 3, max = 30)
     @Pattern(regexp = "^[a-zA-Z0-9._+-]([a-zA-Z0-9._+ -]*[a-zA-Z0-9._+-])?$")
     private String name;
 
@@ -68,6 +69,7 @@ public class Team {
     }
 
     public void setOnePlayer(PlayerLeague player) throws IllegalArgumentException {
+        if (this.players == null) this.players = new ArrayList<>();
         if (this.players.size() >= 7) throw new IllegalArgumentException("Max of 7 players allowed");
         this.players.add(player);
     }

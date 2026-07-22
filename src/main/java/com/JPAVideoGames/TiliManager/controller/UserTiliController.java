@@ -56,6 +56,11 @@ public class UserTiliController {
         return ResponseEntity.ok(userTiliService.registerUserTili(userTili)); // Cambiar a created
     }
 
+    @PostMapping("/register/bot")
+    public ResponseEntity<UserTiliDTO> postUserTiliBot(@RequestBody @Valid UserTiliCreateDTO userTili) {
+        return ResponseEntity.ok(userTiliService.registerUserTiliBot(userTili)); // Cambiar a created
+    }
+
     @PostMapping("/login")
     public ResponseEntity<UserTiliPassDTO> loginUserTili(@RequestBody @Valid UserTiliLoginDTO userTili){
         return userTiliService.loginUserTili(userTili).
