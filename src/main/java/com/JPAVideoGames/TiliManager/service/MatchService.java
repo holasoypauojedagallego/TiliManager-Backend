@@ -91,10 +91,10 @@ public class MatchService {
         int visitorDefenseRating = visitorTeam.getPlayers().stream().mapToInt(p -> p.getPlayer().getDefense()).sum();
         int visitorGoals = 0;
 
-        int porcentajeGanaLocal = 45 + (localTeamRating - visitorTeamRating);
-        int porcentajeGanaVisitante = 45 + (visitorTeamRating - localTeamRating);
-        if (porcentajeGanaLocal <= 0){ porcentajeGanaLocal = 1; porcentajeGanaVisitante = 89; }
-        if (porcentajeGanaVisitante <= 0){ porcentajeGanaVisitante = 1; porcentajeGanaLocal = 89; }
+        int porcentajeGanaLocal = 30 + (localTeamRating - visitorTeamRating);
+        int porcentajeGanaVisitante = 30 + (visitorTeamRating - localTeamRating);
+        if (porcentajeGanaLocal <= 0){ porcentajeGanaLocal = 1; porcentajeGanaVisitante = 59; }
+        if (porcentajeGanaVisitante <= 0){ porcentajeGanaVisitante = 1; porcentajeGanaLocal = 59; }
 
         int contador = 0;
         List<PartidoEncapsulado> partidoEncapsulados = new ArrayList<>();
@@ -125,7 +125,7 @@ public class MatchService {
 
                 int golito = 0;
 
-                if (queSucede < 0.3) {
+                if (queSucede < 0.33) {
                     golito = gol( localAttackRating, visitorDefenseRating);
                     localGoals = localGoals + golito;
                 }
@@ -144,7 +144,7 @@ public class MatchService {
 
                 int golito = 0;
 
-                if (queSucede < 0.3) {
+                if (queSucede < 0.33) {
                     golito = gol(visitorAttackRating, localDefenseRating);
                     visitorGoals += golito;
                 }
